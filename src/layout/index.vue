@@ -34,12 +34,12 @@ import AppHeader from './components/AppHeader.vue'
 }
 
 .el-aside {
-  background-color: #304156;
+  // background-color: #304156;
   color: #333;
 }
 
 .el-main {
-  background-color: #E9EEF3;
+  min-width: 800px;
   color: #333;
 }
 

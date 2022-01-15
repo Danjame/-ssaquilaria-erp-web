@@ -4,4 +4,10 @@ import router from './router'
 import store from './store'
 import ElementPlus from './plugins/element-plus'
 
-createApp(App).use(store).use(router).use(ElementPlus).mount('#app')
+import './styles/index.scss'
+
+createApp(App)
+  .use(store)
+  .use(router)
+  .use(ElementPlus)
+  .mount('#app')

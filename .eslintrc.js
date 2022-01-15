@@ -4,7 +4,7 @@ module.exports = {
     es2021: true
   },
   extends: [
-    'plugin:vue/vue3-recommended',
+    'plugin:vue/vue3-strongly-recommended',
     'standard'
   ],
   parserOptions: {
@@ -17,7 +17,10 @@ module.exports = {
     '@typescript-eslint'
   ],
   rules: {
-    'vue/multi-word-component-names': 0
+    'vue/multi-word-component-names': 0,
+    'vue/singleline-html-element-content-newline': 0,
+    'vue/multiline-html-element-content-newline': 0,
+    'vue/max-attributes-per-line': 0
   },
   globals: {
     defineProps: 'readonly',
