@@ -1,5 +1,8 @@
 import { createRouter, RouteRecordRaw, createWebHashHistory } from 'vue-router'
 import AppLayout from '@/layout/index.vue'
+import sysRoutes from './modules/system'
+import orgRoutes from './modules/organization'
+import invRoutes from './modules/inventory'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -10,7 +13,10 @@ const routes: RouteRecordRaw[] = [
         path: '',
         name: 'home',
         component: () => import('../views/home/index.vue')
-      }
+      },
+      sysRoutes,
+      orgRoutes,
+      invRoutes
     ]
   },
   {

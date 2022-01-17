@@ -5,28 +5,46 @@
       <span>中科沉香ERP系统</span>
     </div>
   </div>
-  <el-menu mode="vertical">
-    <el-menu-item index="1">
-      进销存
-    </el-menu-item>
-    <el-menu-item index="2">
-      组织
-    </el-menu-item>
-    <el-menu-item index="3">系统</el-menu-item>
+  <el-menu default-active="/" router @select="handleSelect">
+    <template v-for="menu in menus">
+      <el-sub-menu v-if="menu.children && menu.children.length" :key="menu.value" :index="menu.value">
+        <template #title>
+          <span>{{ menu.label }}</span>
+        </template>
+        <el-menu-item v-for="child in menu.children" :key="child.value" :index="child.value">
+          <template #title>
+            <span>{{ child.label }}</span>
+          </template>
+        </el-menu-item>
+      </el-sub-menu>
+      <el-menu-item v-else :key="menu.id" :index="menu.value">
+        <template #title>
+          <span>{{ menu.label }}</span>
+        </template>
+      </el-menu-item>
+    </template>
   </el-menu>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 import { getUserInfo } from '@/api/system/user'
+import { Menu } from '@/types/menu'
+
+const menus = ref<Menu[]>([])
 
 onMounted(async () => {
+  // getUserInfo by ??
   const user = await loadUserInfo(6)
-  console.log([].concat(...(user as any).roles.map((item: any) => item.menus)))
+  menus.value = [].concat(...(user as any).roles.map((item: any) => item.menus))
 })
 
 const loadUserInfo = (id: number) => {
   return getUserInfo(id)
+}
+
+const handleSelect = (index: string) => {
+  // console.log('layout:' + index)
 }
 
 </script>
@@ -34,6 +52,11 @@ const loadUserInfo = (id: number) => {
 <style lang="scss" scoped>
 .el-menu {
   min-height:calc(100vh - 60px);
+  text-align: center;
+}
+
+.el-menu-item {
+  text-align: center;
 }
 
 .aside-header{
@@ -47,6 +70,15 @@ const loadUserInfo = (id: number) => {
     margin-left: 15px;
     text-align: center;
   }
+}
+
+.el-menu-item:hover {
+  background-color: $menu-hover-bg-color;
+}
+
+.el-menu-item.is-active {
+  color: $primary-color;
+  background-color: $menu-active-bg-color;
 }
 
 </style>

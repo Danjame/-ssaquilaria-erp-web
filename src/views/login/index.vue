@@ -31,11 +31,12 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { ElForm, ElMessage } from '@/plugins/element-plus'
+import { ElForm, ElMessage } from 'element-plus'
 import { User as UserIcon, Lock as LockIcon } from '@element-plus/icons-vue'
 import { login } from '@/api/system/user'
 import logoSrc from '@/assets/logo.png'
 import store from '@/store'
+import router from '@/router'
 
 const form = ref<InstanceType<typeof ElForm> | null>(null)
 
@@ -65,6 +66,7 @@ const handleSubmit = async () => {
     const { accessToken } = await login(user)
     store.commit('setAccessToken', accessToken)
     ElMessage.success('登录成功')
+    router.push('/')
   } catch (err) {
     ElMessage.error('账号/密码错误')
   }
