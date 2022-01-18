@@ -5,9 +5,9 @@ const routes: RouteRecordRaw = {
   component: RouterView,
   children: [
     {
-      path: '',
-      name: 'organization',
-      component: () => import('@/views/organization/index.vue')
+      path: 'department',
+      name: 'department',
+      component: () => import('@/views/organization/department.vue')
     }
   ]
 }

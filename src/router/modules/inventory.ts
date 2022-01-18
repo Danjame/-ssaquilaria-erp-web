@@ -1,18 +1,23 @@
 import { RouteRecordRaw, RouterView } from 'vue-router'
 
 const routes: RouteRecordRaw = {
-  path: '/inventory',
+  path: 'inventory',
   component: RouterView,
   children: [
     {
-      path: '',
-      name: 'inventory',
-      component: () => import('@/views/inventory/index.vue')
-    },
-    {
-      path: '/inventory/product',
+      path: 'product',
       name: 'product',
       component: () => import('@/views/inventory/product.vue')
+    },
+    {
+      path: 'sale',
+      name: 'sale',
+      component: () => import('@/views/inventory/sale.vue')
+    },
+    {
+      path: 'purchase',
+      name: 'purchase',
+      component: () => import('@/views/inventory/purchase.vue')
     }
   ]
 }

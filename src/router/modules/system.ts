@@ -5,9 +5,24 @@ const routes: RouteRecordRaw = {
   component: RouterView,
   children: [
     {
-      path: '',
-      name: 'system',
-      component: () => import('@/views/system/index.vue')
+      path: 'user',
+      name: 'user',
+      component: () => import('@/views/system/user.vue')
+    },
+    {
+      path: 'role',
+      name: 'role',
+      component: () => import('@/views/system/role.vue')
+    },
+    {
+      path: 'menu',
+      name: 'menu',
+      component: () => import('@/views/system/menu.vue')
+    },
+    {
+      path: 'permission',
+      name: 'permission',
+      component: () => import('@/views/system/permission.vue')
     }
   ]
 }

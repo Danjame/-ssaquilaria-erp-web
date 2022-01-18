@@ -1,7 +1,5 @@
 <template>
-  <div>
-    system
-  </div>
+  menu
 </template>
 
 <script lang="ts" setup>

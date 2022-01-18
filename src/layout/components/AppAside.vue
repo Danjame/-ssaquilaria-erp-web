@@ -5,7 +5,7 @@
       <span>中科沉香ERP系统</span>
     </div>
   </div>
-  <el-menu default-active="/" router @select="handleSelect">
+  <el-menu :default-active="route" router>
     <template v-for="menu in menus">
       <el-sub-menu v-if="menu.children && menu.children.length" :key="menu.value" :index="menu.value">
         <template #title>
@@ -30,8 +30,10 @@
 import { ref, onMounted } from 'vue'
 import { getUserInfo } from '@/api/system/user'
 import { Menu } from '@/types/menu'
+import router from '@/router/index'
 
 const menus = ref<Menu[]>([])
+const route = router.currentRoute.value.path
 
 onMounted(async () => {
   // getUserInfo by ??
@@ -41,10 +43,6 @@ onMounted(async () => {
 
 const loadUserInfo = (id: number) => {
   return getUserInfo(id)
-}
-
-const handleSelect = (index: string) => {
-  // console.log('layout:' + index)
 }
 
 </script>

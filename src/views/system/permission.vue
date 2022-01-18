@@ -1,5 +1,5 @@
 <template>
-  inventory
+  permission
 </template>
 
 <script lang="ts" setup>
