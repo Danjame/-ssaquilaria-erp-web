@@ -22,15 +22,13 @@ import AppHeader from './components/AppHeader.vue'
 .el-header {
   position: sticky;
   top: 0;
-  display: flex;
-  align-items: center;
 }
 
 .el-aside {
   position: sticky;
   top: 0;
-  color: #333;
   max-height: 100vh;
+  color: #333;
 }
 
 .el-main {

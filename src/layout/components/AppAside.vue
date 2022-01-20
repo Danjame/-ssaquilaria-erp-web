@@ -70,7 +70,9 @@ const loadUserInfo = (id: number) => {
   }
 }
 
-.el-menu-item:hover {
+.el-menu-item:hover,
+:deep(.el-sub-menu__title):hover
+{
   background-color: $menu-hover-bg-color;
 }
 
