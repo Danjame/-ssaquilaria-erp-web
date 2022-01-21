@@ -6,7 +6,6 @@
       </div>
     </template>
     <el-table :data="products" border style="width: 100%">
-      <!-- <el-table-column prop="date" label="Date" width="180" /> -->
       <el-table-column prop="name" label="名称" />
       <el-table-column prop="serialNum" label="编码" />
       <el-table-column label="类别">
@@ -23,12 +22,29 @@
       <el-table-column prop="description" label="描述" />
       <el-table-column label="供应商">
         <template #default="scope">
-          <span>{{ scope.row.suppliers.map((item: any) => item.name) }}</span>
+          <el-space>
+            <el-tag
+              v-for="(tag, index) in scope.row.suppliers.map((item: any) => item.name)"
+              :key="index"
+            >
+              {{ tag }}
+            </el-tag>
+          </el-space>
         </template>
       </el-table-column>
       <el-table-column prop="stockQty" label="库存" />
       <el-table-column prop="incomingQty" label="入库数量" />
       <el-table-column prop="outgoingQty" label="出库数量" />
+      <el-table-column label="操作">
+        <template #default="scope">
+          <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+          <el-button
+            size="small"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)"
+          >Delete</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       background
@@ -72,6 +88,14 @@ watch(() => listParams.size, size => {
   listParams.size = size
   loadProducts()
 })
+
+const handleEdit = (index, row) => {
+  console.log(index, row)
+}
+
+const handleDelete = (index, row) => {
+  console.log(index, row)
+}
 
 </script>
 

@@ -29,7 +29,7 @@
 <script lang="ts" setup>
 import { ref, onMounted } from 'vue'
 import { getUserInfo } from '@/api/system/user'
-import { Menu } from '@/types/menu'
+import { Menu } from '@/api/system/types/menu'
 import router from '@/router/index'
 
 const menus = ref<Menu[]>([])
