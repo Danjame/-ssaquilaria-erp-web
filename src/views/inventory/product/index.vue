@@ -5,7 +5,7 @@
         <span>产品库存</span>
       </div>
     </template>
-    <el-table :data="products" border style="width: 100%">
+    <el-table :data="products" :border="true" style="width: 100%">
       <el-table-column prop="name" label="名称" />
       <el-table-column prop="serialNum" label="编码" />
       <el-table-column label="类别">
@@ -37,11 +37,11 @@
       <el-table-column prop="outgoingQty" label="出库数量" />
       <el-table-column label="操作">
         <template #default="scope">
-          <el-button size="small" @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+          <el-button size="small" @click="handleEdit(scope.row)">Edit</el-button>
           <el-button
             size="small"
             type="danger"
-            @click="handleDelete(scope.$index, scope.row)"
+            @click="handleDelete(scope.row)"
           >Delete</el-button>
         </template>
       </el-table-column>
@@ -55,11 +55,16 @@
       v-model:page-size="listParams.size"
     />
   </el-card>
+  <el-dialog v-model="dialogVisible" title="编辑产品">
+    <CreateOrEdit />
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import { getProdcutsByConditions } from '@/api/inventory/product'
 import { onMounted, reactive, ref, watch } from 'vue'
+import { getProdcutsByConditions } from '@/api/inventory/product'
+import { Product } from '@/api/inventory/types/product'
+import CreateOrEdit from './components/CreateOrEdit.vue'
 
 const listParams = reactive({
   categoryId: undefined,
@@ -67,7 +72,8 @@ const listParams = reactive({
   size: 10
 })
 const count = ref(0)
-const products = ref([])
+const products = ref<Product[]>([])
+const dialogVisible = ref(false)
 
 onMounted(() => {
   loadProducts()
@@ -89,12 +95,13 @@ watch(() => listParams.size, size => {
   loadProducts()
 })
 
-const handleEdit = (index, row) => {
-  console.log(index, row)
+const handleEdit = (product: Product) => {
+  dialogVisible.value = true
+  console.log(product)
 }
 
-const handleDelete = (index, row) => {
-  console.log(index, row)
+const handleDelete = (product: Product) => {
+  console.log(product)
 }
 
 </script>

@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { Product } from './types/product'
 
 interface ConditionsDto {
   categoryId?: number | undefined
@@ -8,7 +9,7 @@ interface ConditionsDto {
 
 export const getProdcutsByConditions = (params?: ConditionsDto) => {
   return request<{
-    results: never[],
+    results: Product[],
     size: number,
     page: number,
     total: number

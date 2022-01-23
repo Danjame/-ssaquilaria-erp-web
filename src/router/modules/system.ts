@@ -3,26 +3,31 @@ import { RouteRecordRaw, RouterView } from 'vue-router'
 const routes: RouteRecordRaw = {
   path: 'system',
   component: RouterView,
+  meta: { title: '系统' },
   children: [
     {
       path: 'user',
       name: 'user',
-      component: () => import('@/views/system/user.vue')
+      component: () => import('@/views/system/user/index.vue'),
+      meta: { title: '用户' }
     },
     {
       path: 'role',
       name: 'role',
-      component: () => import('@/views/system/role.vue')
+      component: () => import('@/views/system/role/index.vue'),
+      meta: { title: '角色' }
     },
     {
       path: 'menu',
       name: 'menu',
-      component: () => import('@/views/system/menu.vue')
+      component: () => import('@/views/system/menu/index.vue'),
+      meta: { title: '菜单' }
     },
     {
       path: 'permission',
       name: 'permission',
-      component: () => import('@/views/system/permission.vue')
+      component: () => import('@/views/system/permission/index.vue'),
+      meta: { title: '权限' }
     }
   ]
 }

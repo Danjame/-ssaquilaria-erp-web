@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { AxiosPromise } from 'axios'
+import { Menu } from './types/menu'
 
 interface User {
   username: string;
@@ -14,9 +14,13 @@ export const login = (data: User) => {
   })
 }
 
-export const getUserInfo = (id: number): AxiosPromise<User> => {
-  return request({
+export const getCurrentUser = () => {
+  return request<{
+    name: string,
+    email: string,
+    menuTrees: Menu[]
+  }>({
     method: 'GET',
-    url: `/system/users/${id}`
+    url: '/system/users/current-user'
   })
 }

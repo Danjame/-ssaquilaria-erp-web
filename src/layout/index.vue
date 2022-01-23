@@ -9,8 +9,8 @@
 </template>
 
 <script lang="ts" setup>
-import AppAside from './components/AppAside.vue'
-import AppHeader from './components/AppHeader.vue'
+import AppAside from './components/AppAside/index.vue'
+import AppHeader from './components/AppHeader/index.vue'
 
 </script>
 
@@ -28,12 +28,10 @@ import AppHeader from './components/AppHeader.vue'
   position: sticky;
   top: 0;
   max-height: 100vh;
-  color: #333;
 }
 
 .el-main {
   min-width: 800px;
-  color: #333;
 }
 
 </style>
