@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="title">
-      <span>中科沉香ERP系统</span>
+      <span>中科沉香</span>
     </div>
   </div>
 </template>

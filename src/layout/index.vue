@@ -1,6 +1,6 @@
 <template>
   <el-container>
-    <el-aside width="200px"><AppAside /></el-aside>
+    <el-aside><AppAside /></el-aside>
     <el-container>
       <el-header><AppHeader /></el-header>
       <el-main><router-view /></el-main>
@@ -20,18 +20,17 @@ import AppHeader from './components/AppHeader/index.vue'
 }
 
 .el-header {
-  position: sticky;
-  top: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .el-aside {
-  position: sticky;
-  top: 0;
-  max-height: 100vh;
+  width: auto;
 }
 
 .el-main {
-  min-width: 800px;
+  background-color: $body-bg;
 }
 
 </style>

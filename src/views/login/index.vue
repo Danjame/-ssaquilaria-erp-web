@@ -8,14 +8,18 @@
       <el-form-item label="账号" prop="username">
         <el-input v-model="user.username" placeholder="请输入账号">
           <template #prefix>
-            <el-icon style="width: 100%; height: 100%;"><user-icon /></el-icon>
+            <el-icon style="width: 100%; height: 100%;">
+              <component :is="'User'" />
+            </el-icon>
           </template>
         </el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
         <el-input v-model="user.password" placeholder="请输入密码">
           <template #prefix>
-            <el-icon style="width: 100%; height: 100%;"><lock-icon /></el-icon>
+            <el-icon style="width: 100%; height: 100%;">
+              <component :is="'Lock'" />
+            </el-icon>
           </template>
         </el-input>
       </el-form-item>
@@ -32,7 +36,6 @@
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
 import { ElForm, ElMessage } from 'element-plus'
-import { User as UserIcon, Lock as LockIcon } from '@element-plus/icons-vue'
 import { login } from '@/api/system/user'
 import logoSrc from '@/assets/logo.png'
 import store from '@/store'

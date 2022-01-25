@@ -2,11 +2,11 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-// import ElementPlus from './plugins/element-plus'
-
+import icon from './components/Icon'
 import './styles/index.scss'
 
 createApp(App)
-  .use(store)
   .use(router)
+  .use(store)
+  .use(icon)
   .mount('#app')

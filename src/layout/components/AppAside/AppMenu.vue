@@ -1,5 +1,5 @@
 <template>
-  <el-menu :default-active="route" router>
+  <el-menu :default-active="route" router :collapse="store.state.isCollapse">
     <template v-for="menu in menus">
       <el-sub-menu v-if="menu.children && menu.children.length" :key="menu.value" :index="menu.value">
         <template #title>
@@ -23,6 +23,7 @@
 <script lang="ts" setup>
 import { PropType, toRefs } from 'vue'
 import { Menu } from '@/api/system/types/menu'
+import store from '@/store'
 
 const props = defineProps({
   menus: {
@@ -42,13 +43,17 @@ const { menus, route } = toRefs(props)
 <style lang="scss" scoped>
 .el-menu {
   min-height:calc(100vh - 60px);
+  border-right: none;
+}
+.el-menu:not(.el-menu--collapse) {
+  width: 200px;
 }
 
-.el-menu-item:hover, :deep(.el-sub-menu__title):hover {
-  background-color: $menu-hover-bg-color;
-}
-.el-menu-item.is-active {
-  color: $primary-color;
-  background-color: $menu-active-bg-color;
-}
+// .el-menu-item:hover, :deep(.el-sub-menu__title):hover {
+//   background-color: $menu-hover-bg-color;
+// }
+// .el-menu-item.is-active {
+//   color: $primary-color;
+//   background-color: $menu-active-bg-color;
+// }
 </style>
