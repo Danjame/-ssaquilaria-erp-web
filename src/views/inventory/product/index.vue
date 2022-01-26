@@ -1,26 +1,38 @@
 <template>
   <el-card class="box-card">
     <template #header>
-      <div class="card-header">
-        <span>产品库存</span>
-      </div>
+      筛选
     </template>
-    <el-table :data="products" :border="true" style="width: 100%">
-      <el-table-column prop="name" label="名称" />
-      <el-table-column prop="serialNum" label="编码" />
-      <el-table-column label="类别">
+    <el-form ref="formRef" label-width="120px">
+      <el-form-item label="名称">
+        <el-input />
+      </el-form-item>
+      <el-form-item label="规格">
+        <el-input />
+      </el-form-item>
+    </el-form>
+    <el-button :icon="'Search'">搜索</el-button>
+  </el-card>
+  <el-card class="box-card">
+    <template #header>
+      <el-button type="primary" :icon="'Plus'">新增产品</el-button>
+    </template>
+    <el-table :data="products" style="width: 100%">
+      <el-table-column prop="name" label="名称" align="center" />
+      <el-table-column prop="serialNum" label="编码" align="center" />
+      <el-table-column label="类别" align="center">
         <template #default="scope">
           <span>{{ scope.row.category.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="size" label="规格" />
-      <el-table-column label="单位">
+      <el-table-column prop="size" label="规格" align="center" />
+      <el-table-column label="单位" align="center">
         <template #default="scope">
           <span>{{ scope.row.unit.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="description" label="描述" />
-      <el-table-column label="供应商">
+      <el-table-column prop="description" label="描述" align="center" />
+      <el-table-column label="供应商" align="center">
         <template #default="scope">
           <el-space>
             <el-tag
@@ -32,17 +44,21 @@
           </el-space>
         </template>
       </el-table-column>
-      <el-table-column prop="stockQty" label="库存" />
-      <el-table-column prop="incomingQty" label="入库数量" />
-      <el-table-column prop="outgoingQty" label="出库数量" />
-      <el-table-column label="操作">
+      <el-table-column prop="stockQty" label="库存" align="center" />
+      <el-table-column prop="incomingQty" label="入库数量" align="center" />
+      <el-table-column prop="outgoingQty" label="出库数量" align="center" />
+      <el-table-column label="操作" min-width="100" align="center" fixed="right">
         <template #default="scope">
-          <el-button size="small" @click="handleEdit(scope.row)">Edit</el-button>
-          <el-button
-            size="small"
-            type="danger"
-            @click="handleDelete(scope.row)"
-          >Delete</el-button>
+          <el-space spacer="|">
+            <el-button
+              type="text"
+              @click="handleEdit(scope.row)"
+            >编辑</el-button>
+            <el-button
+              type="text"
+              @click="handleDelete(scope.row)"
+            >删除</el-button>
+          </el-space>
         </template>
       </el-table-column>
     </el-table>

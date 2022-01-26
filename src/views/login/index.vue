@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="login-container">
     <el-form ref="form" class="login-form" label-position="top" :model="user" :rules="rules" @submit.prevent="handleSubmit">
       <div class="login-form-header">
         <el-image style="width: 100px; height: 100px;" fit="fill" :src="logoSrc" />
@@ -24,7 +24,7 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="login-form-btn" type="primary" native-type="submit">登陆</el-button>
+        <el-button class="submit-button" type="primary" native-type="submit">登陆</el-button>
       </el-form-item>
     </el-form>
     <div class="footer">
@@ -78,38 +78,39 @@ const handleSubmit = async () => {
 </script>
 
 <style lang="scss" scoped>
-.container {
+.login-container {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background: $body-bg;
-  .login-form {
-    min-width: 300px;
-    background: #fff;
-    padding: 30px;
-    border-radius: 6px;
-    &-header {
-      text-align: center;
-      color:$primary-color;
-      p {
-        font-size: small;
-      }
-      .el-icon{
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .login-form-btn {
-      width: 100%;
-    }
   }
-  .footer {
+.login-form {
+  min-width: 300px;
+  background: #fff;
+  padding: 30px;
+  border-radius: 6px;
+  &-header {
     text-align: center;
-    font-size: 10px;
-    color: $info-color;
+    color:$primary-color;
+    p {
+      font-size: small;
+    }
+    .el-icon{
+      width: 100%;
+      height: 100%;
+    }
   }
+  .submit-button {
+    width: 100%;
+    margin-top: 30px;
+  }
+}
+.footer {
+  text-align: center;
+  font-size: 10px;
+  color: $info-color;
 }
 
 </style>

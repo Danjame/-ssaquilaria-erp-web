@@ -1,5 +1,5 @@
 <template>
-  <el-icon :size="24" @click="toggleCollapse">
+  <el-icon :size="20" @click="toggleCollapse">
     <component :is="collapseIcon" />
   </el-icon>
 </template>
