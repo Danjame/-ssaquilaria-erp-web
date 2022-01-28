@@ -35,7 +35,6 @@
 
 <script lang="ts" setup>
 import { reactive, ref } from 'vue'
-import { ElForm, ElMessage } from 'element-plus'
 import { login } from '@/api/system/user'
 import logoSrc from '@/assets/logo.png'
 import store from '@/store'
@@ -44,8 +43,8 @@ import router from '@/router'
 const form = ref<InstanceType<typeof ElForm> | null>(null)
 
 const user = reactive({
-  username: 'ssaquilaria',
-  password: 'ssa123'
+  username: 'John K',
+  password: 'john1234'
 })
 
 const isLoading = ref(false)

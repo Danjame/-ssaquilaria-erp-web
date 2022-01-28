@@ -6,8 +6,8 @@ export interface Category {
   name: string
   value: string
   label: string
-  products: Product[]
-  suppliers: Supplier[]
+  products?: Product[]
+  suppliers?: Supplier[]
   createdAt: Date
   updatedAt: Date
 }

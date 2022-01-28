@@ -28,6 +28,7 @@ request.interceptors.response.use(function (response) {
 }, function (error) {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
+  ElMessage.error('操作失败：' + error.response.data.message)
   return Promise.reject(error)
 })
 
