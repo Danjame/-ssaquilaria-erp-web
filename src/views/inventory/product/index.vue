@@ -43,9 +43,7 @@
             <el-tag
               v-for="(tag, index) in scope.row.suppliers.map((item: any) => item.name)"
               :key="index"
-            >
-              {{ tag }}
-            </el-tag>
+            >{{ tag }}</el-tag>
           </el-space>
         </template>
       </el-table-column>
@@ -55,10 +53,7 @@
       <el-table-column label="操作" width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
-            <el-button
-              type="text"
-              @click="openCreateOrEdit(scope.row.id)"
-            >编辑</el-button>
+            <el-button type="text" @click="openCreateOrEdit(scope.row.id)">编辑</el-button>
             <el-popconfirm
               confirm-button-text="确定"
               cancel-button-text="取消"
@@ -108,44 +103,42 @@ const listParams = reactive({
   page: 1,
   size: 10
 })
-const count = ref(0)
-const categories = ref<Category[]>([])
-const products = ref<Product[]>([])
-const dialogVisible = ref(false)
 const productId = ref(undefined as number | undefined)
 
 onMounted(() => {
   loadCategories()
   loadProducts()
 })
-
+// 产品类别
+const categories = ref<Category[]>([])
 const loadCategories = async () => {
   const data = await getCategories()
   categories.value = data
 }
-
+// 产品信息列表
+const products = ref<Product[]>([])
+const count = ref(0)
 const loadProducts = async () => {
   if (listParams.name === '') listParams.name = undefined
   const { results, total } = await getProductsByConditions(listParams)
   products.value = results
   count.value = total
 }
-
+// 监听参数变化
 watch(() => listParams.page, page => {
   listParams.page = page
   loadProducts()
 })
-
 watch(() => listParams.size, size => {
   listParams.size = size
   loadProducts()
 })
-
 watch(() => listParams.categoryId, id => {
   listParams.categoryId = !id ? undefined : id
   loadProducts()
 })
-
+// 显示隐藏 dialog
+const dialogVisible = ref(false)
 const openCreateOrEdit = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     productId.value = payload
@@ -154,7 +147,6 @@ const openCreateOrEdit = (payload: number | MouseEvent) => {
   }
   dialogVisible.value = true
 }
-
 const closeCreateOrEdit = () => {
   dialogVisible.value = false
 }
@@ -164,8 +156,4 @@ const handleDelete = async (id: number) => {
   ElMessage.success('删除成功')
   return true
 }
-
 </script>
-
-<style lang="scss" scoped>
-</style>
