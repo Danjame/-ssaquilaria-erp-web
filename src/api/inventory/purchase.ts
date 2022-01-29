@@ -5,9 +5,9 @@ interface PurchaseAttrs {
   orderNum: string
   productId: number | undefined
   supplierId: number | undefined
-  price: number | undefined
-  quantity: number | undefined
-  amount: number | undefined
+  price: number
+  quantity: number
+  amount: number
   comment: string
 }
 

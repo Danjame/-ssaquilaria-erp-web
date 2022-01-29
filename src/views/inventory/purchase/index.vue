@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <template #header>
-      <el-form :inline="true">
+      <el-form inline>
         <el-form-item label="采购单号">
           <el-input v-model="listParams.orderNum">
             <template #append>
@@ -82,7 +82,7 @@
   </el-card>
   <el-dialog
     v-model="dialogVisible"
-    :destroy-on-close="true"
+    destroy-on-close
     :close-on-click-modal="false"
     title="新增采购"
   >

@@ -57,7 +57,7 @@ const props = defineProps({
   }
 })
 
-const rules = ref({
+const rules = reactive({
   name: [
     { required: true, message: '请输入产品名称', trigger: 'change' }
   ],

@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="form" :rules="rules" :model="purchase" label-width="100px">
+  <el-form ref="form" :model="purchase" :rules="rules" label-width="100px">
     <el-form-item label="采购单号" prop="orderNum">
       <el-input v-model="purchase.orderNum" />
     </el-form-item>
@@ -24,13 +24,13 @@
       </el-select>
     </el-form-item>
     <el-form-item label="单价" prop="price">
-      <el-input-number v-model="purchase.price" :min="0" />
+      <el-input-number v-model="purchase.price" :min="0" :controls="false" :precision="2" />
     </el-form-item>
     <el-form-item label="数量" prop="quantity">
-      <el-input v-model.number="purchase.quantity" :min="1" />
+      <el-input-number v-model="purchase.quantity" :min="1" :controls="false" />
     </el-form-item>
     <el-form-item label="金额" prop="amount">
-      <el-input v-model.number="purchase.amount" disabled />
+      <el-input-number v-model="purchase.amount" disabled :controls="false" :precision="2" />
     </el-form-item>
     <el-form-item label="备注" prop="comment">
       <el-input type="textarea" v-model="purchase.comment" autosize />
@@ -58,7 +58,12 @@ defineProps({
   }
 })
 
-const rules = ref({
+// 表单验证
+const validateQty = (rule: any, value: any, callback: any) => {
+  if (!value) callback(new Error('请输入产品数量'))
+  if (!Number.isInteger(value)) callback(new Error('产品数量必须为整数'))
+}
+const rules = reactive({
   orderNum: [
     { required: true, message: '请输入采购单号', trigger: 'change' }
   ],
@@ -69,16 +74,13 @@ const rules = ref({
     { required: true, message: '请选择供应商', trigger: 'change' }
   ],
   price: [
-    { required: true, message: '请输入产品单价', trigger: 'change' },
-    { type: 'number', message: '产品单价必须为数字' }
+    { required: true, message: '请输入产品单价', trigger: 'change' }
   ],
   quantity: [
-    { required: true, message: '请输入产品数量', trigger: 'change' },
-    { type: 'number', message: '产品数量必须为数字' }
+    { validator: validateQty, trigger: 'change' }
   ],
   amount: [
-    { required: true, message: '请输入产品金额', trigger: 'change' },
-    { type: 'number', message: '产品金额必须为数字' }
+    { required: true, message: '请输入产品金额', trigger: 'change' }
   ],
   comment: [
     { required: false, message: '请输入备注', trigger: 'change' }
@@ -90,9 +92,9 @@ const purchase = reactive({
   orderNum: '',
   productId: undefined as number | undefined,
   supplierId: undefined as number | undefined,
-  price: undefined as number | undefined,
-  quantity: undefined as number | undefined,
-  amount: undefined as number | undefined,
+  price: 0,
+  quantity: 1,
+  amount: 0,
   comment: ''
 })
 

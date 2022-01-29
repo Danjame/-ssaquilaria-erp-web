@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <template #header>
-      <el-form :inline="true">
+      <el-form inline>
         <el-form-item label="产品名称">
           <el-input v-model="listParams.name" placeholder="请输入产品名称">
             <template #append>
@@ -81,7 +81,7 @@
   </el-card>
   <el-dialog
     v-model="dialogVisible"
-    :destroy-on-close="true"
+    destroy-on-close
     :close-on-click-modal="false"
     :title="productId ? '编辑产品' : '新增产品'"
   >
