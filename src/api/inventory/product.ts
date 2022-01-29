@@ -1,13 +1,6 @@
 import request from '@/utils/request'
 import { Product } from './types/product'
 
-interface ProductConditions {
-  name?: string
-  categoryId?: number
-  page?: number
-  size?: number
-}
-
 interface ProductAttrs {
   name: string
   size: string
@@ -17,10 +10,17 @@ interface ProductAttrs {
   warnQty: string
 }
 
+interface ProductConditions {
+  name?: string
+  categoryId?: number
+  page?: number
+  size?: number
+}
+
 export const createProduct = (data: ProductAttrs) => {
   return request<Product>({
     method: 'POST',
-    url: '/inventory/products/',
+    url: '/inventory/products',
     data
   })
 }
@@ -42,6 +42,13 @@ export const getProductsByConditions = (params?: ProductConditions) => {
     method: 'GET',
     url: '/inventory/products/conditions',
     params
+  })
+}
+
+export const getAllProducts = () => {
+  return request<Product[]>({
+    method: 'GET',
+    url: '/inventory/products'
   })
 }
 

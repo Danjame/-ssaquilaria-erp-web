@@ -41,10 +41,10 @@
 
 <script lang="ts" setup>
 import { onMounted, PropType, reactive, ref, toRefs } from 'vue'
-import { getProductById, createProduct, updateProduct } from '@/api/inventory/product'
 import { Category } from '@/api/inventory/types/category'
 import { getUnits } from '@/api/inventory/unit'
 import { Unit } from '@/api/inventory/types/unit'
+import { getProductById, createProduct, updateProduct } from '@/api/inventory/product'
 
 const props = defineProps({
   id: {
@@ -56,7 +56,6 @@ const props = defineProps({
     required: true
   }
 })
-const emit = defineEmits(['close'])
 
 const rules = ref({
   name: [
@@ -85,6 +84,19 @@ const rules = ref({
   ]
 })
 
+onMounted(() => {
+  if (id.value) loadProduct()
+  loadUnits()
+})
+
+// 产品单位
+const units = ref<Unit[]>([])
+const loadUnits = async () => {
+  const results = await getUnits()
+  units.value = results
+}
+
+// 产品信息
 const product = reactive({
   name: '',
   categoryId: undefined as number | undefined,
@@ -97,17 +109,6 @@ const product = reactive({
 })
 
 const { id } = toRefs(props)
-onMounted(() => {
-  if (id.value) loadProduct()
-  loadUnits()
-})
-// 产品单位
-const units = ref<Unit[]>([])
-const loadUnits = async () => {
-  const results = await getUnits()
-  units.value = results
-}
-// 产品信息
 const loadProduct = async () => {
   const {
     name,
@@ -131,15 +132,17 @@ const loadProduct = async () => {
     warnQty
   })
 }
-// 提交表单
+
+// 表单提交
 const form = ref<InstanceType<typeof ElForm> | null>(null)
+const emit = defineEmits(['close'])
 const handleSumit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
   if (!id.value) {
     await createProduct(product)
-    ElMessage.success('创建成功')
+    ElMessage.success('新增成功')
   } else {
     console.log(id.value, product)
     await updateProduct(id.value, product)
