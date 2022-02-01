@@ -62,6 +62,7 @@ defineProps({
 const validateQty = (rule: any, value: any, callback: any) => {
   if (!value) callback(new Error('请输入产品数量'))
   if (!Number.isInteger(value)) callback(new Error('产品数量必须为整数'))
+  callback()
 }
 const rules = reactive({
   orderNum: [
