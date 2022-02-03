@@ -39,7 +39,7 @@ export const getSalesByConditions = (params?: SaleConditions) => {
   })
 }
 
-export const deleteSaleById = (id: number) => {
+export const deleteSale = (id: number) => {
   return request<Sale>({
     method: 'DELETE',
     url: `/inventory/sales/${id}`

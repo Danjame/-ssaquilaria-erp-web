@@ -40,7 +40,7 @@ export const getPurchasesByConditions = (params?: PurchaseConditions) => {
   })
 }
 
-export const deletePurchaseById = (id: number) => {
+export const deletePurchase = (id: number) => {
   return request<Purchase>({
     method: 'DELETE',
     url: `/inventory/purchases/${id}`

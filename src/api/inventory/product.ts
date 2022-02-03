@@ -60,7 +60,7 @@ export const updateProduct = (id: number, data: ProductAttrs) => {
   })
 }
 
-export const deleteProductById = (id: number) => {
+export const deleteProduct = (id: number) => {
   return request<Product>({
     method: 'DELETE',
     url: `/inventory/products/${id}`

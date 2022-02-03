@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <template #header>
-      <el-form inline>
+      <el-form ref="form" inline>
         <el-form-item label="产品名称">
           <el-input v-model="listParams.name" placeholder="请输入产品名称">
             <template #append>
@@ -86,27 +86,27 @@
     :close-on-click-modal="false"
     :title="productId ? '编辑产品' : '新增产品'"
   >
-    <CreateOrEdit :id="productId" :categories="categories" @close="closeCreateOrEdit" />
+    <CreateOrEdit :id="productId" :categories="categories" @close="dialogVisible = false" />
   </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, reactive, ref, watch } from 'vue'
 import CreateOrEdit from './components/CreateOrEdit.vue'
-import { getCategories } from '@/api/inventory/category'
+import { getAllCategories } from '@/api/inventory/category'
 import { Category } from '@/api/inventory/types/category'
-import { getProductsByConditions, deleteProductById } from '@/api/inventory/product'
+import { getProductsByConditions, deleteProduct } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 
 onMounted(() => {
-  loadCategories()
+  loadAllCategories()
   loadProducts()
 })
 
 // 产品类别
 const categories = ref<Category[]>([])
-const loadCategories = async () => {
-  const data = await getCategories()
+const loadAllCategories = async () => {
+  const data = await getAllCategories()
   categories.value = data
 }
 
@@ -136,12 +136,9 @@ const openCreateOrEdit = (payload: number | MouseEvent) => {
   }
   dialogVisible.value = true
 }
-const closeCreateOrEdit = () => {
-  dialogVisible.value = false
-}
 
 const handleDelete = async (id: number) => {
-  await deleteProductById(id)
+  await deleteProduct(id)
   ElMessage.success('删除成功')
   return true
 }

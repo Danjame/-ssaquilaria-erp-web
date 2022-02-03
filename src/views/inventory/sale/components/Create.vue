@@ -76,7 +76,7 @@ const rules = reactive({
   ]
 })
 
-// 采购信息
+// 销售信息
 const sale = reactive({
   orderNum: '',
   productId: undefined as number | undefined,

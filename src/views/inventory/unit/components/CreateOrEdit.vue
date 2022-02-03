@@ -1,0 +1,79 @@
+<template>
+  <el-form ref="form" :model="unit" :rules="rules" label-width="100px">
+    <el-form-item label="单位名称" prop="name">
+      <el-input v-model="unit.name" />
+    </el-form-item>
+    <el-form-item label="值" prop="value">
+      <el-input v-model="unit.value" />
+    </el-form-item>
+    <el-form-item label="单位标签" prop="label">
+      <el-input v-model="unit.label" />
+    </el-form-item>
+    <el-form-item label="描述" prop="description">
+      <el-input type="textarea" v-model="unit.description" autosize />
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="handleSumit">提交</el-button>
+    </el-form-item>
+  </el-form>
+</template>
+
+<script lang="ts" setup>
+import { onMounted, reactive, ref, toRefs } from 'vue'
+import { createUnit, getUnitById, updateUnit } from '@/api/inventory/unit'
+
+const props = defineProps({
+  id: {
+    type: Number,
+    default: null
+  }
+})
+
+// 表单验证
+const rules = reactive({
+  name: [
+    { required: true, message: '单位名称', trigger: 'change' }
+  ],
+  value: [
+    { required: true, message: '值', trigger: 'change' }
+  ],
+  label: [
+    { required: true, message: '单位标签', trigger: 'change' }
+  ]
+})
+
+onMounted(() => {
+  if (id.value) loadUnit()
+})
+
+// 供应商信息
+const unit = reactive({
+  name: '',
+  value: '',
+  label: '',
+  description: ''
+})
+
+// 表单提交
+const { id } = toRefs(props)
+const loadUnit = async () => {
+  const { name, value, label, description } = await getUnitById(id.value)
+  Object.assign(unit, { name, value, label, description })
+}
+const form = ref<InstanceType<typeof ElForm> | null>(null)
+const emit = defineEmits(['close'])
+const handleSumit = async () => {
+  const valid = await form.value?.validate()
+  if (!valid) return
+  // 验证通过
+  if (!id.value) {
+    await createUnit(unit)
+    ElMessage.success('新增成功')
+  } else {
+    await updateUnit(id.value, unit)
+    ElMessage.success('更新成功')
+  }
+  emit('close')
+}
+
+</script>

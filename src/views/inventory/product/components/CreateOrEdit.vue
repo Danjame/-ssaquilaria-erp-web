@@ -42,7 +42,7 @@
 <script lang="ts" setup>
 import { onMounted, PropType, reactive, ref, toRefs } from 'vue'
 import { Category } from '@/api/inventory/types/category'
-import { getUnits } from '@/api/inventory/unit'
+import { getAllUnits } from '@/api/inventory/unit'
 import { Unit } from '@/api/inventory/types/unit'
 import { getProductById, createProduct, updateProduct } from '@/api/inventory/product'
 
@@ -86,13 +86,13 @@ const rules = reactive({
 
 onMounted(() => {
   if (id.value) loadProduct()
-  loadUnits()
+  loadAllUnits()
 })
 
 // 产品单位
 const units = ref<Unit[]>([])
-const loadUnits = async () => {
-  const results = await getUnits()
+const loadAllUnits = async () => {
+  const results = await getAllUnits()
   units.value = results
 }
 
@@ -144,7 +144,6 @@ const handleSumit = async () => {
     await createProduct(product)
     ElMessage.success('新增成功')
   } else {
-    console.log(id.value, product)
     await updateProduct(id.value, product)
     ElMessage.success('更新成功')
   }

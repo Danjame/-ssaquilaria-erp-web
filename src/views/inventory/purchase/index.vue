@@ -1,9 +1,9 @@
 <template>
   <el-card>
     <template #header>
-      <el-form inline>
+      <el-form ref="form" inline>
         <el-form-item label="采购单号">
-          <el-input v-model="listParams.orderNum">
+          <el-input v-model="listParams.orderNum" placeholder="请输入采购单号">
             <template #append>
               <el-button :icon="'Search'" @click="loadPurchases" />
             </template>
@@ -98,7 +98,7 @@ import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getAllSuppliers } from '@/api/inventory/supplier'
 import { Supplier } from '@/api/inventory/types/supplier'
-import { getPurchasesByConditions, deletePurchaseById } from '@/api/inventory/purchase'
+import { getPurchasesByConditions, deletePurchase } from '@/api/inventory/purchase'
 import { Purchase } from '@/api/inventory/types/purchase'
 
 onMounted(() => {
@@ -141,7 +141,7 @@ const loadPurchases = async () => {
 const dialogVisible = ref(false)
 
 const handleDelete = async (id: number) => {
-  await deletePurchaseById(id)
+  await deletePurchase(id)
   ElMessage.success('删除成功')
   return true
 }

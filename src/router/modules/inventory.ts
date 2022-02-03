@@ -22,6 +22,24 @@ const routes: RouteRecordRaw = {
       name: 'purchase',
       component: () => import('@/views/inventory/purchase/index.vue'),
       meta: { title: '采购' }
+    },
+    {
+      path: 'supplier',
+      name: 'supplier',
+      component: () => import('@/views/inventory/supplier/index.vue'),
+      meta: { title: '供应商' }
+    },
+    {
+      path: 'category',
+      name: 'category',
+      component: () => import('@/views/inventory/category/index.vue'),
+      meta: { title: '商品类别' }
+    },
+    {
+      path: 'unit',
+      name: 'unit',
+      component: () => import('@/views/inventory/unit/index.vue'),
+      meta: { title: '商品单位' }
     }
   ]
 }
