@@ -43,7 +43,8 @@ export const getUnitsByConditions = (params?: UnitConditions) => {
     total: number
   }>({
     method: 'GET',
-    url: '/inventory/units/conditions'
+    url: '/inventory/units/conditions',
+    params
   })
 }
 
