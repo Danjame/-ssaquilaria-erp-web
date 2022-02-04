@@ -8,9 +8,9 @@ const request = axios.create({
 
 // Add a request interceptor
 request.interceptors.request.use(function (config) {
-  const { accessToken } = store.state
-  if (accessToken) {
-    config.headers!.Authorization = `Bearer ${accessToken}`
+  const { user } = store.state
+  if (user && user.token) {
+    config.headers!.Authorization = `Bearer ${user.token}`
   }
   // Do something before request is sent
   // config.headers.Authorization = token

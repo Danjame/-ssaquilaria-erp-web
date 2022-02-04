@@ -1,6 +1,6 @@
 <template>
   <div class="login-container">
-    <el-form ref="form" class="login-form" label-position="top" :model="user" :rules="rules" @submit.prevent="handleSubmit">
+    <el-form ref="form" class="login-form" label-position="top" :model="user" :rules="rules" @submit.prevent="handleLogin">
       <div class="login-form-header">
         <el-image style="width: 100px; height: 100px;" fit="fill" :src="logoSrc" />
         <p>中科沉香ERP系统</p>
@@ -24,7 +24,12 @@
         </el-input>
       </el-form-item>
       <el-form-item>
-        <el-button class="submit-button" type="primary" native-type="submit">登陆</el-button>
+        <el-button
+          class="submit-button"
+          type="primary"
+          native-type="submit"
+          :loading="isLoading"
+        >登录</el-button>
       </el-form-item>
     </el-form>
     <div class="footer">
@@ -58,21 +63,18 @@ const rules = ref({
   ]
 })
 
-const handleSubmit = async () => {
+const handleLogin = async () => {
   isLoading.value = true
   // 验证表单
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
-  try {
-    const { accessToken } = await login(user)
-    store.commit('setAccessToken', accessToken)
-    ElMessage.success('登录成功')
-    router.push('/')
-  } catch (err) {
-    ElMessage.error('账号/密码错误')
-  }
-  isLoading.value = false
+  const data = await login(user).finally(() => {
+    isLoading.value = false
+  })
+  store.commit('setUser', data)
+  ElMessage.success('登录成功')
+  router.push('/')
 }
 </script>
 
@@ -95,10 +97,6 @@ const handleSubmit = async () => {
     color:$primary-color;
     p {
       font-size: small;
-    }
-    .el-icon{
-      width: 100%;
-      height: 100%;
     }
   }
   .submit-button {

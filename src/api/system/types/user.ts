@@ -6,11 +6,16 @@ export interface User {
   name: string
   username: string
   email: string
-  password: string
   roles: Role[]
   department: Department
   status: boolean
   lastLogin: Date
   createdAt: Date
   updatedAt: Date
+}
+
+export interface CurrentUser {
+  name: string
+  status: boolean
+  token: string
 }

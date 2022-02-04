@@ -1,19 +1,17 @@
 import { createStore } from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
+import { CurrentUser } from '@/api/system/types/user'
 
 const store = createStore({
+  plugins: [createPersistedState()],
   state: {
     isCollapse: false,
-    accessToken: localStorage.getItem('accessToken') || '',
-    user: null
+    user: null as CurrentUser | null
   },
   getters: {},
   mutations: {
     setIsCollapse (state, payload) {
       state.isCollapse = payload
-    },
-    setAccessToken (state, payload) {
-      state.accessToken = payload
-      localStorage.setItem('accessToken', payload)
     },
     setUser (state, payload) {
       state.user = payload
