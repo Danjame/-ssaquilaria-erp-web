@@ -25,9 +25,7 @@ const handleLogout = () => {
   ).then(() => {
     store.commit('setUser', null)
     ElMessage.success('退出成功')
-    router.push({
-      name: 'login'
-    })
+    router.push({ name: 'login' })
   })
 }
 

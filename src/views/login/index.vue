@@ -44,15 +44,9 @@ import { login } from '@/api/system/user'
 import logoSrc from '@/assets/logo.png'
 import store from '@/store'
 import router from '@/router'
+import { useRoute } from 'vue-router'
 
 const form = ref<InstanceType<typeof ElForm> | null>(null)
-
-const user = reactive({
-  username: 'John K',
-  password: 'john1234'
-})
-
-const isLoading = ref(false)
 
 const rules = ref({
   username: [
@@ -63,6 +57,14 @@ const rules = ref({
   ]
 })
 
+const user = reactive({
+  username: 'John K',
+  password: 'john1234'
+})
+
+// 登录
+const isLoading = ref(false)
+const route = useRoute()
 const handleLogin = async () => {
   isLoading.value = true
   // 验证表单
@@ -74,7 +76,12 @@ const handleLogin = async () => {
   })
   store.commit('setUser', data)
   ElMessage.success('登录成功')
-  router.push('/')
+
+  let redirect = route.query.redirect
+  if (typeof redirect !== 'string') {
+    redirect = '/'
+  }
+  router.replace(redirect)
 }
 </script>
 
