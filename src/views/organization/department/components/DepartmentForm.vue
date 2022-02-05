@@ -1,22 +1,23 @@
 <template>
-  <el-form ref="form" :model="department" :rules="rules" label-width="100px">
-    <el-form-item label="部门名称" prop="name">
-      <el-input v-model="department.name" />
-    </el-form-item>
-    <el-form-item label="值" prop="value">
-      <el-input v-model="department.value" />
-    </el-form-item>
-    <el-form-item label="部门标签" prop="label">
-      <el-input v-model="department.label" />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="handleSumit">提交</el-button>
-    </el-form-item>
-  </el-form>
+  <Dialog
+    :title="id ? '编辑部门' : '新增部门'"
+    :submit="handleSubmit"
+  >
+    <el-form ref="form" :model="department" :rules="rules" label-width="100px">
+      <el-form-item label="部门名称" prop="name">
+        <el-input v-model="department.name" />
+      </el-form-item>
+      <el-form-item label="值" prop="value">
+        <el-input v-model="department.value" />
+      </el-form-item>
+      <el-form-item label="部门标签" prop="label">
+        <el-input v-model="department.label" />
+      </el-form-item>
+    </el-form>
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, toRefs } from 'vue'
 import { createDepartment, getDepartmentById, updateDepartment } from '@/api/organization/department'
 
 const props = defineProps({
@@ -56,9 +57,9 @@ const loadDepartment = async () => {
   const { name, value, label } = await getDepartmentById(id.value)
   Object.assign(department, { name, value, label })
 }
-const form = ref<InstanceType<typeof ElForm> | null>(null)
-const emit = defineEmits(['close'])
-const handleSumit = async () => {
+const form = ref<typeof ElForm | null>(null)
+const emit = defineEmits(['submit'])
+const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
@@ -69,7 +70,7 @@ const handleSumit = async () => {
     await updateDepartment(id.value, department)
     ElMessage.success('更新成功')
   }
-  emit('close')
+  emit('submit')
 }
 
 </script>

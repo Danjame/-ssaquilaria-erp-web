@@ -5,20 +5,25 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
+const rootPath = path.resolve(__dirname, './src')
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
     vue(),
     AutoImport({
-      resolvers: [ElementPlusResolver()]
+      imports: ['vue'],
+      resolvers: [ElementPlusResolver()],
+      dts: path.resolve(rootPath, 'auto-imports.d.ts')
     }),
     Components({
-      resolvers: [ElementPlusResolver()]
+      resolvers: [ElementPlusResolver()],
+      dts: path.resolve(rootPath, 'components.d.ts')
     })
   ],
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src')
+      '@': rootPath
     }
   },
   css: {

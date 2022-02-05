@@ -1,41 +1,43 @@
 <template>
-  <el-form ref="form" :model="sale" :rules="rules" label-width="100px">
-    <el-form-item label="采购单号" prop="orderNum">
-      <el-input v-model="sale.orderNum" />
-    </el-form-item>
-    <el-form-item label="产品名称" prop="productId">
-      <el-select v-model="sale.productId" placeholder="请选择产品名称" clearable>
-        <el-option
-          v-for="product in products"
-          :key="product.id"
-          :label="product.name"
-          :value="product.id"
-        />
-      </el-select>
-    </el-form-item>
-    <el-form-item label="客户编号" prop="customerId">
-      <el-input-number v-model="sale.customerId" :controls="false" />
-    </el-form-item>
-    <el-form-item label="单价" prop="price">
-      <el-input-number v-model="sale.price" :min="0" :controls="false" :precision="2" />
-    </el-form-item>
-    <el-form-item label="数量" prop="quantity">
-      <el-input-number v-model="sale.quantity" :min="1" :controls="false" />
-    </el-form-item>
-    <el-form-item label="金额" prop="amount">
-      <el-input-number v-model="sale.amount" disabled :controls="false" :precision="2" />
-    </el-form-item>
-    <el-form-item label="备注" prop="comment">
-      <el-input type="textarea" v-model="sale.comment" autosize />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="handleSumit">提交</el-button>
-    </el-form-item>
-  </el-form>
+  <Dialog
+    title="新增销售"
+    :submit="handleSubmit"
+  >
+    <el-form ref="form" :model="sale" :rules="rules" label-width="100px">
+      <el-form-item label="采购单号" prop="orderNum">
+        <el-input v-model="sale.orderNum" />
+      </el-form-item>
+      <el-form-item label="产品名称" prop="productId">
+        <el-select v-model="sale.productId" placeholder="请选择产品名称" clearable>
+          <el-option
+            v-for="product in products"
+            :key="product.id"
+            :label="product.name"
+            :value="product.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="客户编号" prop="customerId">
+        <el-input-number v-model="sale.customerId" :controls="false" />
+      </el-form-item>
+      <el-form-item label="单价" prop="price">
+        <el-input-number v-model="sale.price" :min="0" :controls="false" :precision="2" />
+      </el-form-item>
+      <el-form-item label="数量" prop="quantity">
+        <el-input-number v-model="sale.quantity" :min="1" :controls="false" />
+      </el-form-item>
+      <el-form-item label="金额" prop="amount">
+        <el-input-number v-model="sale.amount" disabled :controls="false" :precision="2" />
+      </el-form-item>
+      <el-form-item label="备注" prop="comment">
+        <el-input type="textarea" v-model="sale.comment" autosize />
+      </el-form-item>
+    </el-form>
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
-import { PropType, reactive, ref, watch } from 'vue'
+import { PropType } from 'vue'
 import { Product } from '@/api/inventory/types/product'
 import { createSale } from '@/api/inventory/sale'
 
@@ -88,15 +90,15 @@ const sale = reactive({
 })
 
 // 表单提交
-const form = ref<InstanceType<typeof ElForm> | null>(null)
-const emit = defineEmits(['close'])
-const handleSumit = async () => {
+const form = ref<typeof ElForm | null>(null)
+const emit = defineEmits(['submit'])
+const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
   await createSale(sale)
   ElMessage.success('新增成功')
-  emit('close')
+  emit('submit')
 }
 
 watch(() => [sale.price, sale.quantity], () => {

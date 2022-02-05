@@ -1,22 +1,23 @@
 <template>
-  <el-form ref="form" :model="category" :rules="rules" label-width="100px">
-    <el-form-item label="分类名称" prop="name">
-      <el-input v-model="category.name" />
-    </el-form-item>
-    <el-form-item label="值" prop="value">
-      <el-input v-model="category.value" />
-    </el-form-item>
-    <el-form-item label="分类标签" prop="label">
-      <el-input v-model="category.label" />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="handleSumit">提交</el-button>
-    </el-form-item>
-  </el-form>
+  <Dialog
+    :title="id ? '编辑类别' : '新增类别'"
+    :submit="handleSubmit"
+  >
+    <el-form ref="form" :model="category" :rules="rules" label-width="100px">
+      <el-form-item label="分类名称" prop="name">
+        <el-input v-model="category.name" />
+      </el-form-item>
+      <el-form-item label="值" prop="value">
+        <el-input v-model="category.value" />
+      </el-form-item>
+      <el-form-item label="分类标签" prop="label">
+        <el-input v-model="category.label" />
+      </el-form-item>
+    </el-form>
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, toRefs } from 'vue'
 import { createCategory, getCategoryById, updateCategory } from '@/api/inventory/category'
 
 const props = defineProps({
@@ -56,9 +57,9 @@ const loadCategory = async () => {
   const { name, value, label } = await getCategoryById(id.value)
   Object.assign(category, { name, value, label })
 }
-const form = ref<InstanceType<typeof ElForm> | null>(null)
-const emit = defineEmits(['close'])
-const handleSumit = async () => {
+const form = ref<typeof ElForm | null>(null)
+const emit = defineEmits(['submit'])
+const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
@@ -69,7 +70,7 @@ const handleSumit = async () => {
     await updateCategory(id.value, category)
     ElMessage.success('更新成功')
   }
-  emit('close')
+  emit('submit')
 }
 
 </script>

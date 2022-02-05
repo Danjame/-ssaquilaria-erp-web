@@ -13,7 +13,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="openCreateOrEdit">新增类别</el-button>
+      <el-button type="primary" :icon="'Plus'" @click="openForm">新增类别</el-button>
     </template>
     <el-table :data="categories" style="width: 100%">
       <el-table-column label="分类名" prop="name" align="center" />
@@ -22,7 +22,7 @@
       <el-table-column label="操作" width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space>
-            <el-button type="text" @click="openCreateOrEdit(scope.row.id)">编辑</el-button>
+            <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
             <el-popconfirm
               confirm-button-text="确定"
               cancel-button-text="取消"
@@ -49,19 +49,16 @@
       v-model:page-size="listParams.size"
     />
   </el-card>
-  <el-dialog
-    v-model="dialogVisible"
-    destroy-on-close
-    :close-on-click-modal="false"
-    :title="categoryId ? '编辑类别' : '新增类别'"
-  >
-    <CreateOrEdit :id="categoryId" @close="dialogVisible = false" />
-  </el-dialog>
+  <CategoryForm
+    v-if="visible"
+    v-model="visible"
+    :id="categoryId"
+    @submit="onSubmitted"
+  />
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, watch } from 'vue'
-import CreateOrEdit from './components/CreateOrEdit.vue'
+import CategoryForm from './components/CategoryForm.vue'
 import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getCategoriesByConditions, deleteCategory } from '@/api/inventory/category'
@@ -94,15 +91,20 @@ const loadCategories = async () => {
 }
 
 // 显示隐藏 dialog
-const dialogVisible = ref(false)
+const visible = ref(false)
 const categoryId = ref(undefined as number | undefined)
-const openCreateOrEdit = (payload: number | MouseEvent) => {
+const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     categoryId.value = payload
   } else {
     categoryId.value = undefined
   }
-  dialogVisible.value = true
+  visible.value = true
+}
+
+const onSubmitted = () => {
+  visible.value = false
+  loadCategories()
 }
 
 const handleDelete = async (id: number) => {

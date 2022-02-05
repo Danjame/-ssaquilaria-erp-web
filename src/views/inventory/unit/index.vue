@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <template #header>
-      <el-button type="primary" :icon="'Plus'" @click="openCreateOrEdit">新增产品单位</el-button>
+      <el-button type="primary" :icon="'Plus'" @click="openForm">新增产品单位</el-button>
     </template>
     <el-table :data="units" style="width: 100%">
       <el-table-column label="单位名称" prop="name" align="center" />
@@ -11,7 +11,7 @@
       <el-table-column label="操作" width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space>
-            <el-button type="text" @click="openCreateOrEdit(scope.row.id)">编辑</el-button>
+            <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
             <el-popconfirm
               confirm-button-text="确定"
               cancel-button-text="取消"
@@ -38,19 +38,16 @@
       v-model:page-size="listParams.size"
     />
   </el-card>
-  <el-dialog
-    v-model="dialogVisible"
-    destroy-on-close
-    :close-on-click-modal="false"
-    :title="unitId ? '编辑产品单位' : '新增产品单位'"
-  >
-    <CreateOrEdit :id="unitId" @close="dialogVisible = false;" />
-  </el-dialog>
+  <UnitForm
+    v-if="visible"
+    v-model="visible"
+    :id="unitId"
+    @submit="onSubmitted"
+  />
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, watch } from 'vue'
-import CreateOrEdit from './components/CreateOrEdit.vue'
+import UnitForm from './components/UnitForm.vue'
 import { getUnitsByConditions, deleteUnit } from '@/api/inventory/unit'
 import { Unit } from '@/api/inventory/types/unit'
 
@@ -72,15 +69,20 @@ const loadUnits = async () => {
 }
 
 // 显示隐藏 dialog
-const dialogVisible = ref(false)
+const visible = ref(false)
 const unitId = ref(undefined as number | undefined)
-const openCreateOrEdit = (payload: number | MouseEvent) => {
+const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     unitId.value = payload
   } else {
     unitId.value = undefined
   }
-  dialogVisible.value = true
+  visible.value = true
+}
+
+const onSubmitted = () => {
+  visible.value = false
+  loadUnits()
 }
 
 const handleDelete = async (id: number) => {

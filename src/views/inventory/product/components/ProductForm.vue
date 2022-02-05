@@ -1,47 +1,49 @@
 <template>
-  <el-form ref="form" :rules="rules" :model="product" label-width="100px">
-    <el-form-item label="名称" prop="name">
-      <el-input v-model="product.name" />
-    </el-form-item>
-    <el-form-item label="类别" prop="categoryId">
-      <el-select v-model="product.categoryId" placeholder="请选择产品类别">
-        <el-option
-          v-for="category in categories"
-          :key="category.value"
-          :label="category.label"
-          :value="category.id"
-        />
-      </el-select>
-    </el-form-item>
-    <el-form-item label="单位" prop="unitId">
-      <el-select v-model="product.unitId" placeholder="请选择产品单位">
-        <el-option v-for="unit in units" :key="unit.value" :label="unit.label" :value="unit.id" />
-      </el-select>
-    </el-form-item>
-    <el-form-item label="规格" prop="sieze">
-      <el-input v-model="product.size" />
-    </el-form-item>
-    <el-form-item label="描述" prop="description">
-      <el-input type="textarea" v-model="product.description" autosize />
-    </el-form-item>
-    <el-form-item label="序列号" prop="serialNum">
-      <el-input v-model="product.serialNum" />
-    </el-form-item>
-    <el-form-item label="机器码" prop="machineCode">
-      <el-input v-model="product.machineCode" />
-    </el-form-item>
-    <el-form-item label="预警库存" prop="warnQty">
-      <el-input v-model="product.warnQty" />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="handleSumit">提交</el-button>
-    </el-form-item>
-  </el-form>
+  <Dialog
+    :title="id ? '编辑产品' : '新增产品'"
+    :submit="handleSubmit"
+  >
+    <el-form ref="form" :rules="rules" :model="product" label-width="100px">
+      <el-form-item label="名称" prop="name">
+        <el-input v-model="product.name" />
+      </el-form-item>
+      <el-form-item label="类别" prop="categoryId">
+        <el-select v-model="product.categoryId" placeholder="请选择产品类别">
+          <el-option
+            v-for="category in categories"
+            :key="category.value"
+            :label="category.label"
+            :value="category.id"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="单位" prop="unitId">
+        <el-select v-model="product.unitId" placeholder="请选择产品单位">
+          <el-option v-for="unit in units" :key="unit.value" :label="unit.label" :value="unit.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="规格" prop="sieze">
+        <el-input v-model="product.size" />
+      </el-form-item>
+      <el-form-item label="描述" prop="description">
+        <el-input type="textarea" v-model="product.description" autosize />
+      </el-form-item>
+      <el-form-item label="序列号" prop="serialNum">
+        <el-input v-model="product.serialNum" />
+      </el-form-item>
+      <el-form-item label="机器码" prop="machineCode">
+        <el-input v-model="product.machineCode" />
+      </el-form-item>
+      <el-form-item label="预警库存" prop="warnQty">
+        <el-input v-model="product.warnQty" />
+      </el-form-item>
+    </el-form>
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, PropType, reactive, ref, toRefs } from 'vue'
 import { Category } from '@/api/inventory/types/category'
+import { PropType } from 'vue'
 import { getAllUnits } from '@/api/inventory/unit'
 import { Unit } from '@/api/inventory/types/unit'
 import { getProductById, createProduct, updateProduct } from '@/api/inventory/product'
@@ -134,9 +136,9 @@ const loadProduct = async () => {
 }
 
 // 表单提交
-const form = ref<InstanceType<typeof ElForm> | null>(null)
-const emit = defineEmits(['close'])
-const handleSumit = async () => {
+const form = ref<typeof ElForm | null>(null)
+const emit = defineEmits(['submit'])
+const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
@@ -147,7 +149,7 @@ const handleSumit = async () => {
     await updateProduct(id.value, product)
     ElMessage.success('更新成功')
   }
-  emit('close')
+  emit('submit')
 }
 
 </script>

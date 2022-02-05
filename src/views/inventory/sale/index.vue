@@ -27,7 +27,7 @@
           </el-input>
         </el-form-item>
       </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="dialogVisible = true">新增销售</el-button>
+      <el-button type="primary" :icon="'Plus'" @click="visible = true">新增销售</el-button>
     </template>
     <el-table :data="sales" style="width: 100%">
       <el-table-column label="销售单号" prop="orderNum" align="center" />
@@ -37,6 +37,7 @@
         </template>
       </el-table-column>
       <el-table-column label="客户编号" prop="customerId" align="center" />
+      <el-table-column label="单价" prop="price" align="center" />
       <el-table-column label="数量" prop="quantity" align="center" />
       <el-table-column label="金额" prop="amount" align="center" />
       <el-table-column label="备注" prop="comment" align="center" />
@@ -69,19 +70,16 @@
       v-model:page-size="listParams.size"
     />
   </el-card>
-  <el-dialog
-    v-model="dialogVisible"
-    destroy-on-close
-    :close-on-click-modal="false"
-    title="新增销售"
-  >
-    <Create :products="products" @close="dialogVisible = false" />
-  </el-dialog>
+  <SaleForm
+    v-if="visible"
+    v-model="visible"
+    :products="products"
+    @submit="onSubmitted"
+  />
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, watch } from 'vue'
-import Create from './components/Create.vue'
+import SaleForm from './components/SaleForm.vue'
 import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getSalesByConditions, deleteSale } from '@/api/inventory/sale'
@@ -116,7 +114,12 @@ const loadSales = async () => {
 }
 
 // 显示隐藏 dialog
-const dialogVisible = ref(false)
+const visible = ref(false)
+
+const onSubmitted = () => {
+  visible.value = false
+  loadSales()
+}
 
 const handleDelete = async (id: number) => {
   await deleteSale(id)

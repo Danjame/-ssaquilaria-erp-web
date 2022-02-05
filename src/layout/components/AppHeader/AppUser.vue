@@ -1,9 +1,8 @@
 <template>
   <el-dropdown>
-    <el-avatar :size="26" :icon="'Avatar'" />
+    <span>{{ store.state.user?.name }}</span>
     <template #dropdown>
       <el-dropdown-menu>
-        <el-dropdown-item>{{ store.state.user?.name }}</el-dropdown-item>
         <el-dropdown-item divided @click="handleLogout">退出</el-dropdown-item>
       </el-dropdown-menu>
     </template>

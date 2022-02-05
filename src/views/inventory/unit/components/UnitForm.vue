@@ -1,25 +1,26 @@
 <template>
-  <el-form ref="form" :model="unit" :rules="rules" label-width="100px">
-    <el-form-item label="单位名称" prop="name">
-      <el-input v-model="unit.name" />
-    </el-form-item>
-    <el-form-item label="值" prop="value">
-      <el-input v-model="unit.value" />
-    </el-form-item>
-    <el-form-item label="单位标签" prop="label">
-      <el-input v-model="unit.label" />
-    </el-form-item>
-    <el-form-item label="描述" prop="description">
-      <el-input type="textarea" v-model="unit.description" autosize />
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="handleSumit">提交</el-button>
-    </el-form-item>
-  </el-form>
+  <Dialog
+    :title="id ? '编辑产品单位' : '新增产品单位'"
+    :submit="handleSubmit"
+  >
+    <el-form ref="form" :model="unit" :rules="rules" label-width="100px">
+      <el-form-item label="单位名称" prop="name">
+        <el-input v-model="unit.name" />
+      </el-form-item>
+      <el-form-item label="值" prop="value">
+        <el-input v-model="unit.value" />
+      </el-form-item>
+      <el-form-item label="单位标签" prop="label">
+        <el-input v-model="unit.label" />
+      </el-form-item>
+      <el-form-item label="描述" prop="description">
+        <el-input type="textarea" v-model="unit.description" autosize />
+      </el-form-item>
+    </el-form>
+  </Dialog>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, toRefs } from 'vue'
 import { createUnit, getUnitById, updateUnit } from '@/api/inventory/unit'
 
 const props = defineProps({
@@ -60,9 +61,9 @@ const loadUnit = async () => {
   const { name, value, label, description } = await getUnitById(id.value)
   Object.assign(unit, { name, value, label, description })
 }
-const form = ref<InstanceType<typeof ElForm> | null>(null)
-const emit = defineEmits(['close'])
-const handleSumit = async () => {
+const form = ref<typeof ElForm | null>(null)
+const emit = defineEmits(['submit'])
+const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
@@ -73,7 +74,7 @@ const handleSumit = async () => {
     await updateUnit(id.value, unit)
     ElMessage.success('更新成功')
   }
-  emit('close')
+  emit('submit')
 }
 
 </script>

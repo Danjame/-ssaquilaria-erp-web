@@ -5,7 +5,8 @@ module.exports = {
   },
   extends: [
     'plugin:vue/vue3-strongly-recommended',
-    'standard'
+    'standard',
+    'vue-global-api'
   ],
   parserOptions: {
     ecmaVersion: 13,
@@ -23,11 +24,7 @@ module.exports = {
     'vue/max-attributes-per-line': 0
   },
   globals: {
-    defineProps: 'readonly',
-    defineEmits: 'readonly',
-    defineExpose: 'readonly',
-    withDefaults: 'readonly',
-    ElMessage: 'readonly',
-    ElForm: 'readonly'
+    ElMessage: true,
+    ElDialog: true
   }
 }

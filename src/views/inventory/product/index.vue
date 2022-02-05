@@ -80,19 +80,17 @@
       v-model:page-size="listParams.size"
     />
   </el-card>
-  <el-dialog
-    v-model="dialogVisible"
-    destroy-on-close
-    :close-on-click-modal="false"
-    :title="productId ? '编辑产品' : '新增产品'"
-  >
-    <CreateOrEdit :id="productId" :categories="categories" @close="dialogVisible = false" />
-  </el-dialog>
+  <ProductForm
+    v-if="visible"
+    v-model="visible"
+    :id="productId"
+    :categories="categories"
+    @submit="onSubmitted"
+  />
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, watch } from 'vue'
-import CreateOrEdit from './components/CreateOrEdit.vue'
+import ProductForm from './components/ProductForm.vue'
 import { getAllCategories } from '@/api/inventory/category'
 import { Category } from '@/api/inventory/types/category'
 import { getProductsByConditions, deleteProduct } from '@/api/inventory/product'
@@ -126,7 +124,7 @@ const loadProducts = async () => {
 }
 
 // 显示隐藏新增/编辑 dialog
-const dialogVisible = ref(false)
+const visible = ref(false)
 const productId = ref(undefined as number | undefined)
 const openCreateOrEdit = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
@@ -134,7 +132,12 @@ const openCreateOrEdit = (payload: number | MouseEvent) => {
   } else {
     productId.value = undefined
   }
-  dialogVisible.value = true
+  visible.value = true
+}
+
+const onSubmitted = () => {
+  visible.value = false
+  loadProducts()
 }
 
 const handleDelete = async (id: number) => {

@@ -30,7 +30,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="dialogVisible = true">新增采购</el-button>
+      <el-button type="primary" :icon="'Plus'" @click="visible = true">新增采购</el-button>
     </template>
     <el-table :data="purchases" style="width: 100%">
       <el-table-column label="采购单号" prop="orderNum" align="center" />
@@ -44,6 +44,7 @@
           <span>{{ scope.row.supplier.label }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="单价" prop="price" align="center" />
       <el-table-column label="数量" prop="quantity" align="center" />
       <el-table-column label="金额" prop="amount" align="center" />
       <el-table-column label="申请人" align="center">
@@ -81,19 +82,17 @@
       v-model:page-size="listParams.size"
     />
   </el-card>
-  <el-dialog
-    v-model="dialogVisible"
-    destroy-on-close
-    :close-on-click-modal="false"
-    title="新增采购"
-  >
-    <Create :products="products" :suppliers="suppliers" @close="dialogVisible = false" />
-  </el-dialog>
+  <PurchaseForm
+    v-if="visible"
+    v-model="visible"
+    :products="products"
+    :suppliers="suppliers"
+    @submit="onSubmitted"
+  />
 </template>
 
 <script lang="ts" setup>
-import { onMounted, reactive, ref, watch } from 'vue'
-import Create from './components/Create.vue'
+import PurchaseForm from './components/PurchaseForm.vue'
 import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getAllSuppliers } from '@/api/inventory/supplier'
@@ -138,7 +137,12 @@ const loadPurchases = async () => {
 }
 
 // 显示隐藏 dialog
-const dialogVisible = ref(false)
+const visible = ref(false)
+
+const onSubmitted = () => {
+  visible.value = false
+  loadPurchases()
+}
 
 const handleDelete = async (id: number) => {
   await deletePurchase(id)
