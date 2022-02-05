@@ -4,18 +4,21 @@
       <el-button type="primary" :icon="'Plus'" @click="openForm">新增部门</el-button>
     </template>
     <el-table :data="departments" style="width: 100%">
+      <el-table-column type="expand">
+        <template #default="props">
+          <span>部门成员：</span>
+          <el-tag v-for="user in props.row.users"> {{ user.name }}</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="部门名称" prop="name" align="center" />
       <el-table-column label="值" prop="value" align="center" />
       <el-table-column label="部门标签" prop="label" align="center" />
-      <el-table-column label="操作" width="100" align="center" fixed="right">
+      <el-table-column label="操作" width="150" align="center" fixed="right">
         <template #default="scope">
           <el-space>
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
+            <el-button type="text" @click="openSetting(scope.row.id)">管理</el-button>
             <el-popconfirm
-              confirm-button-text="确定"
-              cancel-button-text="取消"
-              :icon="'InfoFilled'"
-              icon-color="red"
               title="确定要删除该部门吗?"
               @confirm="handleDelete(scope.row.id)"
             >
@@ -43,10 +46,17 @@
     :id="departmentId"
     @submit="onSubmitted"
   />
+  <DepartmentSetting
+    v-if="settingVisible"
+    v-model="settingVisible"
+    :id="departmentId"
+    @submit="onSubmitted"
+  />
 </template>
 
 <script lang="ts" setup>
 import DepartmentForm from './components/DepartmentForm.vue'
+import DepartmentSetting from './components/DepartmentSetting.vue'
 import { getDepartmentsByConditions, deleteDepartment } from '@/api/organization/department'
 import { Department } from '@/api/organization/types/department'
 
@@ -67,7 +77,7 @@ const loadDepartments = async () => {
   count.value = total
 }
 
-// 显示隐藏 dialog
+// 显示隐藏 form
 const visible = ref(false)
 const departmentId = ref(undefined as number | undefined)
 const openForm = (payload: number | MouseEvent) => {
@@ -84,9 +94,17 @@ const onSubmitted = () => {
   loadDepartments()
 }
 
+// 显示隐藏 setting
+const settingVisible = ref(false)
+const openSetting = (id: number) => {
+  departmentId.value = id
+  settingVisible.value = true
+}
+
 const handleDelete = async (id: number) => {
   await deleteDepartment(id)
   ElMessage.success('删除成功')
+  loadDepartments()
   return true
 }
 

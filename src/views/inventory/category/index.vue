@@ -24,10 +24,6 @@
           <el-space>
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
             <el-popconfirm
-              confirm-button-text="确定"
-              cancel-button-text="取消"
-              :icon="'InfoFilled'"
-              icon-color="red"
               title="确定要删除该产品分类吗?"
               @confirm="handleDelete(scope.row.id)"
             >
@@ -90,7 +86,7 @@ const loadCategories = async () => {
   count.value = total
 }
 
-// 显示隐藏 dialog
+// 显示隐藏 form
 const visible = ref(false)
 const categoryId = ref(undefined as number | undefined)
 const openForm = (payload: number | MouseEvent) => {

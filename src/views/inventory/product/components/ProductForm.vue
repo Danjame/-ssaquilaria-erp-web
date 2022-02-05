@@ -87,7 +87,7 @@ const rules = reactive({
 })
 
 onMounted(() => {
-  if (id.value) loadProduct()
+  if (props.id) loadProduct()
   loadAllUnits()
 })
 
@@ -110,7 +110,6 @@ const product = reactive({
   warnQty: ''
 })
 
-const { id } = toRefs(props)
 const loadProduct = async () => {
   const {
     name,
@@ -121,7 +120,7 @@ const loadProduct = async () => {
     serialNum,
     machineCode,
     warnQty
-  } = await getProductById(id.value)
+  } = await getProductById(props.id)
 
   Object.assign(product, {
     name,
@@ -142,11 +141,11 @@ const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
-  if (!id.value) {
+  if (!props.id) {
     await createProduct(product)
     ElMessage.success('新增成功')
   } else {
-    await updateProduct(id.value, product)
+    await updateProduct(props.id, product)
     ElMessage.success('更新成功')
   }
   emit('submit')

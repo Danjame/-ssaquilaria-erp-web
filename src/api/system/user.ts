@@ -46,6 +46,13 @@ export const createUser = (data: UserAttrs) => {
   })
 }
 
+export const getAllUsers = () => {
+  return request<User[]>({
+    method: 'GET',
+    url: '/system/users'
+  })
+}
+
 export const getUserById = (id: number) => {
   return request<User>({
     method: 'GET',

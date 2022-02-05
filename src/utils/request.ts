@@ -48,7 +48,7 @@ request.interceptors.response.use(function (response) {
       isRefreshing = false
     })
   } else {
-    ElMessage.error('操作失败：' + error.response.statusText)
+    ElMessage.error('操作失败：' + error.response.data.message)
   }
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error

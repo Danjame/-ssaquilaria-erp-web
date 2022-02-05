@@ -44,34 +44,33 @@ const rules = reactive({
 })
 
 onMounted(() => {
-  if (id.value) loadUnit()
+  if (props.id) loadUnit()
 })
 
-// 供应商信息
+// 单位信息
 const unit = reactive({
   name: '',
   value: '',
   label: '',
   description: ''
 })
-
-// 表单提交
-const { id } = toRefs(props)
 const loadUnit = async () => {
-  const { name, value, label, description } = await getUnitById(id.value)
+  const { name, value, label, description } = await getUnitById(props.id)
   Object.assign(unit, { name, value, label, description })
 }
+
+// 表单提交
 const form = ref<typeof ElForm | null>(null)
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
-  if (!id.value) {
+  if (!props.id) {
     await createUnit(unit)
     ElMessage.success('新增成功')
   } else {
-    await updateUnit(id.value, unit)
+    await updateUnit(props.id, unit)
     ElMessage.success('更新成功')
   }
   emit('submit')

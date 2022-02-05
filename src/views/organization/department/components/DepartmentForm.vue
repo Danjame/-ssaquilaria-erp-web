@@ -41,33 +41,32 @@ const rules = reactive({
 })
 
 onMounted(() => {
-  if (id.value) loadDepartment()
+  if (props.id) loadDepartment()
 })
 
-// 供应商信息
+// 部门信息
 const department = reactive({
   name: '',
   value: '',
   label: ''
 })
-
-// 表单提交
-const { id } = toRefs(props)
 const loadDepartment = async () => {
-  const { name, value, label } = await getDepartmentById(id.value)
+  const { name, value, label } = await getDepartmentById(props.id)
   Object.assign(department, { name, value, label })
 }
+
+// 表单提交
 const form = ref<typeof ElForm | null>(null)
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
-  if (!id.value) {
+  if (!props.id) {
     await createDepartment(department)
     ElMessage.success('新增成功')
   } else {
-    await updateDepartment(id.value, department)
+    await updateDepartment(props.id, department)
     ElMessage.success('更新成功')
   }
   emit('submit')

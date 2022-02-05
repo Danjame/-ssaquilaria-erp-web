@@ -11,6 +11,7 @@ declare global {
   const ElForm: typeof import('element-plus/es')['ElForm']
   const ElMessage: typeof import('element-plus/es')['ElMessage']
   const ElMessageBox: typeof import('element-plus/es')['ElMessageBox']
+  const ElTable: typeof import('element-plus/es')['ElTable']
   const getCurrentInstance: typeof import('vue')['getCurrentInstance']
   const getCurrentScope: typeof import('vue')['getCurrentScope']
   const h: typeof import('vue')['h']

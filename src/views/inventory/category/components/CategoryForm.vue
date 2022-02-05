@@ -41,7 +41,7 @@ const rules = reactive({
 })
 
 onMounted(() => {
-  if (id.value) loadCategory()
+  if (props.id) loadCategory()
 })
 
 // 类别信息
@@ -50,24 +50,23 @@ const category = reactive({
   value: '',
   label: ''
 })
-
-// 表单提交
-const { id } = toRefs(props)
 const loadCategory = async () => {
-  const { name, value, label } = await getCategoryById(id.value)
+  const { name, value, label } = await getCategoryById(props.id)
   Object.assign(category, { name, value, label })
 }
+
+// 表单提交
 const form = ref<typeof ElForm | null>(null)
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
-  if (!id.value) {
+  if (!props.id) {
     await createCategory(category)
     ElMessage.success('新增成功')
   } else {
-    await updateCategory(id.value, category)
+    await updateCategory(props.id, category)
     ElMessage.success('更新成功')
   }
   emit('submit')
