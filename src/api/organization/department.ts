@@ -2,9 +2,10 @@ import request from '@/utils/request'
 import { Department } from './types/department'
 
 interface DepartmentAttrs {
-  name: string
-  value: string
-  label: string
+  name?: string
+  value?: string
+  label?: string
+  userIds?: number[]
 }
 
 interface DepartmentConditions {

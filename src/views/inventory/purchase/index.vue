@@ -71,7 +71,6 @@
     <el-pagination
       background
       layout="total, sizes, prev, pager, next, jumper"
-      align="right"
       :page-sizes="[10, 15, 20]"
       :total="count"
       v-model:current-page="listParams.page"

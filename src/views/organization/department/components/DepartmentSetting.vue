@@ -1,9 +1,9 @@
 <template>
   <Dialog
-    title="部门成员"
+    title="设置部门成员"
     :submit="handleSubmit"
   >
-    <el-table :data="users" style="width: 100%" ref="multipleTableRef" @selection-change="handleSelect">
+    <el-table :data="users" style="width: 100%" ref="multipleTableRef" @selection-change="onSelect">
       <el-table-column type="selection" width="55" />
       <el-table-column label="用户名称" prop="name" align="center" />
       <el-table-column label="用户邮箱" prop="email" align="center" />
@@ -12,10 +12,9 @@
 </template>
 
 <script lang="ts" setup>
-import { getDepartmentById, updateDepartment } from '@/api/organization/department'
 import { getAllUsers } from '@/api/system/user'
-import { User } from '@/api/system/types/user';
-import { Department } from '@/api/organization/types/department';
+import { User } from '@/api/system/types/user'
+import { getDepartmentById, updateDepartment } from '@/api/organization/department'
 
 const props = defineProps({
   id: {
@@ -24,33 +23,11 @@ const props = defineProps({
   }
 })
 
-onMounted(() => {
-  // loadAllUsers()
-  loadDepartment()
+onMounted(async () => {
+  await loadAllUsers()
+  await loadUserIds()
+  selectDefault()
 })
-
-const selectedUsers = ref<User[]>([])
-const multipleTableRef = ref<typeof ElTable | null>(null)
-const handleSelect = (val: User[]) => {
-  // multipleSelection.value = val
-  // console.log(val)
-}
-
-// 部门信息
-const department = reactive({
-  users: []
-})
-const loadDepartment = async () => {
-  users.value = await getAllUsers()
-
-  const result = await getDepartmentById(props.id)
-  Object.assign(department, result)
-
-  department.users.forEach((user: User) => {
-    console.log(user)
-    multipleTableRef.value!.toggleRowSelection(user, true)
-  })
-}
 
 // 用户列表
 const users = ref<User[]>([])
@@ -58,11 +35,34 @@ const loadAllUsers = async () => {
   users.value = await getAllUsers()
 }
 
-// 表单提交
-const form = ref<typeof ElForm | null>(null)
+// 部门成员 id
+const userIds = ref<number[] | undefined>(undefined)
+const loadUserIds = async () => {
+  const { users } = await getDepartmentById(props.id)
+  userIds.value = users.map((user: User) => user.id)
+}
+
+// 默认选中
+const multipleTableRef = ref<typeof ElTable | null>(null)
+const selectDefault = () => {
+  userIds.value?.forEach((id: number) => {
+    users.value.forEach((user: User) => {
+      if (id === user.id) multipleTableRef.value!.toggleRowSelection(user, true)
+    })
+  })
+}
+
+// 获取选中 id
+const onSelect = (users: User[]) => {
+  userIds.value = users.map((user: User) => user.id)
+}
+
+// 确定提交
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
-  emit('submit')
+  await updateDepartment(props.id, { userIds: userIds.value})
+  ElMessage.success('更新成功')
+  emit('submit', 'setting')
 }
 
 </script>

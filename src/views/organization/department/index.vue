@@ -7,7 +7,9 @@
       <el-table-column type="expand">
         <template #default="props">
           <span>部门成员：</span>
-          <el-tag v-for="user in props.row.users"> {{ user.name }}</el-tag>
+          <el-space>
+            <el-tag v-for="user in props.row.users"> {{ user.name }}</el-tag>
+          </el-space>
         </template>
       </el-table-column>
       <el-table-column label="部门名称" prop="name" align="center" />
@@ -17,7 +19,7 @@
         <template #default="scope">
           <el-space>
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
-            <el-button type="text" @click="openSetting(scope.row.id)">管理</el-button>
+            <el-button type="text" @click="openSetting(scope.row.id)">设置</el-button>
             <el-popconfirm
               title="确定要删除该部门吗?"
               @confirm="handleDelete(scope.row.id)"
@@ -33,7 +35,6 @@
     <el-pagination
       background
       layout="total, sizes, prev, pager, next, jumper"
-      align="right"
       :page-sizes="[10, 15, 20]"
       :total="count"
       v-model:current-page="listParams.page"
@@ -89,8 +90,12 @@ const openForm = (payload: number | MouseEvent) => {
   visible.value = true
 }
 
-const onSubmitted = () => {
-  visible.value = false
+const onSubmitted = (type: string) => {
+  if (type && type === 'setting') {
+    settingVisible.value = false
+  } else {
+    visible.value = false
+  }
   loadDepartments()
 }
 
