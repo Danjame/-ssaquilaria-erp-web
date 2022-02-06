@@ -22,7 +22,7 @@
       </el-form>
       <el-button type="primary" :icon="'Plus'" @click="openCreateOrEdit">新增产品</el-button>
     </template>
-    <el-table :data="products" style="width: 100%">
+    <el-table :data="products" style="width: 100%" v-loading="store.state.isLoading">
       <el-table-column label="产品名称" prop="name" align="center" />
       <el-table-column label="序列号" prop="serialNum" align="center" />
       <el-table-column label="产品类别" align="center">
@@ -90,6 +90,7 @@ import { getAllCategories } from '@/api/inventory/category'
 import { Category } from '@/api/inventory/types/category'
 import { getProductsByConditions, deleteProduct } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
+import store from '@/store'
 
 onMounted(() => {
   loadAllCategories()
@@ -99,8 +100,7 @@ onMounted(() => {
 // 产品类别
 const categories = ref<Category[]>([])
 const loadAllCategories = async () => {
-  const data = await getAllCategories()
-  categories.value = data
+  categories.value = await getAllCategories()
 }
 
 // 产品列表

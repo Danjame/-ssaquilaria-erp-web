@@ -4,14 +4,14 @@
     :submit="handleSubmit"
   >
     <el-form ref="form" :model="category" :rules="rules" label-width="100px">
-      <el-form-item label="分类名称" prop="name">
-        <el-input v-model="category.name" />
+      <el-form-item label="类别名称" prop="name">
+        <el-input v-model="category.name" placeholder="请输入类别名称" />
       </el-form-item>
-      <el-form-item label="值" prop="value">
-        <el-input v-model="category.value" />
+      <el-form-item label="类别编号" prop="value">
+        <el-input v-model="category.value" placeholder="请输入类别编号" />
       </el-form-item>
-      <el-form-item label="分类标签" prop="label">
-        <el-input v-model="category.label" />
+      <el-form-item label="类别标签" prop="label">
+        <el-input v-model="category.label" placeholder="请输入类别标签" />
       </el-form-item>
     </el-form>
   </Dialog>
@@ -30,13 +30,13 @@ const props = defineProps({
 // 表单验证
 const rules = reactive({
   name: [
-    { required: true, message: '分类名', trigger: 'change' }
+    { required: true, message: '类别名称不能为空', trigger: 'change' }
   ],
   value: [
-    { required: true, message: '分类值', trigger: 'change' }
+    { required: true, message: '类别编号不能为空', trigger: 'change' }
   ],
   label: [
-    { required: true, message: '分类标签', trigger: 'change' }
+    { required: true, message: '类别标签不能为空', trigger: 'change' }
   ]
 })
 

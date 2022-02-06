@@ -13,7 +13,7 @@ const collapseIcon = computed(() => {
 })
 
 const toggleCollapse = () => {
-  store.commit('setIsCollapse', !store.state.isCollapse)
+  store.commit('setCollapse', !store.state.isCollapse)
 }
 
 </script>

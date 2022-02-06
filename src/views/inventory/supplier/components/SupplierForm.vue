@@ -5,16 +5,16 @@
   >
     <el-form ref="form" :model="supplier" :rules="rules" label-width="100px">
       <el-form-item label="供应商名称" prop="name">
-        <el-input v-model="supplier.name" />
+        <el-input v-model="supplier.name" placeholder="请输入供应商名称" />
       </el-form-item>
-      <el-form-item label="值" prop="value">
-        <el-input v-model="supplier.value" />
+      <el-form-item label="供应商编号" prop="value">
+        <el-input v-model="supplier.value" placeholder="请输入供应商编号" />
       </el-form-item>
       <el-form-item label="供应商标签" prop="label">
-        <el-input v-model="supplier.label" />
+        <el-input v-model="supplier.label" placeholder="请输入供应商标签" />
       </el-form-item>
       <el-form-item label="描述" prop="description">
-        <el-input type="textarea" v-model="supplier.description" autosize />
+        <el-input type="textarea" v-model="supplier.description" autosize placeholder="请输入描述" />
       </el-form-item>
     </el-form>
   </Dialog>
@@ -33,13 +33,16 @@ const props = defineProps({
 // 表单验证
 const rules = reactive({
   name: [
-    { required: true, message: '供应商名称', trigger: 'change' }
+    { required: true, message: '供应商名称不能为空', trigger: 'change' }
   ],
   value: [
-    { required: true, message: '值', trigger: 'change' }
+    { required: true, message: '供应商编号不能为空', trigger: 'change' }
   ],
   label: [
-    { required: true, message: '供应商标签', trigger: 'change' }
+    { required: true, message: '供应商标签不能为空', trigger: 'change' }
+  ],
+  description: [
+    { required: false, message: '描述不能为空', trigger: 'change' }
   ]
 })
 

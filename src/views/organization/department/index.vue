@@ -3,17 +3,17 @@
     <template #header>
       <el-button type="primary" :icon="'Plus'" @click="openForm">新增部门</el-button>
     </template>
-    <el-table :data="departments" style="width: 100%">
+    <el-table :data="departments" style="width: 100%" v-loading="store.state.isLoading">
       <el-table-column type="expand">
         <template #default="props">
-          <span>部门成员：</span>
           <el-space>
-            <el-tag v-for="user in props.row.users"> {{ user.name }}</el-tag>
+            <span>部门成员（{{ props.row.users.length }} 人）：</span>
+            <el-tag v-for="user in props.row.users" size="large"> {{ user.name }}</el-tag>
           </el-space>
         </template>
       </el-table-column>
       <el-table-column label="部门名称" prop="name" align="center" />
-      <el-table-column label="值" prop="value" align="center" />
+      <el-table-column label="部门编号" prop="value" align="center" />
       <el-table-column label="部门标签" prop="label" align="center" />
       <el-table-column label="操作" width="150" align="center" fixed="right">
         <template #default="scope">
@@ -42,8 +42,8 @@
     />
   </el-card>
   <DepartmentForm
-    v-if="visible"
-    v-model="visible"
+    v-if="formVisible"
+    v-model="formVisible"
     :id="departmentId"
     @submit="onSubmitted"
   />
@@ -60,6 +60,7 @@ import DepartmentForm from './components/DepartmentForm.vue'
 import DepartmentSetting from './components/DepartmentSetting.vue'
 import { getDepartmentsByConditions, deleteDepartment } from '@/api/organization/department'
 import { Department } from '@/api/organization/types/department'
+import store from '@/store'
 
 onMounted(() => {
   loadDepartments()
@@ -79,7 +80,7 @@ const loadDepartments = async () => {
 }
 
 // 显示隐藏 form
-const visible = ref(false)
+const formVisible = ref(false)
 const departmentId = ref(undefined as number | undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
@@ -87,16 +88,7 @@ const openForm = (payload: number | MouseEvent) => {
   } else {
     departmentId.value = undefined
   }
-  visible.value = true
-}
-
-const onSubmitted = (type: string) => {
-  if (type && type === 'setting') {
-    settingVisible.value = false
-  } else {
-    visible.value = false
-  }
-  loadDepartments()
+  formVisible.value = true
 }
 
 // 显示隐藏 setting
@@ -104,6 +96,15 @@ const settingVisible = ref(false)
 const openSetting = (id: number) => {
   departmentId.value = id
   settingVisible.value = true
+}
+
+const onSubmitted = (type: string) => {
+  if (type && type === 'setting') {
+    settingVisible.value = false
+  } else {
+    formVisible.value = false
+  }
+  loadDepartments()
 }
 
 const handleDelete = async (id: number) => {

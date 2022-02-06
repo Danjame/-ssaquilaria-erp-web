@@ -6,15 +6,19 @@ const store = createStore({
   plugins: [createPersistedState()],
   state: {
     isCollapse: false,
-    user: null as CurrentUser | null
+    user: null as CurrentUser | null,
+    isLoading: false
   },
   getters: {},
   mutations: {
-    setIsCollapse (state, payload) {
+    setCollapse (state, payload) {
       state.isCollapse = payload
     },
     setUser (state, payload) {
       state.user = payload
+    },
+    setLoading (state, payload) {
+      state.isLoading = payload
     }
   },
   actions: {},

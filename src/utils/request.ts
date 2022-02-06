@@ -13,6 +13,8 @@ request.interceptors.request.use(function (config) {
   if (user && user.token) {
     config.headers!.Authorization = `Bearer ${user.token}`
   }
+  // 设定 loding 状态
+  if (config.url?.includes('/conditions')) store.commit('setLoading', true)
   // Do something before request is sent
   // config.headers.Authorization = token
   return config
@@ -26,8 +28,14 @@ let isRefreshing = false
 request.interceptors.response.use(function (response) {
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
+
+  // 复原 loding 状态
+  if (response.config.url?.includes('/conditions')) store.commit('setLoading', false)
   return response
 }, function (error) {
+  // 复原 loding 状态
+  if (error.response.config.url.includes('/conditions')) store.commit('setLoading', false)
+  
   if (error.response.status === 401) {
     if (isRefreshing) return
     isRefreshing = true

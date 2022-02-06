@@ -4,10 +4,10 @@
     :submit="handleSubmit"
   >
     <el-form ref="form" :rules="rules" :model="product" label-width="100px">
-      <el-form-item label="名称" prop="name">
-        <el-input v-model="product.name" />
+      <el-form-item label="产品名称" prop="name">
+        <el-input v-model="product.name" placeholder="请输入产品名称" />
       </el-form-item>
-      <el-form-item label="类别" prop="categoryId">
+      <el-form-item label="产品类别" prop="categoryId">
         <el-select v-model="product.categoryId" placeholder="请选择产品类别">
           <el-option
             v-for="category in categories"
@@ -22,20 +22,20 @@
           <el-option v-for="unit in units" :key="unit.value" :label="unit.label" :value="unit.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="规格" prop="sieze">
-        <el-input v-model="product.size" />
+      <el-form-item label="规格" prop="size">
+        <el-input v-model="product.size" placeholder="请输入产品规格" />
       </el-form-item>
       <el-form-item label="描述" prop="description">
-        <el-input type="textarea" v-model="product.description" autosize />
+        <el-input type="textarea" v-model="product.description" autosize placeholder="请输入产品描述" />
       </el-form-item>
       <el-form-item label="序列号" prop="serialNum">
-        <el-input v-model="product.serialNum" />
+        <el-input v-model="product.serialNum" placeholder="请输入产品序列号" />
       </el-form-item>
       <el-form-item label="机器码" prop="machineCode">
-        <el-input v-model="product.machineCode" />
+        <el-input v-model="product.machineCode" placeholder="请输入输入机器码" />
       </el-form-item>
       <el-form-item label="预警库存" prop="warnQty">
-        <el-input v-model="product.warnQty" />
+        <el-input-number v-model="product.warnQty" :min="0" :controls="false" placeholder="请输入产品预警数量" />
       </el-form-item>
     </el-form>
   </Dialog>
@@ -47,6 +47,7 @@ import { PropType } from 'vue'
 import { getAllUnits } from '@/api/inventory/unit'
 import { Unit } from '@/api/inventory/types/unit'
 import { getProductById, createProduct, updateProduct } from '@/api/inventory/product'
+import { intValidator } from '@/utils/validator'
 
 const props = defineProps({
   id: {
@@ -61,28 +62,28 @@ const props = defineProps({
 
 const rules = reactive({
   name: [
-    { required: true, message: '请输入产品名称', trigger: 'change' }
+    { required: true, message: '产品名称不能为空', trigger: 'change' }
   ],
   categoryId: [
-    { required: true, message: '请选择产品类别', trigger: 'change' }
+    { required: true, message: '产品类别不能为空', trigger: 'change' }
   ],
   unitId: [
-    { required: true, message: '请选择产品单位', trigger: 'change' }
+    { required: true, message: '产品单位不能为空', trigger: 'change' }
   ],
   size: [
-    { required: true, message: '请输入产品规格', trigger: 'change' }
+    { required: true, message: '产品规格不能为空', trigger: 'change' }
   ],
   description: [
-    { required: false, message: '请输入产品描述', trigger: 'change' }
+    { required: false, message: '产品描述不能为空', trigger: 'change' }
   ],
   serialNum: [
-    { required: false, message: '请输入产品序列号', trigger: 'change' }
+    { required: false, message: '产品序列号不能为空', trigger: 'change' }
   ],
   machineCode: [
-    { required: false, message: '请输入产品机器码', trigger: 'change' }
+    { required: false, message: '产品机器码不能为空', trigger: 'change' }
   ],
   warnQty: [
-    { required: false, message: '请输入产品库存预警数量', trigger: 'change' }
+    { validator: intValidator, trigger: 'change' }
   ]
 })
 
@@ -107,7 +108,7 @@ const product = reactive({
   description: '',
   serialNum: '',
   machineCode: '',
-  warnQty: ''
+  warnQty: 0
 })
 
 const loadProduct = async () => {

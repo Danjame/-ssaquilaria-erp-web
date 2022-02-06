@@ -5,7 +5,7 @@
     </template>
     <el-table :data="units" style="width: 100%">
       <el-table-column label="单位名称" prop="name" align="center" />
-      <el-table-column label="值" prop="value" align="center" />
+      <el-table-column label="单位编号" prop="value" align="center" />
       <el-table-column label="单位标签" prop="label" align="center" />
       <el-table-column label="描述" prop="description" align="center" />
       <el-table-column label="操作" width="100" align="center" fixed="right">

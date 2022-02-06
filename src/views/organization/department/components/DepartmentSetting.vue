@@ -1,6 +1,6 @@
 <template>
   <Dialog
-    title="设置部门成员"
+    :title="`部门成员（${userIds?.length} 人）`"
     :submit="handleSubmit"
   >
     <el-table :data="users" style="width: 100%" ref="multipleTableRef" @selection-change="onSelect">

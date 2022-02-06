@@ -8,13 +8,16 @@ interface Auth {
 }
 
 interface UserAttrs {
-  name: string
-  value: string
-  label: string
+  name?: string
+  email?: string
+  status?: boolean
+  lastLogin?: string
+  roleIds?: number[]
 }
 
 interface UserConditions {
-  departmentId: number
+  name?: string
+  departmentId?: number
   page?: number
   size?: number
 }

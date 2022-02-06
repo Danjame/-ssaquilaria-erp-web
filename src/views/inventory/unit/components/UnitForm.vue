@@ -5,16 +5,16 @@
   >
     <el-form ref="form" :model="unit" :rules="rules" label-width="100px">
       <el-form-item label="单位名称" prop="name">
-        <el-input v-model="unit.name" />
+        <el-input v-model="unit.name" placeholder="请输入单位名称" />
       </el-form-item>
-      <el-form-item label="值" prop="value">
-        <el-input v-model="unit.value" />
+      <el-form-item label="单位编号" prop="value">
+        <el-input v-model="unit.value" placeholder="请输入单位编号" />
       </el-form-item>
       <el-form-item label="单位标签" prop="label">
-        <el-input v-model="unit.label" />
+        <el-input v-model="unit.label" placeholder="请输入单位标签" />
       </el-form-item>
       <el-form-item label="描述" prop="description">
-        <el-input type="textarea" v-model="unit.description" autosize />
+        <el-input type="textarea" v-model="unit.description" autosize placeholder="请输入描述" />
       </el-form-item>
     </el-form>
   </Dialog>
@@ -33,13 +33,16 @@ const props = defineProps({
 // 表单验证
 const rules = reactive({
   name: [
-    { required: true, message: '单位名称', trigger: 'change' }
+    { required: true, message: '单位名称不能为空', trigger: 'change' }
   ],
   value: [
-    { required: true, message: '值', trigger: 'change' }
+    { required: true, message: '单位编号不能为空', trigger: 'change' }
   ],
   label: [
-    { required: true, message: '单位标签', trigger: 'change' }
+    { required: true, message: '单位标签不能为空', trigger: 'change' }
+  ],
+  description: [
+    { required: false, message: '描述不能为空', trigger: 'change' }
   ]
 })
 

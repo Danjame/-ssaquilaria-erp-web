@@ -3,11 +3,13 @@ import { Product } from './types/product'
 
 interface ProductAttrs {
   name: string
+  categoryId: number | undefined
+  unitId: number | undefined
   size: string
-  description: string
-  serialNum: string
-  machineCode: string
-  warnQty: string
+  description?: string
+  serialNum?: string
+  machineCode?: string
+  warnQty?: number
 }
 
 interface ProductConditions {

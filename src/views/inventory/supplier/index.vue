@@ -15,9 +15,9 @@
       </el-form>
       <el-button type="primary" :icon="'Plus'" @click="openForm">新增类别</el-button>
     </template>
-    <el-table :data="suppliers" style="width: 100%">
+    <el-table :data="suppliers" style="width: 100%" v-loading="store.state.isLoading">
       <el-table-column label="供应商名称" prop="name" align="center" />
-      <el-table-column label="值" prop="value" align="center" />
+      <el-table-column label="供应商编号" prop="value" align="center" />
       <el-table-column label="供应商标签" prop="label" align="center" />
       <el-table-column label="描述" prop="description" align="center" />
       <el-table-column label="操作" width="100" align="center" fixed="right">
@@ -59,6 +59,7 @@ import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getSuppliersByConditions, deleteSupplier } from '@/api/inventory/supplier'
 import { Supplier } from '@/api/inventory/types/supplier'
+import store from '@/store'
 
 onMounted(() => {
   loadAllProducts()
@@ -68,8 +69,7 @@ onMounted(() => {
 // 产品
 const products = ref<Product[]>([])
 const loadAllProducts = async () => {
-  const results = await getAllProducts()
-  products.value = results
+  products.value = await getAllProducts()
 }
 
 // 类别列表

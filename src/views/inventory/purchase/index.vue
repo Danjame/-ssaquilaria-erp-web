@@ -32,7 +32,7 @@
       </el-form>
       <el-button type="primary" :icon="'Plus'" @click="visible = true">新增采购</el-button>
     </template>
-    <el-table :data="purchases" style="width: 100%">
+    <el-table :data="purchases" style="width: 100%" v-loading="store.state.isLoading">
       <el-table-column label="采购单号" prop="orderNum" align="center" />
       <el-table-column label="产品名称" align="center">
         <template #default="scope">
@@ -94,6 +94,7 @@ import { getAllSuppliers } from '@/api/inventory/supplier'
 import { Supplier } from '@/api/inventory/types/supplier'
 import { getPurchasesByConditions, deletePurchase } from '@/api/inventory/purchase'
 import { Purchase } from '@/api/inventory/types/purchase'
+import store from '@/store'
 
 onMounted(() => {
   loadAllProducts()
@@ -104,8 +105,7 @@ onMounted(() => {
 // 产品
 const products = ref<Product[]>([])
 const loadAllProducts = async () => {
-  const results = await getAllProducts()
-  products.value = results
+  products.value = await getAllProducts()
 }
 
 // 供应商

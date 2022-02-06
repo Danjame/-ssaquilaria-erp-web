@@ -15,16 +15,16 @@
       </el-form>
       <el-button type="primary" :icon="'Plus'" @click="openForm">新增类别</el-button>
     </template>
-    <el-table :data="categories" style="width: 100%">
-      <el-table-column label="分类名" prop="name" align="center" />
-      <el-table-column label="分类值" prop="value" align="center" />
-      <el-table-column label="分类标签" prop="label" align="center" />
+    <el-table :data="categories" style="width: 100%" v-loading="store.state.isLoading">
+      <el-table-column label="类别名称" prop="name" align="center" />
+      <el-table-column label="类别编号" prop="value" align="center" />
+      <el-table-column label="类别标签" prop="label" align="center" />
       <el-table-column label="操作" width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space>
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
             <el-popconfirm
-              title="确定要删除该产品分类吗?"
+              title="确定要删除该产品类别吗?"
               @confirm="handleDelete(scope.row.id)"
             >
               <template #reference>
@@ -58,6 +58,7 @@ import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getCategoriesByConditions, deleteCategory } from '@/api/inventory/category'
 import { Category } from '@/api/inventory/types/category'
+import store from '@/store'
 
 onMounted(() => {
   loadAllProducts()
@@ -67,8 +68,7 @@ onMounted(() => {
 // 产品
 const products = ref<Product[]>([])
 const loadAllProducts = async () => {
-  const results = await getAllProducts()
-  products.value = results
+  products.value = await getAllProducts()
 }
 
 // 类别列表

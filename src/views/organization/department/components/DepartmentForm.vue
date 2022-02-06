@@ -5,13 +5,13 @@
   >
     <el-form ref="form" :model="department" :rules="rules" label-width="100px">
       <el-form-item label="部门名称" prop="name">
-        <el-input v-model="department.name" />
+        <el-input v-model="department.name" placeholder="请输入部门名称" />
       </el-form-item>
-      <el-form-item label="值" prop="value">
-        <el-input v-model="department.value" />
+      <el-form-item label="部门编号" prop="value">
+        <el-input v-model="department.value" placeholder="请输入部门编号" />
       </el-form-item>
       <el-form-item label="部门标签" prop="label">
-        <el-input v-model="department.label" />
+        <el-input v-model="department.label" placeholder="请输入部门标签" />
       </el-form-item>
     </el-form>
   </Dialog>
@@ -30,13 +30,13 @@ const props = defineProps({
 // 表单验证
 const rules = reactive({
   name: [
-    { required: true, message: '部门名称', trigger: 'change' }
+    { required: true, message: '部门名称不能为空', trigger: 'change' }
   ],
   value: [
-    { required: true, message: '值', trigger: 'change' }
+    { required: true, message: '部门编号不能为空', trigger: 'change' }
   ],
   label: [
-    { required: true, message: '部门标签', trigger: 'change' }
+    { required: true, message: '部门标签不能为空', trigger: 'change' }
   ]
 })
 
