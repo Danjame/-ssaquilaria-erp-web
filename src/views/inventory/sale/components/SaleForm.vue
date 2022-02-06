@@ -40,7 +40,7 @@
 import { PropType } from 'vue'
 import { Product } from '@/api/inventory/types/product'
 import { createSale } from '@/api/inventory/sale'
-import { intValidator } from '@/utils/validator';
+import { intValidator } from '@/utils/validator'
 
 defineProps({
   products: {

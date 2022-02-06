@@ -24,6 +24,11 @@
     <el-table :data="users" style="width: 100%" v-loading="store.state.isLoading">
       <el-table-column label="用户名称" prop="name" align="center" />
       <el-table-column label="用户邮箱" prop="email" align="center" />
+      <el-table-column label="最近登录时间" align="center">
+        <template #default="scope">
+        {{ new Date(Date.parse(scope.row.lastLogin)).toLocaleString() }}
+        </template>
+      </el-table-column>
       <el-table-column label="用户角色" align="center">
         <template #default="scope">
           <el-space>

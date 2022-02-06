@@ -8,7 +8,7 @@ interface PurchaseAttrs {
   price: number
   quantity: number
   amount: number
-  comment: string
+  comment?: string
 }
 
 interface PurchaseConditions {

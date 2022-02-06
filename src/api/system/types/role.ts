@@ -1,5 +1,6 @@
 import { User } from './user'
 import { Permission } from './permission'
+import { Menu } from './menu'
 
 export interface Role {
   id: number
@@ -12,4 +13,5 @@ export interface Role {
   status: boolean
   createdAt: Date
   updatedAt: Date
+  menus: Menu[]
 }

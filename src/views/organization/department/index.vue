@@ -7,7 +7,7 @@
       <el-table-column type="expand">
         <template #default="props">
           <el-space>
-            <span>部门成员（{{ props.row.users.length }} 人）：</span>
+            <span>部门成员（{{ props.row.users.length }} 人）:</span>
             <el-tag v-for="user in props.row.users" size="large"> {{ user.name }}</el-tag>
           </el-space>
         </template>

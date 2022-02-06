@@ -11,7 +11,7 @@ interface UserAttrs {
   name?: string
   email?: string
   status?: boolean
-  lastLogin?: string
+  lastLogin?: Date
   roleIds?: number[]
 }
 

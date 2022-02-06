@@ -8,7 +8,7 @@ interface SaleAttrs {
   price: number
   quantity: number
   amount: number
-  comment: string
+  comment?: string
 }
 
 interface SaleConditions {

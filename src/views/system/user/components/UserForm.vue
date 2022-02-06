@@ -25,9 +25,9 @@
 </template>
 
 <script lang="ts" setup>
-import { getAllRoles } from '@/api/system/role';
-import { Role } from '@/api/system/types/role';
-import { getUserById, updateUser } from '@/api/system/user';
+import { getAllRoles } from '@/api/system/role'
+import { Role } from '@/api/system/types/role'
+import { getUserById, updateUser } from '@/api/system/user'
 
 const props = defineProps({
   id: {
