@@ -7,11 +7,3 @@ export const getAllMenus = () => {
     url: '/system/menus'
   })
 }
-
-export const getMenusByConditions = (data: number[]) => {
-  return request<Menu[]>({
-    method: 'POST',
-    url: '/system/menus/conditions',
-    data
-  })
-}

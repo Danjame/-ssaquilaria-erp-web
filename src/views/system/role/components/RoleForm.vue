@@ -1,8 +1,5 @@
 <template>
-  <Dialog
-    :title="id ? '编辑角色' : '新增角色'"
-    :submit="handleSubmit"
-  >
+  <Dialog :title="id ? '编辑角色' : '新增角色'" :submit="handleSubmit">
     <el-form ref="form" :model="role" :rules="rules" label-width="100px">
       <el-form-item label="角色名称" prop="name">
         <el-input v-model="role.name" placeholder="请输入角色名称" />
@@ -10,7 +7,7 @@
       <el-form-item label="角色编号" prop="value">
         <el-input v-model="role.value" placeholder="请输入角色编号" />
       </el-form-item>
-      <el-form-item label="角色标签" prop="lebal">
+      <el-form-item label="角色标签" prop="label">
         <el-input v-model="role.label" placeholder="请输入角色标签" />
       </el-form-item>
       <el-form-item label="角色权限" prop="permissionIds">
@@ -25,12 +22,13 @@
       </el-form-item>
       <el-form-item label="角色菜单" prop="menuIds">
         <el-tree
+          ref="tree"
           :data="menus"
           show-checkbox
           node-key="id"
           :default-checked-keys="role.menuIds"
           :props="defaultProps"
-          @check="onCheck"
+          :check-strictly="isStrict"
           v-loading="menusLoading"
         />
       </el-form-item>
@@ -77,26 +75,26 @@ onMounted(() => {
   if (props.id) loadRole()
 })
 
-// 权限信息
+// 权限
 const permissions = ref<Permission[] | null>(null)
 const loadAllPermissions = async () => {
   permissions.value = await getAllPermissions()
 }
 
-// 菜单信息
+// 菜单
 const defaultProps = {
   children: 'children',
   label: 'label',
 }
-const menus = ref<Menu[]>([])
+const tree = ref<typeof ElTree | null>(null)
+const isStrict = ref(true)
 const menusLoading = ref(false)
+
+const menus = ref<Menu[]>([])
 const loadAllMenus = async () => {
   menusLoading.value = true
   menus.value = await getAllMenus()
   menusLoading.value = false
-}
-const onCheck = (menu: Menu, checked: { checkedKeys: number[]}) => {
-  role.menuIds = checked.checkedKeys
 }
 
 // 角色信息
@@ -105,8 +103,9 @@ const role = reactive({
   value: '',
   label: '',
   permissionIds: [],
-  menuIds: [] as number []
+  menuIds: [] as number[]
 })
+
 const loadRole = async () => {
   const {
     name,
@@ -123,18 +122,23 @@ const loadRole = async () => {
     permissionIds: permissions ? permissions.map(permission => permission.id) : [],
     menuIds: menuIds ? menuIds.map(Number) : []
   })
+
+  isStrict.value = false
 }
 
 // 表单提交
 const form = ref<typeof ElForm | null>(null)
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
-  const valid = await form.value?.validate()
+  const valid = form.value?.validate()
   if (!valid) return
   // 验证通过
-  await updateRole(props.id, role)
+  const { menuIds, ...attrs } = role
+  // 获取所有选中 id
+  const ids = tree.value?.getCheckedNodes(false, true).map((node: { id: number }) => node.id)
+  await updateRole(props.id, { ...attrs, menuIds: ids })
   ElMessage.success('更新成功')
-  
+
   emit('submit')
 }
 
