@@ -3,6 +3,7 @@ import AppLayout from '@/layout/index.vue'
 import sysRoutes from './modules/system'
 import orgRoutes from './modules/organization'
 import invRoutes from './modules/inventory'
+import { Menu } from '@/api/system/types/menu'
 import store from '@/store'
 
 const routes: RouteRecordRaw[] = [
@@ -41,13 +42,30 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from) => {
-  if (to.meta.requiresAuth && !store.state.user) {
-    return {
-      path: '/login',
-      query: { redirect: to.fullPath }
+router.beforeEach((to) => {
+  // 登录页
+  if (to.name === 'login') {
+    if (store.state.user) {
+      return {
+        path: '/',
+      }
+    }
+  } else {
+    // 路由与菜单匹配
+    if(!isMenuMatched(store.state.menus, to.name as string)) return false
+
+    // 非登录页
+    if (to.meta.requiresAuth && !store.state.user) {
+      return {
+        path: '/login',
+        query: { redirect: to.fullPath }
+      }
     }
   }
 })
+
+const isMenuMatched = (menus: Menu[], route: string): boolean => {
+  return menus.some(menu => menu.children && menu.children.length ? isMenuMatched(menu.children, route) : menu.name === route)
+}
 
 export default router

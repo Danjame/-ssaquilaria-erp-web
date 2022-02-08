@@ -1,7 +1,5 @@
 export interface Menu {
-  id: number
-  value: string
+  name: string
   label: string
-  icon: string
   children: Menu[]
 }

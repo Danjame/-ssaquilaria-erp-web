@@ -7,15 +7,16 @@ const request = axios.create({
   baseURL: 'http://localhost:8080'
 })
 
-// Add a request interceptor
+/* —————————————————————————————————— 请求拦截 —————————————————————————————————— */
 request.interceptors.request.use(function (config) {
   const { user } = store.state
   if (user && user.token) {
     config.headers!.Authorization = `Bearer ${user.token}`
   }
-
   // 设定 loding 状态
-  if (config.url?.includes('/conditions')) store.commit('setLoading', true)
+  if (config.url?.includes('/conditions')) {
+    store.commit('setLoading', true)
+  }
 
   // Do something before request is sent
   return config
@@ -24,18 +25,28 @@ request.interceptors.request.use(function (config) {
   return Promise.reject(error)
 })
 
+/* —————————————————————————————————— 响应拦截 —————————————————————————————————— */
+// token 刷新锁
 let isRefreshing = false
-
 request.interceptors.response.use(function (response) {
   // 复原 loding 状态
-  if (response.config.url?.includes('/conditions')) store.commit('setLoading', false)
+  if (response.config.url?.includes('/conditions')) {
+    store.commit('setLoading', false)
+  }
 
   // Any status code that lie within the range of 2xx cause this function to trigger
   // Do something with response data
   return response
 }, function (error) {
+  // 服务离线
+  if (!error.response) {
+    ElMessageBox.alert('服务不可用，请联系管理员', 'HTTP 503 错误')
+  }
+
   // 复原 loding 状态
-  if (error.response.config.url.includes('/conditions')) store.commit('setLoading', false)
+  if (error.response.config.url.includes('/conditions')) {
+    store.commit('setLoading', false)
+  }
 
   // token 过期/无效
   if (error.response.status === 401) {
