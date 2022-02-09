@@ -2,9 +2,17 @@ import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
 import { CurrentUser } from '@/api/system/types/user'
 import { Menu } from '@/api/system/types/menu'
+import { getUserInfo } from '@/api/system/user'
 
 const store = createStore({
-  plugins: [createPersistedState()],
+  plugins: [createPersistedState({
+    reducer(state) {
+      return {
+        isCollapse: state.isCollapse,
+        user: state.user
+      }
+    }
+  })],
   state: {
     isCollapse: false,
     user: null as CurrentUser | null,
@@ -26,7 +34,16 @@ const store = createStore({
       state.isLoading = payload
     }
   },
-  actions: {},
+  actions: {
+    loadMenus ({ commit }) {
+      return new Promise(resolve => {
+        getUserInfo().then(({ menuTrees }) => {
+          commit('setMenus', menuTrees)
+          resolve(menuTrees)
+        })
+      })
+    }
+  },
   modules: {}
 })
 

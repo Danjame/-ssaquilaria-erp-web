@@ -23,7 +23,8 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'about',
         name: 'about',
-        component: () => import('../views/about/index.vue')
+        component: () => import('../views/about/index.vue'),
+        meta: { title: '关于' }
       },
       sysRoutes,
       orgRoutes,
@@ -42,19 +43,20 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to) => {
-  // 登录页
+router.beforeEach(async to => {
   if (to.name === 'login') {
-    if (store.state.user) {
+    // 登录页
+    if (store.state.user && store.state.user.status) {
       return {
         path: '/',
       }
     }
   } else {
-    // 路由与菜单匹配
-    if(!isMenuMatched(store.state.menus, to.name as string)) return false
-
     // 非登录页
+    // 路由与菜单匹配
+    const menus = await store.dispatch('loadMenus')
+    if (!isMenuMatched(menus, to.name as string)) return false
+
     if (to.meta.requiresAuth && !store.state.user) {
       return {
         path: '/login',

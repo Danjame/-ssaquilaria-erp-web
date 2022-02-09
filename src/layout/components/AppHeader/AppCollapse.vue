@@ -6,7 +6,6 @@
 
 <script lang="ts" setup>
 import store from '@/store'
-import { computed } from 'vue'
 
 const collapseIcon = computed(() => {
   return store.state.isCollapse ? 'Expand' : 'Fold'

@@ -21,22 +21,11 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, toRefs } from 'vue'
-import { Menu } from '@/api/system/types/menu'
 import store from '@/store'
+import router from '@/router'
 
-const props = defineProps({
-  menus: {
-    type: Object as PropType<Menu[]>,
-    required: true
-  },
-  route: {
-    type: String,
-    required: true
-  }
-})
-
-const { menus, route } = toRefs(props)
+const menus = store.state.menus
+const route = router.currentRoute.value.path
 
 </script>
 

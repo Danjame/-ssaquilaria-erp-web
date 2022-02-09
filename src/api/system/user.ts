@@ -30,14 +30,14 @@ export const login = (data: Auth) => {
   })
 }
 
-export const getCurrentUser = () => {
+export const getUserInfo = () => {
   return request<{
     name: string,
     email: string,
     menuTrees: Menu[]
   }>({
     method: 'GET',
-    url: '/system/users/current-user'
+    url: '/system/users/user-info'
   })
 }
 

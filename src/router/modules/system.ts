@@ -18,12 +18,6 @@ const routes: RouteRecordRaw = {
       meta: { title: '角色' }
     },
     {
-      path: 'menu',
-      name: 'menu',
-      component: () => import('@/views/system/menu/index.vue'),
-      meta: { title: '菜单' }
-    },
-    {
       path: 'permission',
       name: 'permission',
       component: () => import('@/views/system/permission/index.vue'),

@@ -10,16 +10,10 @@
 </template>
 
 <script lang="ts" setup>
-import { PropType, toRefs } from 'vue'
-import { RouteRecordRaw } from 'vue-router'
+import router from '@/router'
 
-const props = defineProps({
-  routes: {
-    type: Object as PropType<RouteRecordRaw[]>,
-    required: true
-  }
+const routes = computed(() => {
+  return router.currentRoute.value.matched.filter(item => item.meta.title)
 })
-
-const { routes } = toRefs(props)
 
 </script>

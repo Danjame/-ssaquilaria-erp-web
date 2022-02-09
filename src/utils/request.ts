@@ -49,25 +49,40 @@ request.interceptors.response.use(function (response) {
   }
 
   // token 过期/无效
-  if (error.response.status === 401) {
-    if (isRefreshing) return
-    isRefreshing = true
-    ElMessageBox.confirm(
-      '您的登录状态已过期，请重新登录。',
-      '登录过期',
-      {
-        confirmButtonText: '登录',
-        cancelButtonText: '取消'
-      }
-    ).then(() => {
-      store.commit('setUser', null)
-      router.push({
-        name: 'login',
-        query: { redirect: router.currentRoute.value.fullPath }
+  switch (error.response.status) {
+    case 401:
+      if (isRefreshing) return
+      isRefreshing = true
+      ElMessageBox.confirm(
+        '您的登录状态已过期，请重新登录。',
+        '登录过期',
+        {
+          confirmButtonText: '登录',
+          cancelButtonText: '取消'
+        }
+      ).then(() => {
+        toLogin()
+      }).finally(() => {
+        isRefreshing = false
       })
-    }).finally(() => {
-      isRefreshing = false
-    })
+      break
+    case 403:
+      if (error.response.data.message === 'Account Disabled') {
+        ElMessageBox.confirm(
+          '您的账号不可用，请联系管理员。',
+          '账号不可用',
+          {
+            confirmButtonText: '重新登录',
+            cancelButtonText: '取消'
+          }
+        ).then(() => {
+          toLogin()
+        })
+      }
+      break
+  }
+  if (error.response.status === 401) {
+
   } else {
     ElMessage.error('操作失败：' + error.response.data.message)
   }
@@ -75,6 +90,14 @@ request.interceptors.response.use(function (response) {
   // Do something with response error
   return Promise.reject(error)
 })
+
+const toLogin = () => {
+  store.commit('setUser', null)
+  router.push({
+    name: 'login',
+    query: { redirect: router.currentRoute.value.fullPath }
+  })
+}
 
 export default <T = any>(config: AxiosRequestConfig) => {
   return request(config).then(res => {
