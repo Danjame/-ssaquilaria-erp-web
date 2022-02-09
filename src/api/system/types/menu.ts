@@ -3,5 +3,6 @@ export interface Menu {
   name: string
   value: string
   label: string
+  icon: string
   children: Menu[]
 }
