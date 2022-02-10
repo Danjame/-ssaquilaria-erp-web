@@ -15,7 +15,7 @@
         </el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="user.password" placeholder="请输入密码">
+        <el-input v-model="user.password" type="password" placeholder="请输入密码">
           <template #prefix>
             <el-icon style="width: 100%; height: 100%;">
               <component :is="'Lock'" />
@@ -39,9 +39,8 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import { login } from '@/api/system/user'
 import logoSrc from '@/assets/logo.png'
+import { login } from '@/api/system/user'
 import store from '@/store'
 import router from '@/router'
 import { useRoute } from 'vue-router'
@@ -58,8 +57,8 @@ const rules = ref({
 })
 
 const user = reactive({
-  username: 'John K',
-  password: 'john1234'
+  username: '',
+  password: ''
 })
 
 // 登录

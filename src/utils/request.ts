@@ -51,6 +51,10 @@ request.interceptors.response.use(function (response) {
   // token 过期/无效
   switch (error.response.status) {
     case 401:
+      if (error.response.data.message === 'Invalid Username / Password') {
+        return ElMessage.error('账号/密码不正确')
+      }
+
       if (isRefreshing) return
       isRefreshing = true
       ElMessageBox.confirm(
@@ -80,11 +84,8 @@ request.interceptors.response.use(function (response) {
         })
       }
       break
-  }
-  if (error.response.status === 401) {
-
-  } else {
-    ElMessage.error('操作失败：' + error.response.data.message)
+    default:
+      ElMessage.error('操作失败：' + error.response.data.message)
   }
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error

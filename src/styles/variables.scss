@@ -14,6 +14,12 @@ $body-bg: #E9EEF3;
 
 $sidebar-bg: #F8F9FB;
 $navbar-bg: #F8F9FB;
-//菜单颜色
-$menu-hover-bg-color: #deffac;
-$menu-active-bg-color: #82d900;
+//菜单悬浮颜色
+$menu-hover-bg-color: #ddd;
+//菜单激活颜色
+$menu-active-color: #fff;
+$menu-active-bg-color: $primary-color;
+
+$--el-dropdown-menuItem-hover-fill: #ddd;
+
+$--el-dropdown-menuItem-hover-color: $primary-color;

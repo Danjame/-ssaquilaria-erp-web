@@ -1,6 +1,6 @@
 <template>
   <el-dropdown>
-    <span>{{ store.state.user?.name }}</span>
+    <span class="username">{{ store.state.user?.name }}</span>
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item divided @click="handleLogout">退出</el-dropdown-item>
@@ -29,3 +29,10 @@ const handleLogout = () => {
 }
 
 </script>
+
+<style lang="scss">
+.username {
+  color: $primary-color
+}
+
+</style>

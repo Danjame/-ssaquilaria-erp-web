@@ -41,7 +41,7 @@ import { getAllPermissions } from '@/api/system/permission'
 import { Permission } from '@/api/system/types/permission'
 import { getAllMenus } from '@/api/system/menu'
 import { Menu } from '@/api/system/types/menu'
-import { getRoleById, updateRole } from '@/api/system/role'
+import { createRole, getRoleById, updateRole } from '@/api/system/role'
 
 const props = defineProps({
   id: {
@@ -136,8 +136,13 @@ const handleSubmit = async () => {
   const { menuIds, ...attrs } = role
   // 获取所有选中 id
   const ids = tree.value?.getCheckedNodes(false, true).map((node: { id: number }) => node.id)
-  await updateRole(props.id, { ...attrs, menuIds: ids })
-  ElMessage.success('更新成功')
+  if (!props.id) {
+    await createRole({ ...attrs, menuIds: ids })
+    ElMessage.success('新增成功')
+  } else {
+    await updateRole(props.id, { ...attrs, menuIds: ids })
+    ElMessage.success('更新成功')
+  }
 
   emit('submit')
 }

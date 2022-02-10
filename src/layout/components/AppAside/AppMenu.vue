@@ -50,7 +50,7 @@ const route = router.currentRoute.value.path
   background-color: $menu-hover-bg-color;
 }
 .el-menu-item.is-active {
-  color: $primary-color;
+  color: $menu-active-color;
   background-color: $menu-active-bg-color;
 }
 </style>

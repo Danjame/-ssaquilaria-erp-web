@@ -7,6 +7,13 @@
       <el-table-column label="权限名" prop="name" align="center" />
       <el-table-column label="资源接口" prop="value" align="center" />
       <el-table-column label="权限标签" prop="label" align="center" />
+      <el-table-column label="请求方法" align="center">
+        <template #default="scope">
+          <el-space>
+            <el-tag v-for="action in scope.row.actions"> {{ action.label }}</el-tag>
+          </el-space>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="150" align="center" fixed="right">
         <template #default="scope">
           <el-space>

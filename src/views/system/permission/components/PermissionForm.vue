@@ -1,13 +1,13 @@
 <template>
   <Dialog :title="id ? '编辑权限' : '新增权限'" :submit="handleSubmit">
     <el-form ref="form" :model="permission" :rules="rules" label-width="100px">
-      <el-form-item label="部门名称" prop="name">
+      <el-form-item label="权限名" prop="name">
         <el-input v-model="permission.name" placeholder="请输入权限名" />
       </el-form-item>
-      <el-form-item label="部门编号" prop="value">
+      <el-form-item label="资源接口" prop="value">
         <el-input v-model="permission.value" placeholder="请输入资源接口" />
       </el-form-item>
-      <el-form-item label="部门标签" prop="label">
+      <el-form-item label="权限标签" prop="label">
         <el-input v-model="permission.label" placeholder="请输入权限标签" />
       </el-form-item>
       <el-form-item label="请求方法" prop="actionIds">
