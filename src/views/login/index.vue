@@ -65,14 +65,17 @@ const user = reactive({
 const isLoading = ref(false)
 const route = useRoute()
 const handleLogin = async () => {
-  isLoading.value = true
   // 验证表单
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
+  isLoading.value = true
   const data = await login(user).finally(() => {
     isLoading.value = false
   })
+
+  if (!data) return
+  
   store.commit('setUser', data)
   ElMessage.success('登录成功')
 
