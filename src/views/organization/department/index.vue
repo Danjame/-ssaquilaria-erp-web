@@ -34,6 +34,7 @@
       v-model:size="listParams.size"
       :count="count"
       :load-list="loadDepartments"
+      :disabled="store.state.isLoading"
     />
   </el-card>
   <DepartmentForm

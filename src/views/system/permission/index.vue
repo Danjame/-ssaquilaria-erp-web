@@ -35,6 +35,7 @@
       v-model:size="listParams.size"
       :count="count"
       :load-list="loadPermissions"
+      :disabled="store.state.isLoading"
     />
   </el-card>
   <PermissionForm

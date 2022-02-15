@@ -9,6 +9,7 @@ export interface User {
   roles: Role[]
   department: Department
   status: boolean
+  isStatusLoading?: boolean
   lastLogin: Date
   createdAt: Date
   updatedAt: Date

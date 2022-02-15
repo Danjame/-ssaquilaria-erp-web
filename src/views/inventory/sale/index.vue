@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <template #header>
-      <el-form ref="form" inline>
+      <el-form ref="form" inline :disabled="store.state.isLoading">
         <el-form-item label="销售单号">
           <el-input v-model="listParams.orderNum" placeholder="请输入销售单号">
             <template #append>
@@ -61,6 +61,7 @@
       v-model:size="listParams.size"
       :count="count"
       :load-list="loadSales"
+      :disabled="store.state.isLoading"
     />
   </el-card>
   <SaleForm

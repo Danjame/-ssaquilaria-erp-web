@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <template #header>
-      <el-form ref="form">
+      <el-form ref="form" :disabled="store.state.isLoading">
         <el-form-item label="产品名称">
           <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
             <el-option
@@ -40,6 +40,7 @@
       v-model:size="listParams.size"
       :count="count"
       :load-list="loadCategories"
+      :disabled="store.state.isLoading"
     />
   </el-card>
   <CategoryForm

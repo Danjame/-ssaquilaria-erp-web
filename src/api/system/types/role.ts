@@ -11,6 +11,7 @@ export interface Role {
   permissions: Permission[]
   menuIds: number[]
   status: boolean
+  isStatusLoading?: boolean
   createdAt: Date
   updatedAt: Date
   menus: Menu[]

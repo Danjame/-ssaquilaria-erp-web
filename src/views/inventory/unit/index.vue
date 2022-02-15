@@ -3,7 +3,7 @@
     <template #header>
       <el-button type="primary" :icon="'Plus'" @click="openForm">新增产品单位</el-button>
     </template>
-    <el-table :data="units" style="width: 100%">
+    <el-table :data="units" style="width: 100%" v-loading="store.state.isLoading">
       <el-table-column label="单位名称" prop="name" align="center" />
       <el-table-column label="单位编号" prop="value" align="center" />
       <el-table-column label="单位标签" prop="label" align="center" />
@@ -29,6 +29,7 @@
       v-model:size="listParams.size"
       :count="count"
       :load-list="loadUnits"
+      :disabled="store.state.isLoading"
     />
   </el-card>
   <UnitForm
@@ -43,6 +44,7 @@
 import UnitForm from './components/UnitForm.vue'
 import { getUnitsByConditions, deleteUnit } from '@/api/inventory/unit'
 import { Unit } from '@/api/inventory/types/unit'
+import store from '@/store'
 
 onMounted(() => {
   loadUnits()

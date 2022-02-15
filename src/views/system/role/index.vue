@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <template #header>
-      <el-form ref="form" inline>
+      <el-form ref="form" inline :disabled="store.state.isLoading">
         <el-form-item label="角色名称">
           <el-input v-model="listParams.name" placeholder="请输入角色名称">
             <template #append>
@@ -40,6 +40,7 @@
             active-color="#13ce66"
             inactive-color="#ff4949"
             @change="onStatusChange(scope.row)"
+            :loading="scope.row.isStatusLoading"
           />
         </template>
       </el-table-column>
@@ -61,6 +62,7 @@
       v-model:size="listParams.size"
       :count="count"
       :load-list="loadRoles"
+      :disabled="store.state.isLoading"
     />
   </el-card>
   <RoleForm
@@ -91,6 +93,9 @@ const roles = ref<Role[]>([])
 const count = ref(0)
 const loadRoles = async () => {
   const { results, total } = await getRolesByConditions(listParams)
+  results.forEach(item => {
+    item.isStatusLoading = false
+  })
   roles.value = results
   count.value = total
 }
@@ -116,7 +121,10 @@ const openForm = (payload: number | MouseEvent) => {
 // 角色状态变更
 const onStatusChange = async (role: Role) => {
   const { id, status } = role
-  await updateRole(id, { status })
+  role.isStatusLoading = true
+  await updateRole(id, { status }).finally(() => {
+    role.isStatusLoading = false
+  })
   ElMessage.success(`${status ? '启用' : '禁用'}成功`)
 }
 

@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <template #header>
-      <el-form ref="form" inline>
+      <el-form ref="form" inline :disabled="store.state.isLoading">
         <el-form-item label="用户名称">
           <el-input v-model="listParams.name" placeholder="请输入用户名称">
             <template #append>
@@ -43,6 +43,7 @@
             active-color="#13ce66"
             inactive-color="#ff4949"
             @change="onStatusChange(scope.row)"
+            :loading="scope.row.isStatusLoading"
           />
         </template>
       </el-table-column>
@@ -64,6 +65,7 @@
       v-model:size="listParams.size"
       :count="count"
       :load-list="loadUsers"
+      :disabled="store.state.isLoading"
     />
   </el-card>
   <UserForm
@@ -104,6 +106,9 @@ const users = ref<User[]>([])
 const count = ref(0)
 const loadUsers = async () => {
   const { results, total } = await getUsersByConditions(listParams)
+  results.forEach(item => {
+    item.isStatusLoading = false
+  })
   users.value = results
   count.value = total
 }
@@ -119,7 +124,10 @@ const openForm = (payload: number) => {
 // 用户状态变更
 const onStatusChange = async (user: User) => {
   const { id, status } = user
-  await updateUser(id, { status })
+  user.isStatusLoading = true
+  await updateUser(id, { status }).finally(() => {
+    user.isStatusLoading = false
+  })
   ElMessage.success(`${status ? '启用' : '禁用'}成功`)
 }
 

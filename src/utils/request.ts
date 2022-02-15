@@ -82,6 +82,8 @@ request.interceptors.response.use(function (response) {
         ).then(() => {
           toLogin()
         })
+      } else {
+        ElMessage.error('操作失败：' + error.response.data.message)
       }
       break
     default:
