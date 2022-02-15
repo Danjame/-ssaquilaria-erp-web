@@ -22,7 +22,6 @@ declare module 'vue' {
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
     ElIcon: typeof import('element-plus/es')['ElIcon']
-    ElImage: typeof import('element-plus/es')['ElImage']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
     ElMain: typeof import('element-plus/es')['ElMain']
@@ -41,6 +40,7 @@ declare module 'vue' {
     ElTree: typeof import('element-plus/es')['ElTree']
     Icon: typeof import('./components/Icon/index.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
+    Pagination: typeof import('./components/Pagination/index.vue')['default']
   }
 }
 

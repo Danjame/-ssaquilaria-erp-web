@@ -66,13 +66,11 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      background
-      layout="total, sizes, prev, pager, next, jumper"
-      :page-sizes="[10, 15, 20]"
-      :total="count"
-      v-model:current-page="listParams.page"
-      v-model:page-size="listParams.size"
+    <Pagination
+      v-model:page="listParams.page"
+      v-model:size="listParams.size"
+      :count="count"
+      :load-list="loadProducts"
     />
   </el-card>
   <ProductForm
@@ -142,9 +140,6 @@ const handleDelete = async (id: number) => {
 }
 
 // 监听参数变化
-watch(() => [listParams.page, listParams.size], () => {
-  loadProducts()
-})
 watch(() => listParams.name, name => {
   if (name === '') listParams.name = undefined
 })
