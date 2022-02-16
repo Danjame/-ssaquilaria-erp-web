@@ -11,7 +11,12 @@
         <el-input v-model="user.email" placeholder="请输入用户邮箱" />
       </el-form-item>
       <el-form-item label="用户角色" prop="roleIds">
-        <el-select v-model="user.roleIds" multiple placeholder="请选择用户角色">
+        <el-select
+          v-model="user.roleIds"
+          multiple
+          placeholder="请选择用户角色"
+          :disabled="user.name === store.state.user?.name"
+        >
           <el-option
             v-for="role in roles"
             :key="role.value"
@@ -28,6 +33,7 @@
 import { getAllRoles } from '@/api/system/role'
 import { Role } from '@/api/system/types/role'
 import { getUserById, updateUser } from '@/api/system/user'
+import store from '@/store'
 
 const props = defineProps({
   id: {

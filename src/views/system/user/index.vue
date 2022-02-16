@@ -44,6 +44,7 @@
             inactive-color="#ff4949"
             @change="onStatusChange(scope.row)"
             :loading="scope.row.isStatusLoading"
+            :disabled="scope.row.name === store.state.user?.name"
           />
         </template>
       </el-table-column>
