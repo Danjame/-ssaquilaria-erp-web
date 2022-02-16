@@ -107,7 +107,6 @@ const handleDelete = async (id: number) => {
   await deleteDepartment(id)
   ElMessage.success('删除成功')
   loadDepartments()
-  return true
 }
 </script>
 

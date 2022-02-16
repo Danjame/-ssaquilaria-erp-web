@@ -12,10 +12,7 @@
         <template #default="scope">
           <el-space>
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
-            <el-popconfirm
-              title="确定要删除该产品单位吗?"
-              @confirm="handleDelete(scope.row.id)"
-            >
+            <el-popconfirm title="确定要删除该产品单位吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
               </template>
@@ -83,7 +80,7 @@ const onSubmitted = () => {
 const handleDelete = async (id: number) => {
   await deleteUnit(id)
   ElMessage.success('删除成功')
-  return true
+  loadUnits()
 }
 </script>
 

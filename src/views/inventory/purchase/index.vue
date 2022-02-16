@@ -56,10 +56,7 @@
       <el-table-column label="操作" width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space>
-            <el-popconfirm
-              title="确定要删除该采购订单吗?"
-              @confirm="handleDelete(scope.row.id)"
-            >
+            <el-popconfirm title="确定要删除该采购订单吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
               </template>
@@ -141,7 +138,7 @@ const onSubmitted = () => {
 const handleDelete = async (id: number) => {
   await deletePurchase(id)
   ElMessage.success('删除成功')
-  return true
+  loadPurchases()
 }
 
 // 监听参数变化

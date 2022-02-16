@@ -137,7 +137,6 @@ const handleDelete = async (id: number) => {
   await deleteRole(id)
   ElMessage.success('删除成功')
   loadRoles()
-  return true
 }
 
 // 监听参数变化

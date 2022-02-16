@@ -140,7 +140,6 @@ const handleDelete = async (id: number) => {
   await deleteUser(id)
   ElMessage.success('删除成功')
   loadUsers()
-  return true
 }
 
 // 监听参数变化

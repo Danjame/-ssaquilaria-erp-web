@@ -18,10 +18,7 @@
         <template #default="scope">
           <el-space>
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
-            <el-popconfirm
-              title="确定要删除该权限吗?"
-              @confirm="handleDelete(scope.row.id)"
-            >
+            <el-popconfirm title="确定要删除该权限吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
               </template>
@@ -90,7 +87,6 @@ const handleDelete = async (id: number) => {
   await deletePermission(id)
   ElMessage.success('删除成功')
   loadPermissions()
-  return true
 }
 </script>
 

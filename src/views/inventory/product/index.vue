@@ -54,10 +54,7 @@
         <template #default="scope">
           <el-space spacer="|">
             <el-button type="text" @click="openCreateOrEdit(scope.row.id)">编辑</el-button>
-            <el-popconfirm
-              title="确定要删除该产品吗?"
-              @confirm="handleDelete(scope.row.id)"
-            >
+            <el-popconfirm title="确定要删除该产品吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
               </template>
@@ -137,7 +134,7 @@ const onSubmitted = () => {
 const handleDelete = async (id: number) => {
   await deleteProduct(id)
   ElMessage.success('删除成功')
-  return true
+  loadProducts()
 }
 
 // 监听参数变化
