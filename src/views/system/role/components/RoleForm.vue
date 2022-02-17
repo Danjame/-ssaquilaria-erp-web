@@ -26,9 +26,7 @@
           :data="menus"
           show-checkbox
           node-key="id"
-          :default-checked-keys="role.menuIds"
-          :props="defaultProps"
-          :check-strictly="isStrict"
+          :props="{ children: 'children', label: 'label' }"
           v-loading="menusLoading"
         />
       </el-form-item>
@@ -82,12 +80,8 @@ const loadAllPermissions = async () => {
 }
 
 // 菜单
-const defaultProps = {
-  children: 'children',
-  label: 'label',
-}
 const tree = ref<typeof ElTree | null>(null)
-const isStrict = ref(true)
+
 const menusLoading = ref(false)
 
 const menus = ref<Menu[]>([])
@@ -123,7 +117,11 @@ const loadRole = async () => {
     menuIds: menuIds ? menuIds.map(Number) : []
   })
 
-  isStrict.value = false
+  // 回显选中菜单
+  role.menuIds.forEach(id => {
+    const node = tree.value?.getNode(id)
+    if (node && node.isLeaf) tree.value?.setChecked(id ,true, false)
+  })
 }
 
 // 表单提交
@@ -133,14 +131,13 @@ const handleSubmit = async () => {
   const valid = form.value?.validate()
   if (!valid) return
   // 验证通过
-  const { menuIds, ...attrs } = role
   // 获取所有选中 id
-  const ids = tree.value?.getCheckedNodes(false, true).map((node: { id: number }) => node.id)
+  role.menuIds = tree.value?.getCheckedNodes(false, true).map((node: { id: number }) => node.id)
   if (!props.id) {
-    await createRole({ ...attrs, menuIds: ids })
+    await createRole(role)
     ElMessage.success('新增成功')
   } else {
-    await updateRole(props.id, { ...attrs, menuIds: ids })
+    await updateRole(props.id, role)
     ElMessage.success('更新成功')
   }
 

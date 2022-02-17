@@ -25,7 +25,7 @@
               </el-space>
             </el-descriptions-item>
             <el-descriptions-item label="角色菜单">
-              <el-tree :data="props.row.menus" :props="menuTreeProps" />
+              <el-tree :data="props.row.menus" :props="{ children: 'children', label: 'label' }" />
             </el-descriptions-item>
           </el-descriptions>
         </template>
@@ -98,12 +98,6 @@ const loadRoles = async () => {
   })
   roles.value = results
   count.value = total
-}
-
-// 菜单
-const menuTreeProps = {
-  children: 'children',
-  label: 'label',
 }
 
 // 显示隐藏 form
