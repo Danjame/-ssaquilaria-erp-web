@@ -3,8 +3,7 @@ import store from '@/store'
 import router from '@/router'
 
 const request = axios.create({
-  // baseURL: import.meta.env.VITE_API_BASEURL
-  baseURL: 'http://localhost:8080'
+  baseURL: import.meta.env.VITE_BASE_URL as string
 })
 
 /* —————————————————————————————————— 请求拦截 —————————————————————————————————— */

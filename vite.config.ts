@@ -32,5 +32,8 @@ export default defineConfig({
         additionalData: '@import "@/styles/variables.scss";'
       }
     }
+  },
+  server: {
+    port: 5050
   }
 })
