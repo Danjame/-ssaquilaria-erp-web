@@ -67,10 +67,10 @@ const rules = reactive({
   ]
 })
 
-onMounted(() => {
+onMounted(async () => {
   loadAllPermissions()
-  loadAllMenus()
-  if (props.id) loadRole()
+  await loadAllMenus()
+  if (props.id) await loadRole()
 })
 
 // 权限
