@@ -4,16 +4,17 @@
     :submit="handleSubmit"
   >
     <el-upload
-      ref="upload"
       style="text-align: center"
+      ref="upload"
       drag
       :action="url"
       accept=".xlsx"
+      :limit="limit"
       :headers="headers"
       :auto-upload="false"
-      :on-remove="onRemove"
-      :on-success="onSuccess"
+      :on-exceed="onExceed"
       :on-error="onFail"
+      :on-success="onSuccess"
     >
       <el-icon class="el-icon--upload">
         <component :is="'UploadFilled'" />
@@ -34,24 +35,24 @@
 import store from '@/store'
 
 const url = `${import.meta.env.VITE_BASE_URL}/forest/trees/import`
-
+const limit = 1
 const headers = {
   Authorization: `Bearer ${store.state.user.token}`
 }
 
-const onRemove = () => {
-  console.log('onRemove')
+const onExceed = () => {
+  ElMessage.error(`只能上传${limit}个文件`)
 }
+
+const onFail = (error: Error) => {
+  ElMessage.error(`上传失败: ${error.message}`)
+}
+
 const onSuccess = () => {
   ElMessage.success('上传成功')
-  emit('submit')
-}
-const onFail = () => {
-  console.log('onFail')
 }
 
 const upload = ref<typeof ElUpload>()
-const emit = defineEmits(['submit'])
 const handleSubmit = () => {
   upload.value?.submit()
   return new Promise(resolve => resolve())

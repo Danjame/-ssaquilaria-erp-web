@@ -90,12 +90,11 @@ onMounted(() => {
   if (props.id) loadTree()
 })
 
-// 树木单位
+// 林场区域
 const areas = ref<Area[]>([])
 const loadAreasByFarmId = async (id: number) => {
   const results = await getAreasByFarmId(id)
   areas.value = results
-  // console.log(1)
 }
 
 // 树木信息
