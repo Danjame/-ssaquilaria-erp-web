@@ -21,7 +21,7 @@
 <script lang="ts" setup>
 import { PropType } from 'vue'
 
-let visible = false
+const visible = false
 const dialog = ref<typeof ElDialog | null>(null)
 
 const handleCancel = () => {

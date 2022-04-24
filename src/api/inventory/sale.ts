@@ -1,22 +1,6 @@
 import request from '@/utils/request'
-import { Sale } from './types/sale'
-
-interface SaleAttrs {
-  orderNum: string
-  productId: number | undefined
-  customerId?: number | undefined
-  price: number
-  quantity: number
-  amount: number
-  comment?: string
-}
-
-interface SaleConditions {
-  orderNum?: number
-  productId?: number
-  page?: number
-  size?: number
-}
+import { Sale, SaleAttrs, SaleConditions } from './types/sale'
+import { PageResult } from '../types'
 
 export const createSale = (data: SaleAttrs) => {
   return request<Sale>({
@@ -27,14 +11,9 @@ export const createSale = (data: SaleAttrs) => {
 }
 
 export const getSalesByConditions = (params?: SaleConditions) => {
-  return request<{
-    results: Sale[],
-    size: number,
-    page: number,
-    total: number
-  }>({
+  return request<PageResult>({
     method: 'GET',
-    url: '/inventory/sales/conditions',
+    url: '/inventory/sales/by-conditions',
     params
   })
 }

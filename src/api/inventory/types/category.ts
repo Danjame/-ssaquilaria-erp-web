@@ -11,3 +11,15 @@ export interface Category {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface CategoryAttrs {
+  name: string
+  value: string
+  label: string
+}
+
+export interface CategoryConditions {
+  productId?: number
+  page?: number
+  size?: number
+}

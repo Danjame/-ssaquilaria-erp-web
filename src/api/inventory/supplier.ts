@@ -1,18 +1,6 @@
 import request from '@/utils/request'
-import { Supplier } from './types/supplier'
-
-interface SupplierAttrs {
-  name: string
-  value: string
-  label: string
-  description?: string
-}
-
-interface SupplierConditions {
-  productId?: number
-  page?: number
-  size?: number
-}
+import { Supplier, SupplierAttrs, SupplierConditions } from './types/supplier'
+import { PageResult } from '../types'
 
 export const createSupplier = (data: SupplierAttrs) => {
   return request<Supplier>({
@@ -37,14 +25,9 @@ export const getAllSuppliers = () => {
 }
 
 export const getSuppliersByConditions = (params?: SupplierConditions) => {
-  return request<{
-    results: Supplier[],
-    size: number,
-    page: number,
-    total: number
-  }>({
+  return request<PageResult>({
     method: 'GET',
-    url: '/inventory/suppliers/conditions',
+    url: '/inventory/suppliers/by-conditions',
     params
   })
 }

@@ -10,3 +10,15 @@ export interface Unit {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface UnitAttrs {
+  name: string
+  value: string
+  label: string
+  description?: string
+}
+
+export interface UnitConditions {
+  page?: number
+  size?: number
+}

@@ -16,3 +16,18 @@ export interface Role {
   updatedAt: Date
   menus: Menu[]
 }
+
+export interface RoleAttrs {
+  name?: string
+  value?: string
+  label?: string
+  permissionIds?: number[]
+  menuIds?: number[]
+  status?: boolean
+}
+
+export interface RoleConditions {
+  name?: string
+  page?: number
+  size?: number
+}

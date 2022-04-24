@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <img style="height: 40px" src="@/assets/logo.png" />
+    <img style="height: 40px" src="@/assets/logo.png">
     <span v-if="!store.state.isCollapse" class="title">中科沉香</span>
   </div>
 </template>

@@ -26,7 +26,8 @@ const props = defineProps({
   },
   loadList: {
     type: Function as PropType<(...args: any[]) => void>,
-    defautl: () => { }
+    default: () => {},
+    required: false
   }
 })
 

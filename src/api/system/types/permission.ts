@@ -9,3 +9,16 @@ export interface Permission {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface PermissionAttrs {
+  name: string
+  value: string
+  label: string
+  actionIds?: number[]
+}
+
+export interface PermissionConditions {
+  name?: string
+  page?: number
+  size?: number
+}

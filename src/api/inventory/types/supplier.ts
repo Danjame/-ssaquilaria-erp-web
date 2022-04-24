@@ -14,3 +14,16 @@ export interface Supplier {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface SupplierAttrs {
+  name: string
+  value: string
+  label: string
+  description?: string
+}
+
+export interface SupplierConditions {
+  productId?: number
+  page?: number
+  size?: number
+}

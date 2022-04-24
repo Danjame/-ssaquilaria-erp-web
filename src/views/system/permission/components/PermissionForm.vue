@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts" setup>
-import { getAllActions } from '@/api/system/action';
+import { getAllActions } from '@/api/system/action'
 import { Action } from '@/api/system/types/action'
 import { createPermission, getPermissionById, updatePermission } from '@/api/system/permission'
 
@@ -82,7 +82,7 @@ const loadPermission = async () => {
     name,
     value,
     label,
-    actionIds: actions ? actions.map(action => action.id) : [],
+    actionIds: actions ? actions.map(action => action.id) : []
   })
 }
 

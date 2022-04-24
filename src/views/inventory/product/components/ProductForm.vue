@@ -47,7 +47,7 @@ import { PropType } from 'vue'
 import { getAllUnits } from '@/api/inventory/unit'
 import { Unit } from '@/api/inventory/types/unit'
 import { getProductById, createProduct, updateProduct } from '@/api/inventory/product'
-import { intValidator } from '@/utils/validator'
+import { validateQty } from '@/utils/validator'
 
 const props = defineProps({
   id: {
@@ -83,7 +83,7 @@ const rules = reactive({
     { required: false, message: '产品机器码不能为空', trigger: 'change' }
   ],
   warnQty: [
-    { validator: intValidator, trigger: 'change' }
+    { validator: validateQty, trigger: 'change' }
   ]
 })
 

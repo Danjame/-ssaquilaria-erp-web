@@ -1,23 +1,6 @@
 import request from '@/utils/request'
-import { Purchase } from './types/purchase'
-
-interface PurchaseAttrs {
-  orderNum: string
-  productId: number | undefined
-  supplierId: number | undefined
-  price: number
-  quantity: number
-  amount: number
-  comment?: string
-}
-
-interface PurchaseConditions {
-  orderNum?: number
-  productId?: number
-  supplierId?: number
-  page?: number
-  size?: number
-}
+import { Purchase, PurchaseAttrs, PurchaseConditions } from './types/purchase'
+import { PageResult } from '../types'
 
 export const createPurchase = (data: PurchaseAttrs) => {
   return request<Purchase>({
@@ -28,14 +11,9 @@ export const createPurchase = (data: PurchaseAttrs) => {
 }
 
 export const getPurchasesByConditions = (params?: PurchaseConditions) => {
-  return request<{
-    results: Purchase[],
-    size: number,
-    page: number,
-    total: number
-  }>({
+  return request<PageResult>({
     method: 'GET',
-    url: '/inventory/purchases/conditions',
+    url: '/inventory/purchases/by-conditions',
     params
   })
 }

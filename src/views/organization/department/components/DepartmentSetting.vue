@@ -60,7 +60,7 @@ const onSelect = (users: User[]) => {
 // 确定提交
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
-  await updateDepartment(props.id, { userIds: userIds.value})
+  await updateDepartment(props.id, { userIds: userIds.value })
   ElMessage.success('更新成功')
   emit('submit', 'setting')
 }

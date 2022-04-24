@@ -48,7 +48,7 @@ import { PropType } from 'vue'
 import { Product } from '@/api/inventory/types/product'
 import { Supplier } from '@/api/inventory/types/supplier'
 import { createPurchase } from '@/api/inventory/purchase'
-import { intValidator } from '@/utils/validator'
+import { validateQty } from '@/utils/validator'
 
 defineProps({
   products: {
@@ -76,7 +76,7 @@ const rules = reactive({
     { required: true, message: '产品单价不能为空', trigger: 'change' }
   ],
   quantity: [
-    { validator: intValidator, trigger: 'change' }
+    { required: true, validator: validateQty, trigger: 'change' }
   ],
   amount: [
     { required: true, message: '产品金额不能为空', trigger: 'change' }

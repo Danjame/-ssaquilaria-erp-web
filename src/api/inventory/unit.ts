@@ -1,17 +1,6 @@
 import request from '@/utils/request'
-import { Unit } from './types/unit'
-
-interface UnitAttrs {
-  name: string
-  value: string
-  label: string
-  description?: string
-}
-
-interface UnitConditions {
-  page?: number
-  size?: number
-}
+import { Unit, UnitAttrs, UnitConditions } from './types/unit'
+import { PageResult } from '../types'
 
 export const createUnit = (data: UnitAttrs) => {
   return request<Unit>({
@@ -36,14 +25,9 @@ export const getAllUnits = () => {
 }
 
 export const getUnitsByConditions = (params?: UnitConditions) => {
-  return request<{
-    results: Unit[],
-    size: number,
-    page: number,
-    total: number
-  }>({
+  return request<PageResult>({
     method: 'GET',
-    url: '/inventory/units/conditions',
+    url: '/inventory/units/by-conditions',
     params
   })
 }

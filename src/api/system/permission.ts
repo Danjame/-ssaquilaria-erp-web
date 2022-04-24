@@ -1,18 +1,6 @@
 import request from '@/utils/request'
-import { Permission } from './types/permission'
-
-interface PermissionAttrs {
-  name: string
-  value: string
-  label: string
-  actionIds?: number[]
-}
-
-interface PermissionConditions {
-  name?: string
-  page?: number
-  size?: number
-}
+import { Permission, PermissionAttrs, PermissionConditions } from './types/permission'
+import { PageResult } from '../types'
 
 export const createPermission = (data: PermissionAttrs) => {
   return request<Permission>({
@@ -37,14 +25,9 @@ export const getPermissionById = (id: number) => {
 }
 
 export const getPermissionsByConditions = (params?: PermissionConditions) => {
-  return request<{
-    results: Permission[],
-    size: number,
-    page: number,
-    total: number
-  }>({
+  return request<PageResult>({
     method: 'GET',
-    url: '/system/permissions/conditions',
+    url: '/system/permissions/by-conditions',
     params
   })
 }

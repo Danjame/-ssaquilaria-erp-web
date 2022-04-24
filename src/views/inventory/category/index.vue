@@ -76,9 +76,9 @@ const listParams = reactive({
 const categories = ref<Category[]>([])
 const count = ref(0)
 const loadCategories = async () => {
-  const { results, total } = await getCategoriesByConditions(listParams)
-  categories.value = results
-  count.value = total
+  const data = await getCategoriesByConditions(listParams)
+  categories.value = data.results
+  count.value = data.count
 }
 
 // 显示隐藏 form

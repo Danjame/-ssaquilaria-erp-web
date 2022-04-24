@@ -14,3 +14,20 @@ export interface Sale {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface SaleAttrs {
+  orderNum: string
+  productId: number | undefined
+  customerId?: number | undefined
+  price: number
+  quantity: number
+  amount: number
+  comment?: string
+}
+
+export interface SaleConditions {
+  orderNum?: number
+  productId?: number
+  page?: number
+  size?: number
+}

@@ -20,3 +20,23 @@ export interface CurrentUser {
   status: boolean
   token: string
 }
+
+export interface Auth {
+  username: string;
+  password: string;
+}
+
+export interface UserAttrs {
+  name?: string
+  email?: string
+  status?: boolean
+  lastLogin?: Date
+  roleIds?: number[]
+}
+
+export interface UserConditions {
+  name?: string
+  departmentId?: number
+  page?: number
+  size?: number
+}

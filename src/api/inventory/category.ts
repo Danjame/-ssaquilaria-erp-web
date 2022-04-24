@@ -1,17 +1,6 @@
 import request from '@/utils/request'
-import { Category } from './types/category'
-
-interface CategoryAttrs {
-  name: string
-  value: string
-  label: string
-}
-
-interface CategoryConditions {
-  productId?: number
-  page?: number
-  size?: number
-}
+import { Category, CategoryAttrs, CategoryConditions } from './types/category'
+import { PageResult } from '../types'
 
 export const createCategory = (data: CategoryAttrs) => {
   return request<Category>({
@@ -36,14 +25,9 @@ export const getAllCategories = () => {
 }
 
 export const getCategoriesByConditions = (params?: CategoryConditions) => {
-  return request<{
-    results: Category[],
-    size: number,
-    page: number,
-    total: number
-  }>({
+  return request<PageResult>({
     method: 'GET',
-    url: '/inventory/categories/conditions',
+    url: '/inventory/categories/by-conditions',
     params
   })
 }

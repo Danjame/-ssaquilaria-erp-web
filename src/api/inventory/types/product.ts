@@ -28,3 +28,21 @@ export interface Product {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface ProductAttrs {
+  name: string
+  categoryId: number | undefined
+  unitId: number | undefined
+  size: string
+  description?: string
+  serialNum?: string
+  machineCode?: string
+  warnQty?: number
+}
+
+export interface ProductConditions {
+  name?: string
+  categoryId?: number
+  page?: number
+  size?: number
+}

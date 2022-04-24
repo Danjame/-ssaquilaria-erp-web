@@ -20,7 +20,7 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="openCreateOrEdit">新增产品</el-button>
+      <el-button type="primary" :icon="'Plus'" @click="openForm">新增产品</el-button>
     </template>
     <el-table :data="products" style="width: 100%" v-loading="store.state.isLoading">
       <el-table-column label="产品名称" prop="name" align="center" />
@@ -53,7 +53,7 @@
       <el-table-column label="操作" width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
-            <el-button type="text" @click="openCreateOrEdit(scope.row.id)">编辑</el-button>
+            <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
             <el-popconfirm title="确定要删除该产品吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
@@ -109,15 +109,15 @@ const listParams = reactive({
 const products = ref<Product[]>([])
 const count = ref(0)
 const loadProducts = async () => {
-  const { results, total } = await getProductsByConditions(listParams)
-  products.value = results
-  count.value = total
+  const data = await getProductsByConditions(listParams)
+  products.value = data.results
+  count.value = data.count
 }
 
 // 显示隐藏 form
 const visible = ref(false)
 const productId = ref(undefined as number | undefined)
-const openCreateOrEdit = (payload: number | MouseEvent) => {
+const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     productId.value = payload
   } else {

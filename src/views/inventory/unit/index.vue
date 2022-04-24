@@ -55,9 +55,9 @@ const listParams = reactive({
 const units = ref<Unit[]>([])
 const count = ref(0)
 const loadUnits = async () => {
-  const { results, total } = await getUnitsByConditions(listParams)
-  units.value = results
-  count.value = total
+  const data = await getUnitsByConditions(listParams)
+  units.value = data.results
+  count.value = data.count
 }
 
 // 显示隐藏 form

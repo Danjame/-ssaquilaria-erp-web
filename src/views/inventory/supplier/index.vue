@@ -77,9 +77,9 @@ const listParams = reactive({
 const suppliers = ref<Supplier[]>([])
 const count = ref(0)
 const loadSuppliers = async () => {
-  const { results, total } = await getSuppliersByConditions(listParams)
-  suppliers.value = results
-  count.value = total
+  const data = await getSuppliersByConditions(listParams)
+  suppliers.value = data.results
+  count.value = data.count
 }
 
 // 显示隐藏 form

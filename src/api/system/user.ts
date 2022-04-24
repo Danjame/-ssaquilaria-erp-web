@@ -1,26 +1,7 @@
 import request from '@/utils/request'
-import { User } from './types/user'
+import { Auth, User, UserAttrs, UserConditions } from './types/user'
 import { Menu } from './types/menu'
-
-interface Auth {
-  username: string;
-  password: string;
-}
-
-interface UserAttrs {
-  name?: string
-  email?: string
-  status?: boolean
-  lastLogin?: Date
-  roleIds?: number[]
-}
-
-interface UserConditions {
-  name?: string
-  departmentId?: number
-  page?: number
-  size?: number
-}
+import { PageResult } from '../types'
 
 export const login = (data: Auth) => {
   return request({
@@ -37,7 +18,7 @@ export const getUserInfo = () => {
     menuTrees: Menu[]
   }>({
     method: 'GET',
-    url: '/system/users/user-info'
+    url: '/system/users/current-user'
   })
 }
 
@@ -64,14 +45,9 @@ export const getUserById = (id: number) => {
 }
 
 export const getUsersByConditions = (params?: UserConditions) => {
-  return request<{
-    results: User[],
-    size: number,
-    page: number,
-    total: number
-  }>({
+  return request<PageResult>({
     method: 'GET',
-    url: '/system/users/conditions',
+    url: '/system/users/by-conditions',
     params
   })
 }

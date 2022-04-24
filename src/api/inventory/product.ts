@@ -1,23 +1,6 @@
 import request from '@/utils/request'
-import { Product } from './types/product'
-
-interface ProductAttrs {
-  name: string
-  categoryId: number | undefined
-  unitId: number | undefined
-  size: string
-  description?: string
-  serialNum?: string
-  machineCode?: string
-  warnQty?: number
-}
-
-interface ProductConditions {
-  name?: string
-  categoryId?: number
-  page?: number
-  size?: number
-}
+import { Product, ProductAttrs, ProductConditions } from './types/product'
+import { PageResult } from '../types'
 
 export const createProduct = (data: ProductAttrs) => {
   return request<Product>({
@@ -35,14 +18,9 @@ export const getProductById = (id: number) => {
 }
 
 export const getProductsByConditions = (params?: ProductConditions) => {
-  return request<{
-    results: Product[],
-    size: number,
-    page: number,
-    total: number
-  }>({
+  return request<PageResult>({
     method: 'GET',
-    url: '/inventory/products/conditions',
+    url: '/inventory/products/by-conditions',
     params
   })
 }

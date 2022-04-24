@@ -8,7 +8,7 @@
         <template #default="props">
           <el-space>
             <span>部门成员（{{ props.row.users.length }} 人）:</span>
-            <el-tag v-for="user in props.row.users" size="large">{{ user.name }}</el-tag>
+            <el-tag v-for="(user, index) in props.row.users" size="large" :key="index">{{ user.name }}</el-tag>
           </el-space>
         </template>
       </el-table-column>
@@ -70,9 +70,9 @@ const listParams = reactive({
 const departments = ref<Department[]>([])
 const count = ref(0)
 const loadDepartments = async () => {
-  const { results, total } = await getDepartmentsByConditions(listParams)
-  departments.value = results
-  count.value = total
+  const data = await getDepartmentsByConditions(listParams)
+  departments.value = data.results
+  count.value = data.count
 }
 
 // 显示隐藏 form

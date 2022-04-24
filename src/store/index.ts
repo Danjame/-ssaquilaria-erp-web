@@ -6,7 +6,7 @@ import { getUserInfo } from '@/api/system/user'
 
 const store = createStore({
   plugins: [createPersistedState({
-    reducer(state) {
+    reducer (state) {
       return {
         isCollapse: state.isCollapse,
         user: state.user

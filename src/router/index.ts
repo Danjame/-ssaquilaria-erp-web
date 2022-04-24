@@ -3,6 +3,7 @@ import AppLayout from '@/layout/index.vue'
 import sysRoutes from './modules/system'
 import orgRoutes from './modules/organization'
 import invRoutes from './modules/inventory'
+import frstRoutes from './modules/forest'
 import { Menu } from '@/api/system/types/menu'
 import store from '@/store'
 
@@ -28,7 +29,8 @@ const routes: RouteRecordRaw[] = [
       },
       sysRoutes,
       orgRoutes,
-      invRoutes
+      invRoutes,
+      frstRoutes
     ]
   },
   {
@@ -44,11 +46,12 @@ const router = createRouter({
 })
 
 router.beforeEach(async to => {
+  document.title = import.meta.env.VITE_APP_TITLE + ' - ' + to.meta.title
   if (to.name === 'login') {
     // 登录页
     if (store.state.user && store.state.user.status) {
       return {
-        path: '/',
+        path: '/'
       }
     }
   } else {

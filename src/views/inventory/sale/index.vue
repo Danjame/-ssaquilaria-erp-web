@@ -31,6 +31,11 @@
     </template>
     <el-table :data="sales" style="width: 100%" v-loading="store.state.isLoading">
       <el-table-column label="销售单号" prop="orderNum" align="center" />
+      <el-table-column label="时间" align="center">
+        <template #default="scope">
+          <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="产品名称" align="center">
         <template #default="scope">
           <span>{{ scope.row.product.name }}</span>
@@ -76,6 +81,7 @@ import { Product } from '@/api/inventory/types/product'
 import { getSalesByConditions, deleteSale } from '@/api/inventory/sale'
 import { Sale } from '@/api/inventory/types/sale'
 import store from '@/store'
+import moment from 'moment'
 
 onMounted(() => {
   loadAllProducts()
@@ -99,9 +105,9 @@ const listParams = reactive({
 const sales = ref<Sale[]>([])
 const count = ref(0)
 const loadSales = async () => {
-  const { results, total } = await getSalesByConditions(listParams)
-  sales.value = results
-  count.value = total
+  const data = await getSalesByConditions(listParams)
+  sales.value = data.results
+  count.value = data.count
 }
 
 // 显示隐藏 form

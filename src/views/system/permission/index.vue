@@ -10,7 +10,7 @@
       <el-table-column label="请求方法" align="center">
         <template #default="scope">
           <el-space>
-            <el-tag v-for="action in scope.row.actions"> {{ action.label }}</el-tag>
+            <el-tag v-for="(action, index) in scope.row.actions" :key="index"> {{ action.label }}</el-tag>
           </el-space>
         </template>
       </el-table-column>
@@ -61,9 +61,9 @@ const listParams = reactive({
 const permissions = ref<Permission[]>([])
 const count = ref(0)
 const loadPermissions = async () => {
-  const { results, total } = await getPermissionsByConditions(listParams)
-  permissions.value = results
-  count.value = total
+  const data = await getPermissionsByConditions(listParams)
+  permissions.value = data.results
+  count.value = data.count
 }
 
 // 显示隐藏 form

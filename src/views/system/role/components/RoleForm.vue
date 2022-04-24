@@ -120,7 +120,7 @@ const loadRole = async () => {
   // 回显选中菜单
   role.menuIds.forEach(id => {
     const node = tree.value?.getNode(id)
-    if (node && node.isLeaf) tree.value?.setChecked(id ,true, false)
+    if (node && node.isLeaf) tree.value?.setChecked(id, true, false)
   })
 }
 

@@ -24,7 +24,16 @@ module.exports = {
     'vue/max-attributes-per-line': 0
   },
   globals: {
-    ElMessage: true,
-    ElDialog: true
+    defineProps: 'readonly',
+    defineEmits: 'readonly',
+    defineExpose: 'readonly',
+    withDefaults: 'readonly',
+    ElForm: 'readonly',
+    ElDialog: 'readonly',
+    ElMessage: 'readonly',
+    ElTable: 'readonly',
+    ElTree: 'readonly',
+    ElMessageBox: 'readonly',
+    ElUpload: 'readonly'
   }
 }

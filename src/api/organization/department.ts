@@ -1,17 +1,6 @@
 import request from '@/utils/request'
-import { Department } from './types/department'
-
-interface DepartmentAttrs {
-  name?: string
-  value?: string
-  label?: string
-  userIds?: number[]
-}
-
-interface DepartmentConditions {
-  page?: number
-  size?: number
-}
+import { Department, DepartmentAttrs, DepartmentConditions } from './types/department'
+import { PageResult } from '../types'
 
 export const createDepartment = (data: DepartmentAttrs) => {
   return request<Department>({
@@ -36,14 +25,9 @@ export const getAllDepartments = () => {
 }
 
 export const getDepartmentsByConditions = (params?: DepartmentConditions) => {
-  return request<{
-    results: Department[],
-    size: number,
-    page: number,
-    total: number
-  }>({
+  return request<PageResult>({
     method: 'GET',
-    url: '/organization/departments/conditions',
+    url: '/organization/departments/by-conditions',
     params
   })
 }

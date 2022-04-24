@@ -17,3 +17,21 @@ export interface Purchase {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface PurchaseAttrs {
+  orderNum: string
+  productId: number | undefined
+  supplierId: number | undefined
+  price: number
+  quantity: number
+  amount: number
+  comment?: string
+}
+
+export interface PurchaseConditions {
+  orderNum?: number
+  productId?: number
+  supplierId?: number
+  page?: number
+  size?: number
+}

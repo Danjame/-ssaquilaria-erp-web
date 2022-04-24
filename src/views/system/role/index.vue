@@ -19,7 +19,8 @@
             <el-descriptions-item label="角色权限">
               <el-space>
                 <el-tag
-                  v-for="permission in props.row.permissions"
+                  v-for="(permission, index) in props.row.permissions"
+                  :key="index"
                   size="large"
                 >{{ permission.label }}</el-tag>
               </el-space>
@@ -92,10 +93,12 @@ const listParams = reactive({
 const roles = ref<Role[]>([])
 const count = ref(0)
 const loadRoles = async () => {
-  const { results, total } = await getRolesByConditions(listParams)
-  results.forEach(item => {
-    item.isStatusLoading = false
-  })
+  const { results, count: total } = await getRolesByConditions(listParams)
+  if (results && results.length) {
+    results.forEach(item => {
+      item.isStatusLoading = false
+    })
+  }
   roles.value = results
   count.value = total
 }
@@ -141,4 +144,3 @@ watch(() => listParams.name, name => {
 
 <style lang="scss" scoped>
 </style>
-

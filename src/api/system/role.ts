@@ -1,20 +1,6 @@
 import request from '@/utils/request'
-import { Role } from './types/role'
-
-interface RoleAttrs {
-  name?: string
-  value?: string
-  label?: string
-  permissionIds?: number[]
-  menuIds?: number[]
-  status?: boolean
-}
-
-interface RoleConditions {
-  name?: string
-  page?: number
-  size?: number
-}
+import { Role, RoleAttrs, RoleConditions } from './types/role'
+import { PageResult } from '../types'
 
 export const createRole = (data: RoleAttrs) => {
   return request<Role>({
@@ -39,14 +25,9 @@ export const getAllRoles = () => {
 }
 
 export const getRolesByConditions = (params?: RoleConditions) => {
-  return request<{
-    results: Role[],
-    size: number,
-    page: number,
-    total: number
-  }>({
+  return request<PageResult>({
     method: 'GET',
-    url: '/system/roles/conditions',
+    url: '/system/roles/by-conditions',
     params
   })
 }
