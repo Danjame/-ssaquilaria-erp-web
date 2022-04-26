@@ -10,22 +10,12 @@
         </el-form-item>
         <el-form-item label="所属林场" prop="farmId">
           <el-select v-model="listParams.farmId" placeholder="请选择林场" clearable>
-            <el-option
-              v-for="farm in farms"
-              :key="farm.id"
-              :label="farm.name"
-              :value="farm.id"
-            />
+            <el-option v-for="farm in farms" :key="farm.id" :label="farm.name" :value="farm.id" />
           </el-select>
         </el-form-item>
         <el-form-item label="林场区域" prop="areaId">
           <el-select v-model="listParams.areaId" placeholder="请选择区域" clearable>
-            <el-option
-              v-for="area in areas"
-              :key="area.id"
-              :label="area.name"
-              :value="area.id"
-            />
+            <el-option v-for="area in areas" :key="area.id" :label="area.name" :value="area.id" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -48,7 +38,7 @@
           <span>{{ scope.row.farm.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="林场分区" align="center">
+      <el-table-column label="林场区域" align="center">
         <template #default="scope">
           <span>{{ scope.row.area.name }}</span>
         </template>
@@ -57,13 +47,14 @@
       <el-table-column label="列" prop="positionY" align="center" />
       <el-table-column label="种植时间" align="center">
         <template #default="scope">
-          <span>{{ moment(scope.row.plantedAt).format('YYYY/MM/DD HH:mm') }}</span>
+          <span>{{ moment(scope.row.plantedAt).format('YYYY/MM') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="100" align="center" fixed="right">
+      <el-table-column label="操作" width="160" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
+            <el-button type="text" @click="openRecord(scope.row.id)">查看</el-button>
             <el-popconfirm title="确定要删除该树木吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
@@ -93,11 +84,17 @@
     v-model="uploadVisible"
     @submit="onUploadSubmitted"
   />
+  <TreeRecord
+    v-if="recordVisible"
+    v-model="recordVisible"
+    :id="treeId"
+  />
 </template>
 
 <script lang="ts" setup>
 import TreeForm from './components/TreeForm.vue'
 import TreeUpload from './components/TreeUpload.vue'
+import TreeRecord from './components/TreeRecord.vue'
 import { getAllFarms } from '@/api/forest/farm'
 import { Farm } from '@/api/forest/types/farm'
 import { getAreasByFarmId } from '@/api/forest/area'
@@ -154,9 +151,9 @@ const handleDelete = async (id: number) => {
   loadTrees()
 }
 
-// 表格组件
-const formVisible = ref(false)
 const treeId = ref(undefined as number | undefined)
+// 新增与编辑组件
+const formVisible = ref(false)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     treeId.value = payload
@@ -171,10 +168,16 @@ const onFormSubmitted = () => {
   loadTrees()
 }
 
-// 上传组件
+// 成长记录组件
+const recordVisible = ref(false)
+const openRecord = (payload: number) => {
+  treeId.value = payload
+  recordVisible.value = true
+}
+
+// 批量上传组件
 const uploadVisible = ref(false)
 const onUploadSubmitted = () => {
-  console.log('sss')
   uploadVisible.value = false
   loadTrees()
 }
@@ -182,6 +185,9 @@ const onUploadSubmitted = () => {
 // 监听参数变化
 watch(() => listParams.name, name => {
   if (name === '') listParams.name = undefined
+})
+watch(() => listParams.serialNum, serialNum => {
+  if (serialNum === '') listParams.serialNum = undefined
 })
 watch(() => listParams.farmId, id => {
   listParams.farmId = !id ? undefined : id

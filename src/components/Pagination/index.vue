@@ -2,7 +2,7 @@
   <el-pagination
     background
     layout="total, sizes, prev, pager, next, jumper"
-    :page-sizes="[10, 15, 20]"
+    :page-sizes="[7, 10, 15, 20]"
     v-model:current-page="page"
     v-model:page-size="size"
     :total="count"

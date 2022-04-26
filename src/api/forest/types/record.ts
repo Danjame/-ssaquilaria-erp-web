@@ -21,3 +21,8 @@ export interface Record {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface RecordConditions {
+  TreeId: number
+  operTypeId?: number
+}
