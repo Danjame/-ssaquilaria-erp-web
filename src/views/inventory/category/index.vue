@@ -4,12 +4,7 @@
       <el-form ref="form" :disabled="store.state.isLoading">
         <el-form-item label="产品名称">
           <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
-            <el-option
-              v-for="product in products"
-              :key="product.id"
-              :label="product.name"
-              :value="product.id"
-            />
+            <el-option v-for="product in products" :key="product.id" :label="product.name" :value="product.id" />
           </el-select>
         </el-form-item>
       </el-form>

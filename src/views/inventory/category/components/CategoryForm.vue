@@ -1,8 +1,5 @@
 <template>
-  <Dialog
-    :title="id ? '编辑类别' : '新增类别'"
-    :submit="handleSubmit"
-  >
+  <Dialog :title="id ? '编辑类别' : '新增类别'" :submit="handleSubmit">
     <el-form ref="form" :model="category" :rules="rules" label-width="100px">
       <el-form-item label="类别名称" prop="name">
         <el-input v-model="category.name" placeholder="请输入类别名称" />

@@ -1,55 +1,29 @@
 <template>
   <el-dialog
     title="操作记录"
-    v-model="visible"
+    custom-class="record-dialog-container"
     destroy-on-close
     :close-on-click-modal="false"
     :close-on-press-escape="false"
-    custom-class="record-dialog-container"
     center
   >
     <!-- 基本信息 -->
     <el-descriptions :column="3" border>
-      <el-descriptions-item>
+      <el-descriptions-item label="序列号" align="center">{{ tree.serialNum }}</el-descriptions-item>
+      <el-descriptions-item label="树木品种" align="center">{{ tree.name }}</el-descriptions-item>
+      <el-descriptions-item label="所属林场" align="center">{{ tree.farm?.name }}</el-descriptions-item>
+      <el-descriptions-item label="林场区域" align="center">{{ tree.area?.name }}</el-descriptions-item>
+      <el-descriptions-item label="种植时间" align="center">{{ moment(tree.plantedAt).format('YYYY/MM') }}</el-descriptions-item>
+      <el-descriptions-item align="center">
         <template #label>
-          <div class="cell-item">序列号</div>
+          <div class="cell-item">状态图{{ imgRecord.createdAt ? ' (' + moment(imgRecord.createdAt).format('YYYY/MM/DD') + ')' : '' }}</div>
         </template>
-        {{ tree.serialNum }}
-      </el-descriptions-item>
-      <el-descriptions-item>
-        <template #label>
-          <div class="cell-item">树木品种</div>
-        </template>
-        {{ tree.name }}
-      </el-descriptions-item>
-      <el-descriptions-item>
-        <template #label>
-          <div class="cell-item">所属林场</div>
-        </template>
-        {{ tree.farm?.name }}
-      </el-descriptions-item>
-      <el-descriptions-item>
-        <template #label>
-          <div class="cell-item">林场区域</div>
-        </template>
-        {{ tree.area?.name }}
-      </el-descriptions-item>
-      <el-descriptions-item>
-        <template #label>
-          <div class="cell-item">种植时间</div>
-        </template>
-        {{ moment(tree.plantedAt).format('YYYY/MM') }}
-      </el-descriptions-item>
-      <el-descriptions-item>
-        <template #label>
-          <div class="cell-item">最新状态</div>
-        </template>
-        <el-image style="width: 100px; height: 100px" fit="cover" :src="latestImgs[latestImgs.length-1]" :preview-src-list="latestImgs" />
+        <el-image style="width: 60px; height: 60px" fit="cover" :src="imgRecord.srcList[0]" :preview-src-list="imgRecord.srcList" />
       </el-descriptions-item>
     </el-descriptions>
     <el-divider />
     <!-- 筛选表单 -->
-    <el-form ref="form" :model="listParams" inline :disabled="store.state.isLoading" style="text-align: center">
+    <el-form style="text-align: center" ref="form" inline :model="listParams" :disabled="store.state.isLoading">
       <el-form-item label="项目" prop="operType">
         <el-select v-model="listParams.operTypeId" placeholder="请选择项目" clearable>
           <el-option v-for="operType in operTypes" :key="operType.id" :label="operType.name" :value="operType.id" />
@@ -62,7 +36,7 @@
       </el-form-item>
     </el-form>
     <!-- 内容表格 -->
-    <el-table :data="records" style="width: 100%" v-loading="store.state.isLoading">
+    <el-table :data="records" v-loading="store.state.isLoading">
       <el-table-column label="时间" align="center" min-width="81">
         <template #default="scope">
           <span>{{ moment(scope.row.startedAt).format('YYYY/MM/DD HH:mm') }}</span>
@@ -116,10 +90,12 @@
       </el-table-column>
       <el-table-column label="图片" align="center">
         <template #default="scope">
-          <el-popover placement="bottom" trigger="hover" :show-after="300" @show="onImageShow(scope.row.images)">
-            <el-image style="width: 150px" fit="cover" :src="srcList[0]" :preview-src-list="srcList" />
+          <el-popover width="auto" placement="bottom" trigger="click" @show="onImageShow(scope.row.images)">
+            <el-space>
+              <el-image v-for="(img, index) in srcList" :key="index" style="width: 80px" fit="cover" :src="img" :preview-src-list="srcList" />
+            </el-space>
             <template #reference>
-              <el-button type="text">查看</el-button>
+              <el-button :icon="'Picture'" circle />
             </template>
           </el-popover>
         </template>
@@ -129,7 +105,7 @@
       v-model:page="listParams.page"
       v-model:size="listParams.size"
       :count="count"
-      :load-list="loadRecordsByConditions"
+      :load-list="loadRecordsByTree"
       :disabled="store.state.isLoading"
     />
   </el-dialog>
@@ -138,11 +114,11 @@
 <script lang="ts" setup>
 import { getTreeById } from '@/api/forest/tree'
 import { Tree } from '@/api/forest/types/tree'
-import { getRecordsByConditions } from '@/api/forest/record'
+import { getRecordsByTree } from '@/api/forest/record'
 import { Record } from '@/api/forest/types/record'
 import { getAllOperTypes } from '@/api/forest/opertype'
 import { OperType } from '@/api/forest/types/opertype'
-import { getOperItemsByOperTypeId } from '@/api/forest/operitem'
+import { getOperItemsByOperType } from '@/api/forest/operitem'
 import { OperItem } from '@/api/forest/types/operitem'
 import { downloadImage } from '@/api/file/image'
 import store from '@/store'
@@ -157,8 +133,9 @@ const props = defineProps({
 
 onMounted(() => {
   loadTree()
-  loadAllOpertypes()
-  loadRecordsByConditions()
+  loadImgRecord()
+  loadAllOperTypes()
+  loadRecordsByTree()
 })
 
 const listParams = reactive({
@@ -169,37 +146,44 @@ const listParams = reactive({
   size: 7
 })
 
+// 树木基本信息
 const tree: Tree = reactive({})
 const loadTree = async () => {
   Object.assign(tree, await getTreeById(props.id))
 }
 
+const imgRecord = reactive({
+  srcList: [],
+  createdAt: undefined
+})
+const loadImgRecord = async () => {
+  const { results } = await getRecordsByTree({ treeId: props.id, operTypeId: 8 })
+  const record = results.find(item => item.images && item.images.length)
+  if (record) {
+    imgRecord.srcList = await downloadImage(record.images)
+    imgRecord.createdAt = record.createdAt
+  }
+}
+
 // 操作项
 const operTypes = ref<OperType[]>([])
-const loadAllOpertypes = async () => {
+const loadAllOperTypes = async () => {
   operTypes.value = await getAllOperTypes()
 }
 
 // 内容
 const operItems = ref<OperItem[]>([])
-const loadOperItemsByOperTypeId = async (id: number) => {
-  operItems.value = await getOperItemsByOperTypeId(id)
+const loadOperItemsByOperType = async (id: number) => {
+  operItems.value = await getOperItemsByOperType(id)
 }
 
 // 记录列表
 const records = ref<Record[]>([])
 const count = ref(0)
-const latestImgs = ref([])
-const loadRecordsByConditions = async () => {
-  const data = await getRecordsByConditions(listParams)
+const loadRecordsByTree = async () => {
+  const data = await getRecordsByTree(listParams)
   records.value = data.results
   count.value = data.count
-
-  // 首次加载获取最新图片
-  if (!latestImgs.value.length) {
-    const record = data.results.find(item => item.images && item.images.length)
-    if (record) latestImgs.value = await downloadImage(record.images)
-  }
 }
 
 // 图片处理
@@ -208,17 +192,16 @@ const onImageShow = async (images: string[]) => {
   srcList.value = await downloadImage(images)
 }
 
+// 监听参数变化
 watch(() => listParams.operTypeId, id => {
   listParams.operTypeId = !id ? undefined : id
-  if (id) loadOperItemsByOperTypeId(id)
-  loadRecordsByConditions()
+  if (id) loadOperItemsByOperType(id)
+  loadRecordsByTree()
 })
-
 watch(() => listParams.operItemId, id => {
   listParams.operItemId = !id ? undefined : id
-  loadRecordsByConditions()
+  loadRecordsByTree()
 })
-
 </script>
 
 <style lang="scss">

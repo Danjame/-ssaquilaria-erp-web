@@ -47,6 +47,7 @@ const handleSubmit = async () => {
 
 <style lang="scss">
 .el-dialog-container {
-  max-width: 500px;
+  max-width: 600px;
+  min-width: 400px;
 }
 </style>

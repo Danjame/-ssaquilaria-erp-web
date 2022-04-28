@@ -1,8 +1,5 @@
 <template>
-  <Dialog
-    title="批量上传"
-    :submit="handleSubmit"
-  >
+  <Dialog title="批量上传" :submit="handleSubmit">
     <el-upload
       style="text-align: center"
       ref="upload"

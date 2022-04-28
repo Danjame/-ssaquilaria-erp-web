@@ -27,3 +27,16 @@ export interface Task {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface TaskAttrs {
+  status: number
+  review?: string
+}
+
+export interface TaskConditions {
+  operTypeId?: number
+  operItemId?: number
+  status?: number
+  page?: number
+  size?: number
+}

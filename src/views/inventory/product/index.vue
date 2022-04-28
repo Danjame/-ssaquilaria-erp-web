@@ -11,12 +11,7 @@
         </el-form-item>
         <el-form-item label="产品类别">
           <el-select v-model="listParams.categoryId" placeholder="请选择产品类别" clearable>
-            <el-option
-              v-for="category in categories"
-              :key="category.value"
-              :label="category.label"
-              :value="category.id"
-            />
+            <el-option v-for="category in categories" :key="category.value" :label="category.label" :value="category.id" />
           </el-select>
         </el-form-item>
       </el-form>

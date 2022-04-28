@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 import { OperItem } from './types/operitem'
 
-export const getOperItemsByOperTypeId = (id: number) => {
+export const getOperItemsByOperType = (id: number) => {
   return request<OperItem[]>({
     method: 'GET',
     url: `/forest/operitems/by-opertype/${id}`

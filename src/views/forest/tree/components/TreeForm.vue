@@ -1,30 +1,17 @@
 <template>
-  <Dialog
-    :title="id ? '编辑树木' : '新增树木'"
-    :submit="handleSubmit"
-  >
+  <Dialog :title="id ? '编辑树木' : '新增树木'" :submit="handleSubmit">
     <el-form ref="form" :rules="rules" :model="tree" label-width="100px">
       <el-form-item label="树木品种" prop="name">
         <el-input v-model="tree.name" placeholder="请输入树木品种" />
       </el-form-item>
       <el-form-item label="所属林场" prop="farmId">
         <el-select v-model="tree.farmId" placeholder="请选择林场">
-          <el-option
-            v-for="farm in farms"
-            :key="farm.id"
-            :label="farm.name"
-            :value="farm.id"
-          />
+          <el-option v-for="farm in farms" :key="farm.id" :label="farm.name" :value="farm.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="林场区域" prop="areaId">
         <el-select v-model="tree.areaId" placeholder="请选择区域">
-          <el-option
-            v-for="area in areas"
-            :key="area.id"
-            :label="area.name"
-            :value="area.id"
-          />
+          <el-option v-for="area in areas" :key="area.id" :label="area.name" :value="area.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="行" prop="positionX">

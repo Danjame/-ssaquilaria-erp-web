@@ -1,20 +1,12 @@
 <template>
-  <Dialog
-    :title="id ? '编辑产品' : '新增产品'"
-    :submit="handleSubmit"
-  >
+  <Dialog :title="id ? '编辑产品' : '新增产品'" :submit="handleSubmit">
     <el-form ref="form" :rules="rules" :model="product" label-width="100px">
       <el-form-item label="产品名称" prop="name">
         <el-input v-model="product.name" placeholder="请输入产品名称" />
       </el-form-item>
       <el-form-item label="产品类别" prop="categoryId">
         <el-select v-model="product.categoryId" placeholder="请选择产品类别">
-          <el-option
-            v-for="category in categories"
-            :key="category.value"
-            :label="category.label"
-            :value="category.id"
-          />
+          <el-option v-for="category in categories" :key="category.value" :label="category.label" :value="category.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="单位" prop="unitId">

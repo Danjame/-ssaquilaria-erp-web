@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <template #header>
-      <el-form ref="form" :model="listParams" inline :disabled="store.state.isLoading">
+      <el-form ref="form" inline :model="listParams" :disabled="store.state.isLoading">
         <el-form-item label="树木品种" prop="name">
           <el-input v-model="listParams.name" placeholder="请输入品种" />
         </el-form-item>
@@ -30,7 +30,7 @@
         <el-button type="primary" :icon="'Upload'" @click="uploadVisible = true">批量上传</el-button>
       </el-button-group>
     </template>
-    <el-table :data="trees" style="width: 100%" v-loading="store.state.isLoading">
+    <el-table :data="trees" v-loading="store.state.isLoading">
       <el-table-column label="序列号" prop="serialNum" align="center" />
       <el-table-column label="树木品种" prop="name" align="center" />
       <el-table-column label="所属林场" align="center">
@@ -53,8 +53,8 @@
       <el-table-column label="操作" width="160" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
-            <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
             <el-button type="text" @click="openRecord(scope.row.id)">查看</el-button>
+            <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
             <el-popconfirm title="确定要删除该树木吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
