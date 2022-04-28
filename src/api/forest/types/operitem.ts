@@ -8,3 +8,15 @@ export interface OperItem {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface OperItemConditions{
+  operTypeId?: number
+  page?: number
+  size?: number
+}
+
+export interface OperItemAttrs {
+  name: string
+  operTypeId: number
+  remark: string
+}

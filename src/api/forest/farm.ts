@@ -17,11 +17,10 @@ export const getFarmsByConditions = (params: FarmConditions) => {
   })
 }
 
-export const createFarm = (data: FarmAttrs) => {
+export const deleteFarm = (id: number) => {
   return request<Farm>({
-    method: 'POST',
-    url: '/forest/farms',
-    data
+    method: 'DELETE',
+    url: `/forest/farms/${id}`
   })
 }
 
@@ -32,17 +31,18 @@ export const getFarmById = (id: number) => {
   })
 }
 
+export const createFarm = (data: FarmAttrs) => {
+  return request<Farm>({
+    method: 'POST',
+    url: '/forest/farms',
+    data
+  })
+}
+
 export const updateFarm = (id: number, data: FarmAttrs) => {
   return request<Farm>({
     method: 'PATCH',
     url: `/forest/farms/${id}`,
     data
-  })
-}
-
-export const deleteFarm = (id: number) => {
-  return request<Farm>({
-    method: 'DELETE',
-    url: `/forest/farms/${id}`
   })
 }

@@ -24,7 +24,11 @@
         </template>
       </el-table-column>
       <el-table-column label="树木数量" prop="treeCount" align="center" />
-      <el-table-column label="备注" prop="remark" align="center" />
+      <el-table-column label="备注" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="120" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">

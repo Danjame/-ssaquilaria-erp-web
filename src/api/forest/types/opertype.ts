@@ -8,3 +8,13 @@ export interface OperType {
   createdAt: Date
   updatedAt: Date
 }
+
+export interface OperTypeConditions{
+  page?: number
+  size?: number
+}
+
+export interface OperTypeAttrs {
+  name: string
+  remark: string
+}

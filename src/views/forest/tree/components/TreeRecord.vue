@@ -24,13 +24,13 @@
     <el-divider />
     <!-- 筛选表单 -->
     <el-form style="text-align: center" ref="form" inline :model="listParams" :disabled="store.state.isLoading">
-      <el-form-item label="项目" prop="operType">
-        <el-select v-model="listParams.operTypeId" placeholder="请选择项目" clearable>
+      <el-form-item label="记录类" prop="operType">
+        <el-select v-model="listParams.operTypeId" placeholder="请选择记录类" clearable>
           <el-option v-for="operType in operTypes" :key="operType.id" :label="operType.name" :value="operType.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="内容" prop="operItem">
-        <el-select v-model="listParams.operItemId" placeholder="请选择内容" clearable>
+      <el-form-item label="记录项" prop="operItem">
+        <el-select v-model="listParams.operItemId" placeholder="请选择记录项" clearable>
           <el-option v-for="operItem in operItems" :key="operItem.id" :label="operItem.name" :value="operItem.id" />
         </el-select>
       </el-form-item>
@@ -42,12 +42,12 @@
           <span>{{ moment(scope.row.startedAt).format('YYYY/MM/DD HH:mm') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="项目" align="center">
+      <el-table-column label="记录类" align="center">
         <template #default="scope">
           <span>{{ scope.row.operType?.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="内容" align="center">
+      <el-table-column label="记录项" align="center">
         <template #default="scope">
           <span>{{ scope.row.operItem ? scope.row.operItem.name : '-' }}</span>
         </template>
@@ -163,7 +163,7 @@ const loadAllOperTypes = async () => {
   operTypes.value = await getAllOperTypes()
 }
 
-// 内容
+// 记录项
 const operItems = ref<OperItem[]>([])
 const loadOperItemsByOperType = async (id: number) => {
   operItems.value = await getOperItemsByOperType(id)

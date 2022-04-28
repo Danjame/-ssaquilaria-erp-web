@@ -2,9 +2,9 @@
   <Dialog :title="!task.status ? '审核工单' : '工单详情'" :submit="handleSubmit">
     <el-descriptions :column="2" border>
       <el-descriptions-item label="时间" align="center">{{ moment(task.starteddAt).format('YYYY/MM/DD HH:MM') }}</el-descriptions-item>
-      <el-descriptions-item label="项目" align="center">{{ task.operType?.name }}</el-descriptions-item>
+      <el-descriptions-item label="记录类" align="center">{{ task.operType?.name }}</el-descriptions-item>
       <el-descriptions-item label="林场" align="center">{{ task.farm?.name }}</el-descriptions-item>
-      <el-descriptions-item label="内容" align="center">{{ task.operItem?.name }}</el-descriptions-item>
+      <el-descriptions-item label="记录项" align="center">{{ task.operItem?.name }}</el-descriptions-item>
       <el-descriptions-item label="区域" align="center">{{ task.area?.name }}</el-descriptions-item>
       <el-descriptions-item label="数据" align="center">{{ task.operData }}</el-descriptions-item>
       <el-descriptions-item label="树木" align="center">

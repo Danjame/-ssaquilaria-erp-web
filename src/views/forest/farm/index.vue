@@ -19,11 +19,12 @@
         <template #default="scope">
           <el-descriptions :column="1" border>
             <el-descriptions-item label="林区" align="center" label-class-name="farm-desc-label">
-              <el-space>
+              <span v-if="!scope.row.areas.length">-</span>
+              <el-space v-else>
                 <el-tag v-for="(area, i) in scope.row.areas" :key="i">{{ area.name }}</el-tag>
               </el-space>
             </el-descriptions-item>
-            <el-descriptions-item label="备注" align="center" label-class-name="farm-desc-label">{{ scope.row.remark }}</el-descriptions-item>
+            <el-descriptions-item label="备注" align="center" label-class-name="farm-desc-label">{{ scope.row.remark ? scope.row.remark : '-' }}</el-descriptions-item>
           </el-descriptions>
         </template>
       </el-table-column>

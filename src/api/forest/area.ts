@@ -17,11 +17,10 @@ export const getAreasByConditions = (params: AreaConditions) => {
   })
 }
 
-export const createArea = (data: AreaAttrs) => {
+export const deleteArea = (id: number) => {
   return request<Area>({
-    method: 'POST',
-    url: '/forest/areas',
-    data
+    method: 'DELETE',
+    url: `/forest/areas/${id}`
   })
 }
 
@@ -32,17 +31,18 @@ export const getAreaById = (id: number) => {
   })
 }
 
+export const createArea = (data: AreaAttrs) => {
+  return request<Area>({
+    method: 'POST',
+    url: '/forest/areas',
+    data
+  })
+}
+
 export const updateArea = (id: number, data: AreaAttrs) => {
   return request<Area>({
     method: 'PATCH',
     url: `/forest/areas/${id}`,
     data
-  })
-}
-
-export const deleteArea = (id: number) => {
-  return request<Area>({
-    method: 'DELETE',
-    url: `/forest/areas/${id}`
   })
 }

@@ -2,13 +2,13 @@
   <el-card>
     <template #header>
       <el-form ref="form" inline :model="listParams" :disabled="store.state.isLoading">
-        <el-form-item label="项目" prop="operTypeId">
-          <el-select v-model="listParams.operTypeId" placeholder="请选择项目" clearable>
+        <el-form-item label="记录类" prop="operTypeId">
+          <el-select v-model="listParams.operTypeId" placeholder="请选择记录类" clearable>
             <el-option v-for="operType in operTypes" :key="operType.id" :label="operType.name" :value="operType.id" />
           </el-select>
         </el-form-item>
-        <el-form-item label="内容" prop="operItemId">
-          <el-select v-model="listParams.operItemId" placeholder="请选择内容" clearable>
+        <el-form-item label="记录项" prop="operItemId">
+          <el-select v-model="listParams.operItemId" placeholder="请选择记录项" clearable>
             <el-option v-for="operItem in operItems" :key="operItem.id" :label="operItem.name" :value="operItem.id" />
           </el-select>
         </el-form-item>
@@ -30,9 +30,12 @@
         <template #default="scope">
           <el-descriptions :column="1" border>
             <el-descriptions-item label="树木" align="center" label-class-name="task-desc-label">
-              <el-tag v-for="(tree, index) in scope.row.trees" :key="index">{{ tree.serialNum }}</el-tag>
+              <span v-if="!scope.row.trees.length">-</span>
+              <el-space v-else>
+                <el-tag v-for="(tree, index) in scope.row.trees" :key="index">{{ tree.serialNum }}</el-tag>
+              </el-space>
             </el-descriptions-item>
-            <el-descriptions-item label="备注" align="center" label-class-name="task-desc-label">{{ scope.row.remark }}</el-descriptions-item>
+            <el-descriptions-item label="备注" align="center" label-class-name="task-desc-label">{{ scope.row.remark ? scope.row.remark : '-' }}</el-descriptions-item>
             <el-descriptions-item label="审核人" align="center" label-class-name="task-desc-label">{{ scope.row.reviewer?.name }}</el-descriptions-item>
             <el-descriptions-item label="审核意见" align="center" label-class-name="task-desc-label">{{ scope.row.review }}</el-descriptions-item>
           </el-descriptions>
@@ -54,12 +57,12 @@
         </template>
       </el-table-column>
       <el-table-column label="棵数" prop="treeCount" align="center" />
-      <el-table-column label="项目" align="center">
+      <el-table-column label="记录类" align="center">
         <template #default="scope">
           <span>{{ scope.row.operType?.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="内容" align="center">
+      <el-table-column label="记录项" align="center">
         <template #default="scope">
           <span>{{ scope.row.operItem ? scope.row.operItem.name : '-' }}</span>
         </template>
@@ -126,7 +129,7 @@ const loadAllOperTypes = async () => {
   operTypes.value = await getAllOperTypes()
 }
 
-// 内容
+// 记录项
 const operItems = ref<OperItem[]>([])
 const loadOperItemsByOperType = async (id: number) => {
   operItems.value = await getOperItemsByOperType(id)
