@@ -5,7 +5,7 @@
       <el-descriptions-item label="项目" align="center">{{ task.operType?.name }}</el-descriptions-item>
       <el-descriptions-item label="林场" align="center">{{ task.farm?.name }}</el-descriptions-item>
       <el-descriptions-item label="内容" align="center">{{ task.operItem?.name }}</el-descriptions-item>
-      <el-descriptions-item label="林区" align="center">{{ task.area?.name }}</el-descriptions-item>
+      <el-descriptions-item label="区域" align="center">{{ task.area?.name }}</el-descriptions-item>
       <el-descriptions-item label="数据" align="center">{{ task.operData }}</el-descriptions-item>
       <el-descriptions-item label="树木" align="center">
         <el-tag v-for="(tree, index) in task.trees" :key="index">{{ tree.serialNum }}</el-tag>

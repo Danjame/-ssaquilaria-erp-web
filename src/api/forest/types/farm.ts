@@ -10,14 +10,6 @@ export interface Farm{
   remark: string
 }
 
-export interface FarmAttrs {
-  name: string
-  province: string
-  city: string
-  district: string
-  remark: string
-}
-
 export interface FarmConditions{
   name?: string
   province?: string
@@ -25,4 +17,12 @@ export interface FarmConditions{
   district?: string
   page?: number
   size?: number
+}
+
+export interface FarmAttrs {
+  name: string
+  province: string
+  city: string
+  district: string
+  remark: string
 }

@@ -97,7 +97,7 @@ import TreeUpload from './components/TreeUpload.vue'
 import TreeRecord from './components/TreeRecord.vue'
 import { getAllFarms } from '@/api/forest/farm'
 import { Farm } from '@/api/forest/types/farm'
-import { getAreasByFarmId } from '@/api/forest/area'
+import { getAreasByFarm } from '@/api/forest/area'
 import { Area } from '@/api/forest/types/area'
 import { getTreesByConditions, deleteTree } from '@/api/forest/tree'
 import { Tree } from '@/api/forest/types/tree'
@@ -117,8 +117,8 @@ const loadAllFarms = async () => {
 
 // 林场区域
 const areas = ref<Area[]>([])
-const loadAreasByFarmId = async (id: number) => {
-  areas.value = await getAreasByFarmId(id)
+const loadAreasByFarm = async (id: number) => {
+  areas.value = await getAreasByFarm(id)
 }
 
 // 树木列表
@@ -191,7 +191,7 @@ watch(() => listParams.serialNum, serialNum => {
 })
 watch(() => listParams.farmId, id => {
   listParams.farmId = !id ? undefined : id
-  if (id) loadAreasByFarmId(id)
+  if (id) loadAreasByFarm(id)
 })
 watch(() => listParams.areaId, id => {
   listParams.areaId = !id ? undefined : id

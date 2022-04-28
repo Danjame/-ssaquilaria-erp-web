@@ -1,6 +1,21 @@
 import request from '@/utils/request'
-import { PageResult } from '../types'
 import { Farm, FarmAttrs, FarmConditions } from './types/farm'
+import { PageResult } from '../types'
+
+export const getAllFarms = () => {
+  return request<Farm[]>({
+    method: 'GET',
+    url: '/forest/farms'
+  })
+}
+
+export const getFarmsByConditions = (params: FarmConditions) => {
+  return request<PageResult>({
+    method: 'GET',
+    url: '/forest/farms/by-conditions',
+    params
+  })
+}
 
 export const createFarm = (data: FarmAttrs) => {
   return request<Farm>({
@@ -10,25 +25,10 @@ export const createFarm = (data: FarmAttrs) => {
   })
 }
 
-export const getAllFarms = () => {
-  return request<Farm[]>({
-    method: 'GET',
-    url: '/forest/farms'
-  })
-}
-
 export const getFarmById = (id: number) => {
   return request<Farm>({
     method: 'GET',
     url: `/forest/farms/${id}`
-  })
-}
-
-export const getFarmsByConditions = (params: FarmConditions) => {
-  return request<PageResult>({
-    method: 'GET',
-    url: '/forest/farms/by-conditions',
-    params
   })
 }
 

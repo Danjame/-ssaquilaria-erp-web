@@ -14,7 +14,7 @@
         <el-input v-model="farm.district" placeholder="请输入区/县" />
       </el-form-item>
       <el-form-item label="备注" prop="remark">
-        <el-input v-model="farm.remark" placeholder="请输入备注" />
+        <el-input v-model="farm.remark" placeholder="请输入备注" type="textarea" autosize />
       </el-form-item>
     </el-form>
   </Dialog>

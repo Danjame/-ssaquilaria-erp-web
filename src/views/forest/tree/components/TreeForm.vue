@@ -33,7 +33,7 @@
 <script lang="ts" setup>
 import { PropType } from 'vue'
 import { Farm } from '@/api/forest/types/farm'
-import { getAreasByFarmId } from '@/api/forest/area'
+import { getAreasByFarm } from '@/api/forest/area'
 import { Area } from '@/api/forest/types/area'
 import { getTreeById, createTree, updateTree } from '@/api/forest/tree'
 import { validatePositionX, validatePositionY } from '@/utils/validator'
@@ -79,8 +79,8 @@ onMounted(() => {
 
 // 林场区域
 const areas = ref<Area[]>([])
-const loadAreasByFarmId = async (id: number) => {
-  const results = await getAreasByFarmId(id)
+const loadAreasByFarm = async (id: number) => {
+  const results = await getAreasByFarm(id)
   areas.value = results
 }
 
@@ -97,23 +97,15 @@ const tree = reactive({
 
 const loadTree = async () => {
   const {
-    name,
     farm: { id: farmId },
     area: { id: areaId },
-    positionX,
-    positionY,
-    machineCode,
-    plantedAt
+    ...attrs
   } = await getTreeById(props.id)
 
   Object.assign(tree, {
-    name,
     farmId,
     areaId,
-    positionX,
-    positionY,
-    machineCode,
-    plantedAt
+    ...attrs
   })
 
   isEditFirstLoad = true
@@ -146,7 +138,7 @@ watch(() => tree.farmId, async id => {
     } else {
       tree.areaId = undefined
     }
-    await loadAreasByFarmId(id)
+    await loadAreasByFarm(id)
   }
 })
 
