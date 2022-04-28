@@ -138,14 +138,6 @@ onMounted(() => {
   loadRecordsByTree()
 })
 
-const listParams = reactive({
-  treeId: props.id,
-  operTypeId: undefined,
-  operItemId: undefined,
-  page: 1,
-  size: 7
-})
-
 // 树木基本信息
 const tree: Tree = reactive({})
 const loadTree = async () => {
@@ -178,6 +170,13 @@ const loadOperItemsByOperType = async (id: number) => {
 }
 
 // 记录列表
+const listParams = reactive({
+  treeId: props.id,
+  operTypeId: undefined,
+  operItemId: undefined,
+  page: 1,
+  size: 7
+})
 const records = ref<Record[]>([])
 const count = ref(0)
 const loadRecordsByTree = async () => {

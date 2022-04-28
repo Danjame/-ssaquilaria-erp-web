@@ -7,6 +7,8 @@ export interface Tree {
   name: string
   farm: Farm
   area: Area
+  areaCount: number
+  treeCount: number
   positionX: number
   positionY: number
   machineCode: string

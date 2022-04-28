@@ -120,14 +120,6 @@ onMounted(() => {
   loadTasks()
 })
 
-const listParams = reactive({
-  operTypeId: undefined,
-  operItemId: undefined,
-  status: undefined,
-  page: 1,
-  size: 10
-})
-
 // 操作项
 const operTypes = ref<OperType[]>([])
 const loadAllOperTypes = async () => {
@@ -160,6 +152,14 @@ const status = [
   }
 ]
 
+// 工单列表
+const listParams = reactive({
+  operTypeId: undefined,
+  operItemId: undefined,
+  status: undefined,
+  page: 1,
+  size: 10
+})
 const tasks = ref<Task[]>([])
 const count = ref(0)
 const loadTasks = async () => {
