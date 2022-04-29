@@ -1,22 +1,20 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-form ref="form" inline :model="listParams" :disabled="store.state.isLoading">
-        <el-form-item label="记录类" prop="operTypeId">
-          <el-select v-model="listParams.operTypeId" placeholder="请选择记录类" clearable>
-            <el-option v-for="operType in operTypes" :key="operType.id" :label="operType.name" :value="operType.id" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button-group>
-            <el-button type="primary" :icon="'Search'" @click="loadOperItems">搜索</el-button>
-            <el-button type="primary" @click="resetFields(form)">重置</el-button>
-          </el-button-group>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="openForm">新增记录项</el-button>
+  <Index
+    title="记录项"
+    :params="listParams"
+    :count="count"
+    :data="operItems"
+    :load="loadOperItems"
+    :handler-a="openForm"
+  >
+    <template #form-item>
+      <el-form-item label="记录类" prop="operTypeId">
+        <el-select v-model="listParams.operTypeId" placeholder="请选择记录类" clearable>
+          <el-option v-for="(operType, i) in operTypes" :key="i" :label="operType.name" :value="operType.id" />
+        </el-select>
+      </el-form-item>
     </template>
-    <el-table :data="operItems" v-loading="store.state.isLoading">
+    <template #table-column>
       <el-table-column label="记录项名称" prop="name" align="center" />
       <el-table-column label="记录类" align="center">
         <template #default="scope">
@@ -40,22 +38,17 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadOperItems"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <OperItemForm
-    v-if="formVisible"
-    v-model="formVisible"
-    :id="operItemId"
-    :oper-types="operTypes"
-    @submit="onFormSubmitted"
-  />
+    </template>
+    <template #a>
+      <OperItemForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="operItemId"
+        :oper-types="operTypes"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
@@ -63,7 +56,6 @@ import OperItemForm from './components/OperItemForm.vue'
 import { getOperItemsByConditions, deleteOperItem } from '@/api/forest/operitem'
 import { OperItem } from '@/api/forest/types/operitem'
 import { getAllOperTypes } from '@/api/forest/opertype'
-import store from '@/store'
 
 onMounted(() => {
   loadAllOperTypes()
@@ -88,13 +80,6 @@ const loadOperItems = async () => {
   const data = await getOperItemsByConditions(listParams)
   operItems.value = data.results
   count.value = data.count
-}
-
-const form = ref<typeof ElForm>()
-const resetFields = (form: ElForm | undefined) => {
-  if (!form) return
-  form.resetFields()
-  loadOperItems()
 }
 
 // 新增与编辑组件

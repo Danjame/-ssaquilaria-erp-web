@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="所属林场" prop="farmId">
         <el-select v-model="area.farmId" placeholder="请选择林场">
-          <el-option v-for="farm in farms" :key="farm.id" :label="farm.name" :value="farm.id" />
+          <el-option v-for="(farm, i) in farms" :key="i" :label="farm.name" :value="farm.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
@@ -51,12 +51,8 @@ onMounted(() => {
 // 区域信息
 const area = reactive({})
 const loadArea = async () => {
-  const {
-    farm: { id: farmId },
-    ...attrs
-  } = await getAreaById(props.id)
-
-  Object.assign(area, { farmId, ...attrs })
+  const { farm: { id: farmId }, name, remark } = await getAreaById(props.id)
+  Object.assign(area, { farmId, name, remark })
 }
 
 // 表单提交

@@ -2,21 +2,6 @@ import request from '@/utils/request'
 import { Role, RoleAttrs, RoleConditions } from './types/role'
 import { PageResult } from '../types'
 
-export const createRole = (data: RoleAttrs) => {
-  return request<Role>({
-    method: 'POST',
-    url: '/system/roles',
-    data
-  })
-}
-
-export const getRoleById = (id: number) => {
-  return request<Role>({
-    method: 'GET',
-    url: `/system/roles/${id}`
-  })
-}
-
 export const getAllRoles = () => {
   return request<Role[]>({
     method: 'GET',
@@ -32,17 +17,32 @@ export const getRolesByConditions = (params?: RoleConditions) => {
   })
 }
 
+export const deleteRole = (id: number) => {
+  return request<Role>({
+    method: 'DELETE',
+    url: `/system/roles/${id}`
+  })
+}
+
+export const getRoleById = (id: number) => {
+  return request<Role>({
+    method: 'GET',
+    url: `/system/roles/${id}`
+  })
+}
+
+export const createRole = (data: RoleAttrs) => {
+  return request<Role>({
+    method: 'POST',
+    url: '/system/roles',
+    data
+  })
+}
+
 export const updateRole = (id: number, data: RoleAttrs) => {
   return request<Role>({
     method: 'PATCH',
     url: `/system/roles/${id}`,
     data
-  })
-}
-
-export const deleteRole = (id: number) => {
-  return request<Role>({
-    method: 'DELETE',
-    url: `/system/roles/${id}`
   })
 }

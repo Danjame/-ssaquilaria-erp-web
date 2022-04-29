@@ -29,6 +29,13 @@ export interface Product {
   updatedAt: Date
 }
 
+export interface ProductConditions {
+  name?: string
+  categoryId?: number
+  page?: number
+  size?: number
+}
+
 export interface ProductAttrs {
   name: string
   categoryId: number | undefined
@@ -38,11 +45,4 @@ export interface ProductAttrs {
   serialNum?: string
   machineCode?: string
   warnQty?: number
-}
-
-export interface ProductConditions {
-  name?: string
-  categoryId?: number
-  page?: number
-  size?: number
 }

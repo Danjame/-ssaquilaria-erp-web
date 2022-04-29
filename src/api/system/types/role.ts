@@ -17,6 +17,12 @@ export interface Role {
   menus: Menu[]
 }
 
+export interface RoleConditions {
+  name?: string
+  page?: number
+  size?: number
+}
+
 export interface RoleAttrs {
   name?: string
   value?: string
@@ -24,10 +30,4 @@ export interface RoleAttrs {
   permissionIds?: number[]
   menuIds?: number[]
   status?: boolean
-}
-
-export interface RoleConditions {
-  name?: string
-  page?: number
-  size?: number
 }

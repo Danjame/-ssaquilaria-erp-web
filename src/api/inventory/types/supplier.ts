@@ -15,15 +15,15 @@ export interface Supplier {
   updatedAt: Date
 }
 
+export interface SupplierConditions {
+  productId?: number
+  page?: number
+  size?: number
+}
+
 export interface SupplierAttrs {
   name: string
   value: string
   label: string
   description?: string
-}
-
-export interface SupplierConditions {
-  productId?: number
-  page?: number
-  size?: number
 }

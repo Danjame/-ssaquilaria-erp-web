@@ -12,12 +12,7 @@
       </el-form-item>
       <el-form-item label="角色权限" prop="permissionIds">
         <el-select v-model="role.permissionIds" multiple placeholder="请选择权限">
-          <el-option
-            v-for="permission in permissions"
-            :key="permission.value"
-            :label="permission.label"
-            :value="permission.id"
-          />
+          <el-option v-for="(permission, i) in permissions" :key="i" :label="permission.label" :value="permission.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="角色菜单" prop="menuIds">
@@ -74,13 +69,13 @@ onMounted(async () => {
 })
 
 // 权限
-const permissions = ref<Permission[] | null>(null)
+const permissions = ref<Permission[]>()
 const loadAllPermissions = async () => {
   permissions.value = await getAllPermissions()
 }
 
 // 菜单
-const tree = ref<typeof ElTree | null>(null)
+const tree = ref<typeof ElTree>()
 
 const menusLoading = ref(false)
 
@@ -92,13 +87,7 @@ const loadAllMenus = async () => {
 }
 
 // 角色信息
-const role = reactive({
-  name: '',
-  value: '',
-  label: '',
-  permissionIds: [],
-  menuIds: [] as number[]
-})
+const role = reactive({})
 
 const loadRole = async () => {
   const {
@@ -125,7 +114,7 @@ const loadRole = async () => {
 }
 
 // 表单提交
-const form = ref<typeof ElForm | null>(null)
+const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = form.value?.validate()

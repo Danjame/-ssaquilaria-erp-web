@@ -11,14 +11,14 @@ export interface Unit {
   updatedAt: Date
 }
 
+export interface UnitConditions {
+  page?: number
+  size?: number
+}
+
 export interface UnitAttrs {
   name: string
   value: string
   label: string
   description?: string
-}
-
-export interface UnitConditions {
-  page?: number
-  size?: number
 }

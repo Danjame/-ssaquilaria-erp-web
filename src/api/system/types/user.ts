@@ -15,15 +15,22 @@ export interface User {
   updatedAt: Date
 }
 
+export interface Auth {
+  username: string;
+  password: string;
+}
+
 export interface CurrentUser {
   name: string
   status: boolean
   token: string
 }
 
-export interface Auth {
-  username: string;
-  password: string;
+export interface UserConditions {
+  name?: string
+  departmentId?: number
+  page?: number
+  size?: number
 }
 
 export interface UserAttrs {
@@ -32,11 +39,4 @@ export interface UserAttrs {
   status?: boolean
   lastLogin?: Date
   roleIds?: number[]
-}
-
-export interface UserConditions {
-  name?: string
-  departmentId?: number
-  page?: number
-  size?: number
 }

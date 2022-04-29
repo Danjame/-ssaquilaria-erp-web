@@ -1,16 +1,20 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-form ref="form" :disabled="store.state.isLoading">
-        <el-form-item label="产品名称">
-          <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
-            <el-option v-for="product in products" :key="product.id" :label="product.name" :value="product.id" />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="openForm">新增类别</el-button>
+  <Index
+    title="产品类别"
+    :params="listParams"
+    :count="count"
+    :data="categories"
+    :load="loadCategories"
+    :handler-a="openForm"
+  >
+    <template #form-item>
+      <el-form-item label="产品名称" prop="productId">
+        <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
+          <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
+        </el-select>
+      </el-form-item>
     </template>
-    <el-table :data="categories" style="width: 100%" v-loading="store.state.isLoading">
+    <template #table-column>
       <el-table-column label="类别名称" prop="name" align="center" />
       <el-table-column label="类别编号" prop="value" align="center" />
       <el-table-column label="类别标签" prop="label" align="center" />
@@ -26,21 +30,16 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadCategories"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <CategoryForm
-    v-if="visible"
-    v-model="visible"
-    :id="categoryId"
-    @submit="onSubmitted"
-  />
+    </template>
+    <template #a>
+      <CategoryForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="categoryId"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
@@ -49,7 +48,6 @@ import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getCategoriesByConditions, deleteCategory } from '@/api/inventory/category'
 import { Category } from '@/api/inventory/types/category'
-import store from '@/store'
 
 onMounted(() => {
   loadAllProducts()
@@ -76,8 +74,8 @@ const loadCategories = async () => {
   count.value = data.count
 }
 
-// 显示隐藏 form
-const visible = ref(false)
+// 新增与编辑组件
+const formVisible = ref(false)
 const categoryId = ref(undefined as number | undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
@@ -85,11 +83,11 @@ const openForm = (payload: number | MouseEvent) => {
   } else {
     categoryId.value = undefined
   }
-  visible.value = true
+  formVisible.value = true
 }
 
-const onSubmitted = () => {
-  visible.value = false
+const onFormSubmitted = () => {
+  formVisible.value = false
   loadCategories()
 }
 
@@ -102,7 +100,6 @@ const handleDelete = async (id: number) => {
 // 监听参数变化
 watch(() => listParams.productId, productId => {
   listParams.productId = !productId ? undefined : productId
-  loadCategories()
 })
 </script>
 

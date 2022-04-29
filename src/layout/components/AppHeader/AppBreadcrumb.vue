@@ -1,9 +1,6 @@
 <template>
   <el-breadcrumb separator=">">
-    <el-breadcrumb-item
-      v-for="(route, index) in routes"
-      :key="index"
-    >
+    <el-breadcrumb-item v-for="(route, i) in routes" :key="i">
       {{ route.meta!.title }}
     </el-breadcrumb-item>
   </el-breadcrumb>

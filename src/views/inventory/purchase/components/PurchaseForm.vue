@@ -1,30 +1,17 @@
 <template>
-  <Dialog
-    title="新增采购"
-    :submit="handleSubmit"
-  >
+  <Dialog title="新增采购" :submit="handleSubmit">
     <el-form ref="form" :model="purchase" :rules="rules" label-width="100px">
       <el-form-item label="采购单号" prop="orderNum" placeholder="请输入采购单号">
         <el-input v-model="purchase.orderNum" placeholder="请输入采购单号" />
       </el-form-item>
       <el-form-item label="产品名称" prop="productId">
         <el-select v-model="purchase.productId" placeholder="请选择产品名称" clearable>
-          <el-option
-            v-for="product in products"
-            :key="product.id"
-            :label="product.name"
-            :value="product.id"
-          />
+          <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="供应商" prop="supplierId">
         <el-select v-model="purchase.supplierId" placeholder="请选择供应商" clearable>
-          <el-option
-            v-for="supplier in suppliers"
-            :key="supplier.value"
-            :label="supplier.label"
-            :value="supplier.id"
-          />
+          <el-option v-for="(supplier, i) in suppliers" :key="i" :label="supplier.label" :value="supplier.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="单价" prop="price">
@@ -87,18 +74,10 @@ const rules = reactive({
 })
 
 // 采购信息
-const purchase = reactive({
-  orderNum: '',
-  productId: undefined as number | undefined,
-  supplierId: undefined as number | undefined,
-  price: 0,
-  quantity: 1,
-  amount: 0,
-  comment: ''
-})
+const purchase = reactive({})
 
 // 表单提交
-const form = ref<typeof ElForm | null>(null)
+const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()

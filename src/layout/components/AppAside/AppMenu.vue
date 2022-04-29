@@ -1,14 +1,14 @@
 <template>
   <el-menu :default-active="route" router :collapse="store.state.isCollapse">
     <template v-for="menu in menus">
-      <el-sub-menu v-if="menu.children && menu.children.length" :key="menu.value" :index="menu.value">
+      <el-sub-menu v-if="menu.children && menu.children.length" :key="menu.id" :index="menu.value">
         <template #title>
           <el-icon>
             <component :is="menu.icon" />
           </el-icon>
           <span>{{ menu.label }}</span>
         </template>
-        <el-menu-item v-for="child in menu.children" :key="child.value" :index="child.value">
+        <el-menu-item v-for="child in menu.children" :key="child.id" :index="child.value">
           <template #title>
             <el-icon>
               <component :is="child.icon" />

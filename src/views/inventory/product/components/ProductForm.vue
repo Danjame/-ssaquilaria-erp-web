@@ -6,12 +6,12 @@
       </el-form-item>
       <el-form-item label="产品类别" prop="categoryId">
         <el-select v-model="product.categoryId" placeholder="请选择产品类别">
-          <el-option v-for="category in categories" :key="category.value" :label="category.label" :value="category.id" />
+          <el-option v-for="(category, i) in categories" :key="i" :label="category.label" :value="category.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="单位" prop="unitId">
         <el-select v-model="product.unitId" placeholder="请选择产品单位">
-          <el-option v-for="unit in units" :key="unit.value" :label="unit.label" :value="unit.id" />
+          <el-option v-for="(unit, i) in units" :key="i" :label="unit.label" :value="unit.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="规格" prop="size">
@@ -75,7 +75,7 @@ const rules = reactive({
     { required: false, message: '产品机器码不能为空', trigger: 'change' }
   ],
   warnQty: [
-    { validator: validateQty, trigger: 'change' }
+    { required: true, validator: validateQty, trigger: 'change' }
   ]
 })
 
@@ -92,17 +92,7 @@ const loadAllUnits = async () => {
 }
 
 // 产品信息
-const product = reactive({
-  name: '',
-  categoryId: undefined as number | undefined,
-  unitId: undefined as number | undefined,
-  size: '',
-  description: '',
-  serialNum: '',
-  machineCode: '',
-  warnQty: 0
-})
-
+const product = reactive({})
 const loadProduct = async () => {
   const {
     name,
@@ -128,7 +118,7 @@ const loadProduct = async () => {
 }
 
 // 表单提交
-const form = ref<typeof ElForm | null>(null)
+const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()

@@ -22,7 +22,7 @@
 import { PropType } from 'vue'
 
 const visible = false
-const dialog = ref<typeof ElDialog | null>(null)
+const dialog = ref<typeof ElDialog>()
 
 const handleCancel = () => {
   dialog.value!.visible = false

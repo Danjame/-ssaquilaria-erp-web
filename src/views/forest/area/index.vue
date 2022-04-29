@@ -1,22 +1,20 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-form ref="form" inline :model="listParams" :disabled="store.state.isLoading">
-        <el-form-item label="所属林场" prop="farmId">
-          <el-select v-model="listParams.farmId" placeholder="请选择林场" clearable>
-            <el-option v-for="farm in farms" :key="farm.id" :label="farm.name" :value="farm.id" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button-group>
-            <el-button type="primary" :icon="'Search'" @click="loadAreas">搜索</el-button>
-            <el-button type="primary" @click="resetFields(form)">重置</el-button>
-          </el-button-group>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="openForm">新增区域</el-button>
+  <Index
+    title="区域"
+    :params="listParams"
+    :count="count"
+    :data="areas"
+    :load="loadAreas"
+    :handler-a="openForm"
+  >
+    <template #form-item>
+      <el-form-item label="所属林场" prop="farmId">
+        <el-select v-model="listParams.farmId" placeholder="请选择林场" clearable>
+          <el-option v-for="(farm, i) in farms" :key="i" :label="farm.name" :value="farm.id" />
+        </el-select>
+      </el-form-item>
     </template>
-    <el-table :data="areas" v-loading="store.state.isLoading">
+    <template #table-column>
       <el-table-column label="区域名称" prop="name" align="center" />
       <el-table-column label="所属林场" align="center">
         <template #default="scope">
@@ -41,22 +39,17 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadAreas"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <AreaForm
-    v-if="formVisible"
-    v-model="formVisible"
-    :id="areaId"
-    :farms="farms"
-    @submit="onFormSubmitted"
-  />
+    </template>
+    <template #a>
+      <AreaForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="areaId"
+        :farms="farms"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </index>
 </template>
 
 <script lang="ts" setup>
@@ -65,7 +58,6 @@ import { getAreasByConditions, deleteArea } from '@/api/forest/area'
 import { Area } from '@/api/forest/types/area'
 import { getAllFarms } from '@/api/forest/farm'
 import { Farm } from '@/api/forest/types/farm'
-import store from '@/store'
 
 onMounted(() => {
   loadAllFarms()
@@ -90,13 +82,6 @@ const loadAreas = async () => {
   const data = await getAreasByConditions(listParams)
   areas.value = data.results
   count.value = data.count
-}
-
-const form = ref<typeof ElForm>()
-const resetFields = (form: ElForm | undefined) => {
-  if (!form) return
-  form.resetFields()
-  loadAreas()
 }
 
 // 新增与编辑组件

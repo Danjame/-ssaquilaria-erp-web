@@ -45,7 +45,7 @@ import store from '@/store'
 import router from '@/router'
 import { useRoute } from 'vue-router'
 
-const form = ref<typeof ElForm | null>(null)
+const form = ref<typeof ElForm>()
 
 const rules = ref({
   username: [

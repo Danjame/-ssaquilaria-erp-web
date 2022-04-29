@@ -1,8 +1,5 @@
 <template>
-  <Dialog
-    :title="`部门成员（${userIds?.length} 人）`"
-    :submit="handleSubmit"
-  >
+  <Dialog :title="`部门成员（${userIds?.length} 人）`" :submit="handleSubmit">
     <el-table :data="users" style="width: 100%" ref="multipleTableRef" @selection-change="onSelect">
       <el-table-column type="selection" width="55" />
       <el-table-column label="用户名称" prop="name" align="center" />
@@ -43,7 +40,7 @@ const loadUserIds = async () => {
 }
 
 // 默认选中
-const multipleTableRef = ref<typeof ElTable | null>(null)
+const multipleTableRef = ref<typeof ElTable>()
 const selectDefault = () => {
   userIds.value?.forEach((id: number) => {
     users.value.forEach((user: User) => {

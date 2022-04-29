@@ -1,8 +1,5 @@
 <template>
-  <Dialog
-    :title="id ? '编辑部门' : '新增部门'"
-    :submit="handleSubmit"
-  >
+  <Dialog :title="id ? '编辑部门' : '新增部门'" :submit="handleSubmit">
     <el-form ref="form" :model="department" :rules="rules" label-width="100px">
       <el-form-item label="部门名称" prop="name">
         <el-input v-model="department.name" placeholder="请输入部门名称" />
@@ -45,18 +42,14 @@ onMounted(() => {
 })
 
 // 部门信息
-const department = reactive({
-  name: '',
-  value: '',
-  label: ''
-})
+const department = reactive({})
 const loadDepartment = async () => {
   const { name, value, label } = await getDepartmentById(props.id)
   Object.assign(department, { name, value, label })
 }
 
 // 表单提交
-const form = ref<typeof ElForm | null>(null)
+const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()

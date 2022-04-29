@@ -1,23 +1,23 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-form ref="form" inline :disabled="store.state.isLoading">
-        <el-form-item label="产品名称">
-          <el-input v-model="listParams.name" placeholder="请输入产品名称">
-            <template #append>
-              <el-button :icon="'Search'" @click="loadProducts" />
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="产品类别">
-          <el-select v-model="listParams.categoryId" placeholder="请选择产品类别" clearable>
-            <el-option v-for="category in categories" :key="category.value" :label="category.label" :value="category.id" />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="openForm">新增产品</el-button>
+  <Index
+    title="产品"
+    :params="listParams"
+    :count="count"
+    :data="products"
+    :load="loadProducts"
+    :handler-a="openForm"
+  >
+    <template #form-item>
+      <el-form-item label="产品名称" prop="name">
+        <el-input v-model="listParams.name" placeholder="请输入产品名称" />
+      </el-form-item>
+      <el-form-item label="产品类别" prop="categoryId">
+        <el-select v-model="listParams.categoryId" placeholder="请选择产品类别" clearable>
+          <el-option v-for="(category, i) in categories" :key="i" :label="category.label" :value="category.id" />
+        </el-select>
+      </el-form-item>
     </template>
-    <el-table :data="products" style="width: 100%" v-loading="store.state.isLoading">
+    <template #table-column>
       <el-table-column label="产品名称" prop="name" align="center" />
       <el-table-column label="序列号" prop="serialNum" align="center" />
       <el-table-column label="产品类别" align="center">
@@ -35,10 +35,7 @@
       <el-table-column label="供应商" align="center">
         <template #default="scope">
           <el-space>
-            <el-tag
-              v-for="(tag, index) in scope.row.suppliers.map((item: any) => item.name)"
-              :key="index"
-            >{{ tag }}</el-tag>
+            <el-tag v-for="(tag, i) in scope.row.suppliers.map((item: any) => item.name)" :key="i">{{ tag }}</el-tag>
           </el-space>
         </template>
       </el-table-column>
@@ -57,22 +54,17 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadProducts"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <ProductForm
-    v-if="visible"
-    v-model="visible"
-    :id="productId"
-    :categories="categories"
-    @submit="onSubmitted"
-  />
+    </template>
+    <template #a>
+      <ProductForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="productId"
+        :categories="categories"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
@@ -81,7 +73,6 @@ import { getAllCategories } from '@/api/inventory/category'
 import { Category } from '@/api/inventory/types/category'
 import { getProductsByConditions, deleteProduct } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
-import store from '@/store'
 
 onMounted(() => {
   loadAllCategories()
@@ -109,8 +100,8 @@ const loadProducts = async () => {
   count.value = data.count
 }
 
-// 显示隐藏 form
-const visible = ref(false)
+// 新增与编辑组件
+const formVisible = ref(false)
 const productId = ref(undefined as number | undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
@@ -118,11 +109,11 @@ const openForm = (payload: number | MouseEvent) => {
   } else {
     productId.value = undefined
   }
-  visible.value = true
+  formVisible.value = true
 }
 
-const onSubmitted = () => {
-  visible.value = false
+const onFormSubmitted = () => {
+  formVisible.value = false
   loadProducts()
 }
 
@@ -138,6 +129,5 @@ watch(() => listParams.name, name => {
 })
 watch(() => listParams.categoryId, id => {
   listParams.categoryId = !id ? undefined : id
-  loadProducts()
 })
 </script>

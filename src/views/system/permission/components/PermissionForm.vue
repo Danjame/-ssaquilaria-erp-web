@@ -12,12 +12,7 @@
       </el-form-item>
       <el-form-item label="请求方法" prop="actionIds">
         <el-select v-model="permission.actionIds" multiple placeholder="请选择权限">
-          <el-option
-            v-for="action in actions"
-            :key="action.value"
-            :label="action.label"
-            :value="action.id"
-          />
+          <el-option v-for="(action, i) in actions" :key="i" :label="action.label" :value="action.id" />
         </el-select>
       </el-form-item>
     </el-form>
@@ -58,7 +53,7 @@ onMounted(() => {
 })
 
 // 方法
-const actions = ref<Action[] | null>(null)
+const actions = ref<Action[]>()
 const loadAllActions = async () => {
   actions.value = await getAllActions()
 }
@@ -87,7 +82,7 @@ const loadPermission = async () => {
 }
 
 // 表单提交
-const form = ref<typeof ElForm | null>(null)
+const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()

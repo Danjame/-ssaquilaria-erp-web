@@ -1,38 +1,35 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-form ref="form" inline :disabled="store.state.isLoading">
-        <el-form-item label="用户名称">
-          <el-input v-model="listParams.name" placeholder="请输入用户名称">
-            <template #append>
-              <el-button :icon="'Search'" @click="loadUsers" />
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="部门">
-          <el-select v-model="listParams.departmentId" placeholder="请选择部门" clearable>
-            <el-option
-              v-for="department in departments"
-              :key="department.id"
-              :label="department.name"
-              :value="department.id"
-            />
-          </el-select>
-        </el-form-item>
-      </el-form>
+  <Index
+    title="用户"
+    :params="listParams"
+    :count="count"
+    :data="users"
+    :load="loadUsers"
+    :handler-a="openForm"
+    :handler-btns="false"
+  >
+    <template #form-item>
+      <el-form-item label="用户名称" prop="name">
+        <el-input v-model="listParams.name" placeholder="请输入用户名称" />
+      </el-form-item>
+      <el-form-item label="部门" prop="departmentId">
+        <el-select v-model="listParams.departmentId" placeholder="请选择部门" clearable>
+          <el-option v-for="(department, i) in departments" :key="i" :label="department.name" :value="department.id" />
+        </el-select>
+      </el-form-item>
     </template>
-    <el-table :data="users" style="width: 100%" v-loading="store.state.isLoading">
+    <template #table-column>
       <el-table-column label="用户名称" prop="name" align="center" />
       <el-table-column label="用户邮箱" prop="email" align="center" />
       <el-table-column label="最近登录时间" align="center">
         <template #default="scope">
-        {{ new Date(Date.parse(scope.row.lastLogin)).toLocaleString() }}
+          {{ new Date(Date.parse(scope.row.lastLogin)).toLocaleString() }}
         </template>
       </el-table-column>
       <el-table-column label="用户角色" align="center">
         <template #default="scope">
           <el-space>
-            <el-tag v-for="role in scope.row.roles"> {{ role.label }}</el-tag>
+            <el-tag v-for="(role, i) in scope.row.roles" :key="i"> {{ role.label }}</el-tag>
           </el-space>
         </template>
       </el-table-column>
@@ -60,21 +57,16 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadUsers"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <UserForm
-    v-if="visible"
-    v-model="visible"
-    :id="userId"
-    @submit="onSubmitted"
-  />
+    </template>
+    <template #a>
+      <UserForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="userId"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
@@ -106,20 +98,22 @@ const listParams = reactive({
 const users = ref<User[]>([])
 const count = ref(0)
 const loadUsers = async () => {
-  const { results, total } = await getUsersByConditions(listParams)
-  results.forEach(item => {
-    item.isStatusLoading = false
-  })
+  const { results, count: total } = await getUsersByConditions(listParams)
+  if (results && results.length) {
+    results.forEach(item => {
+      item.isStatusLoading = false
+    })
+  }
   users.value = results
   count.value = total
 }
 
-// 显示隐藏 form
-const visible = ref(false)
+// 编辑组件
+const formVisible = ref(false)
 const userId = ref(undefined as number | undefined)
 const openForm = (payload: number) => {
   userId.value = payload
-  visible.value = true
+  formVisible.value = true
 }
 
 // 用户状态变更
@@ -132,8 +126,8 @@ const onStatusChange = async (user: User) => {
   ElMessage.success(`${status ? '启用' : '禁用'}成功`)
 }
 
-const onSubmitted = () => {
-  visible.value = false
+const onFormSubmitted = () => {
+  formVisible.value = false
   loadUsers()
 }
 
@@ -147,9 +141,8 @@ const handleDelete = async (id: number) => {
 watch(() => listParams.name, name => {
   listParams.name = !name ? undefined : name
 })
-watch(() => listParams.departmentId, departmentId => {
-  listParams.departmentId = !departmentId ? undefined : departmentId
-  loadUsers()
+watch(() => listParams.departmentId, id => {
+  listParams.departmentId = !id ? undefined : id
 })
 </script>
 

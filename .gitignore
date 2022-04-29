@@ -4,3 +4,6 @@ dist
 dist-ssr
 *.local
 *.zip
+
+.env.development
+.env.production

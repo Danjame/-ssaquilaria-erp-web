@@ -22,25 +22,10 @@ export const getUserInfo = () => {
   })
 }
 
-export const createUser = (data: UserAttrs) => {
-  return request<User>({
-    method: 'POST',
-    url: '/system/users',
-    data
-  })
-}
-
 export const getAllUsers = () => {
   return request<User[]>({
     method: 'GET',
     url: '/system/users'
-  })
-}
-
-export const getUserById = (id: number) => {
-  return request<User>({
-    method: 'GET',
-    url: `/system/users/${id}`
   })
 }
 
@@ -52,17 +37,32 @@ export const getUsersByConditions = (params?: UserConditions) => {
   })
 }
 
+export const deleteUser = (id: number) => {
+  return request<User>({
+    method: 'DELETE',
+    url: `/system/users/${id}`
+  })
+}
+
+export const getUserById = (id: number) => {
+  return request<User>({
+    method: 'GET',
+    url: `/system/users/${id}`
+  })
+}
+
+export const createUser = (data: UserAttrs) => {
+  return request<User>({
+    method: 'POST',
+    url: '/system/users',
+    data
+  })
+}
+
 export const updateUser = (id: number, data: UserAttrs) => {
   return request<User>({
     method: 'PATCH',
     url: `/system/users/${id}`,
     data
-  })
-}
-
-export const deleteUser = (id: number) => {
-  return request<User>({
-    method: 'DELETE',
-    url: `/system/users/${id}`
   })
 }

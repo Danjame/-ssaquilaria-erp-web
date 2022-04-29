@@ -2,21 +2,6 @@ import request from '@/utils/request'
 import { Unit, UnitAttrs, UnitConditions } from './types/unit'
 import { PageResult } from '../types'
 
-export const createUnit = (data: UnitAttrs) => {
-  return request<Unit>({
-    method: 'POST',
-    url: '/inventory/units',
-    data
-  })
-}
-
-export const getUnitById = (id: number) => {
-  return request<Unit>({
-    method: 'GET',
-    url: `/inventory/units/${id}`
-  })
-}
-
 export const getAllUnits = () => {
   return request<Unit[]>({
     method: 'GET',
@@ -32,17 +17,32 @@ export const getUnitsByConditions = (params?: UnitConditions) => {
   })
 }
 
+export const deleteUnit = (id: number) => {
+  return request<Unit>({
+    method: 'DELETE',
+    url: `/inventory/units/${id}`
+  })
+}
+
+export const getUnitById = (id: number) => {
+  return request<Unit>({
+    method: 'GET',
+    url: `/inventory/units/${id}`
+  })
+}
+
+export const createUnit = (data: UnitAttrs) => {
+  return request<Unit>({
+    method: 'POST',
+    url: '/inventory/units',
+    data
+  })
+}
+
 export const updateUnit = (id: number, data: UnitAttrs) => {
   return request<Unit>({
     method: 'PATCH',
     url: `/inventory/units/${id}`,
     data
-  })
-}
-
-export const deleteUnit = (id: number) => {
-  return request<Unit>({
-    method: 'DELETE',
-    url: `/inventory/units/${id}`
   })
 }

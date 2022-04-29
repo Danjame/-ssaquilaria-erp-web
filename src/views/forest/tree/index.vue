@@ -1,36 +1,34 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-form ref="form" inline :model="listParams" :disabled="store.state.isLoading">
-        <el-form-item label="树木品种" prop="name">
-          <el-input v-model="listParams.name" placeholder="请输入品种" />
-        </el-form-item>
-        <el-form-item label="序列号" prop="serialNum">
-          <el-input v-model="listParams.serialNum" placeholder="请输入序列号" />
-        </el-form-item>
-        <el-form-item label="所属林场" prop="farmId">
-          <el-select v-model="listParams.farmId" placeholder="请选择林场" clearable>
-            <el-option v-for="farm in farms" :key="farm.id" :label="farm.name" :value="farm.id" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="林场区域" prop="areaId">
-          <el-select v-model="listParams.areaId" placeholder="请选择区域" clearable>
-            <el-option v-for="area in areas" :key="area.id" :label="area.name" :value="area.id" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button-group>
-            <el-button type="primary" :icon="'Search'" @click="loadTrees">搜索</el-button>
-            <el-button type="primary" @click="resetFields(form)">重置</el-button>
-          </el-button-group>
-        </el-form-item>
-      </el-form>
-      <el-button-group>
-        <el-button type="primary" :icon="'Plus'" @click="openForm">新增树木</el-button>
-        <el-button type="primary" :icon="'Upload'" @click="uploadVisible = true">批量上传</el-button>
-      </el-button-group>
+  <Index
+    title="树木"
+    :params="listParams"
+    :count="count"
+    :data="trees"
+    :load="loadTrees"
+    :handler-a="openForm"
+  >
+    <template #form-item>
+      <el-form-item label="树木品种" prop="name">
+        <el-input v-model="listParams.name" placeholder="请输入品种" />
+      </el-form-item>
+      <el-form-item label="序列号" prop="serialNum">
+        <el-input v-model="listParams.serialNum" placeholder="请输入序列号" />
+      </el-form-item>
+      <el-form-item label="所属林场" prop="farmId">
+        <el-select v-model="listParams.farmId" placeholder="请选择林场" clearable>
+          <el-option v-for="(farm, i) in farms" :key="i" :label="farm.name" :value="farm.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="林场区域" prop="areaId">
+        <el-select v-model="listParams.areaId" placeholder="请选择区域" clearable>
+          <el-option v-for="(area, i) in areas" :key="i" :label="area.name" :value="area.id" />
+        </el-select>
+      </el-form-item>
     </template>
-    <el-table :data="trees" v-loading="store.state.isLoading">
+    <template #form-item-button>
+      <el-button type="primary" :icon="'Upload'" @click="uploadVisible = true">批量上传</el-button>
+    </template>
+    <template #table-column>
       <el-table-column label="序列号" prop="serialNum" align="center" />
       <el-table-column label="树木品种" prop="name" align="center" />
       <el-table-column label="所属林场" align="center">
@@ -63,32 +61,31 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadTrees"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <TreeForm
-    v-if="formVisible"
-    v-model="formVisible"
-    :id="treeId"
-    :farms="farms"
-    @submit="onFormSubmitted"
-  />
-  <TreeUpload
-    v-if="uploadVisible"
-    v-model="uploadVisible"
-    @submit="onUploadSubmitted"
-  />
-  <TreeRecord
-    v-if="recordVisible"
-    v-model="recordVisible"
-    :id="treeId"
-  />
+    </template>
+    <template #a>
+      <TreeForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="treeId"
+        :farms="farms"
+        @submit="onFormSubmitted"
+      />
+    </template>
+    <template #b>
+      <TreeRecord
+        v-if="recordVisible"
+        v-model="recordVisible"
+        :id="treeId"
+      />
+    </template>
+    <template #c>
+      <TreeUpload
+        v-if="uploadVisible"
+        v-model="uploadVisible"
+        @submit="onUploadSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
@@ -101,7 +98,6 @@ import { getAreasByFarm } from '@/api/forest/area'
 import { Area } from '@/api/forest/types/area'
 import { getTreesByConditions, deleteTree } from '@/api/forest/tree'
 import { Tree } from '@/api/forest/types/tree'
-import store from '@/store'
 import moment from 'moment'
 
 onMounted(() => {
@@ -136,13 +132,6 @@ const loadTrees = async () => {
   const data = await getTreesByConditions(listParams)
   trees.value = data.results
   count.value = data.count
-}
-
-const form = ref<typeof ElForm>()
-const resetFields = (form: ElForm | undefined) => {
-  if (!form) return
-  form.resetFields()
-  loadTrees()
 }
 
 const handleDelete = async (id: number) => {

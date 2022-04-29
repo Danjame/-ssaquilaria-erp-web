@@ -2,18 +2,10 @@ import request from '@/utils/request'
 import { Product, ProductAttrs, ProductConditions } from './types/product'
 import { PageResult } from '../types'
 
-export const createProduct = (data: ProductAttrs) => {
-  return request<Product>({
-    method: 'POST',
-    url: '/inventory/products',
-    data
-  })
-}
-
-export const getProductById = (id: number) => {
-  return request<Product>({
+export const getAllProducts = () => {
+  return request<Product[]>({
     method: 'GET',
-    url: `/inventory/products/${id}`
+    url: '/inventory/products'
   })
 }
 
@@ -25,10 +17,25 @@ export const getProductsByConditions = (params?: ProductConditions) => {
   })
 }
 
-export const getAllProducts = () => {
-  return request<Product[]>({
+export const deleteProduct = (id: number) => {
+  return request<Product>({
+    method: 'DELETE',
+    url: `/inventory/products/${id}`
+  })
+}
+
+export const getProductById = (id: number) => {
+  return request<Product>({
     method: 'GET',
-    url: '/inventory/products'
+    url: `/inventory/products/${id}`
+  })
+}
+
+export const createProduct = (data: ProductAttrs) => {
+  return request<Product>({
+    method: 'POST',
+    url: '/inventory/products',
+    data
   })
 }
 
@@ -37,12 +44,5 @@ export const updateProduct = (id: number, data: ProductAttrs) => {
     method: 'PATCH',
     url: `/inventory/products/${id}`,
     data
-  })
-}
-
-export const deleteProduct = (id: number) => {
-  return request<Product>({
-    method: 'DELETE',
-    url: `/inventory/products/${id}`
   })
 }

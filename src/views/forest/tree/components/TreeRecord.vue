@@ -26,12 +26,12 @@
     <el-form style="text-align: center" ref="form" inline :model="listParams" :disabled="store.state.isLoading">
       <el-form-item label="记录类" prop="operType">
         <el-select v-model="listParams.operTypeId" placeholder="请选择记录类" clearable>
-          <el-option v-for="operType in operTypes" :key="operType.id" :label="operType.name" :value="operType.id" />
+          <el-option v-for="(operType, i) in operTypes" :key="i" :label="operType.name" :value="operType.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="记录项" prop="operItem">
         <el-select v-model="listParams.operItemId" placeholder="请选择记录项" clearable>
-          <el-option v-for="operItem in operItems" :key="operItem.id" :label="operItem.name" :value="operItem.id" />
+          <el-option v-for="(operItem, i) in operItems" :key="i" :label="operItem.name" :value="operItem.id" />
         </el-select>
       </el-form-item>
     </el-form>
@@ -92,7 +92,7 @@
         <template #default="scope">
           <el-popover width="auto" placement="bottom" trigger="click" @show="onImageShow(scope.row.images)">
             <el-space>
-              <el-image v-for="(img, index) in srcList" :key="index" style="width: 80px" fit="cover" :src="img" :preview-src-list="srcList" />
+              <el-image v-for="(img, i) in srcList" :key="i" style="width: 80px" fit="cover" :src="img" :preview-src-list="srcList" />
             </el-space>
             <template #reference>
               <el-button :icon="'Picture'" circle />

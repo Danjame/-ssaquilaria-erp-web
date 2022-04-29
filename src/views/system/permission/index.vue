@@ -1,16 +1,21 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-button type="primary" :icon="'Plus'" @click="openForm">新增权限</el-button>
-    </template>
-    <el-table :data="permissions" style="width: 100%" v-loading="store.state.isLoading">
+  <Index
+    title="权限"
+    :params="listParams"
+    :count="count"
+    :data="permissions"
+    :load="loadPermissions"
+    :handler-a="openForm"
+    :filter="false"
+  >
+    <template #table-column>
       <el-table-column label="权限名" prop="name" align="center" />
       <el-table-column label="资源接口" prop="value" align="center" />
       <el-table-column label="权限标签" prop="label" align="center" />
       <el-table-column label="请求方法" align="center">
         <template #default="scope">
           <el-space>
-            <el-tag v-for="(action, index) in scope.row.actions" :key="index"> {{ action.label }}</el-tag>
+            <el-tag v-for="(action, i) in scope.row.actions" :key="i"> {{ action.label }}</el-tag>
           </el-space>
         </template>
       </el-table-column>
@@ -26,28 +31,22 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadPermissions"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <PermissionForm
-    v-if="visible"
-    v-model="visible"
-    :id="permissionId"
-    @submit="onSubmitted"
-  />
+    </template>
+    <template #a>
+      <PermissionForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="permissionId"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
 import PermissionForm from './components/PermissionForm.vue'
 import { Permission } from '@/api/system/types/permission'
 import { getPermissionsByConditions, deletePermission } from '@/api/system/permission'
-import store from '@/store'
 
 onMounted(() => {
   loadPermissions()
@@ -66,8 +65,8 @@ const loadPermissions = async () => {
   count.value = data.count
 }
 
-// 显示隐藏 form
-const visible = ref(false)
+// 新增与编辑组件
+const formVisible = ref(false)
 const permissionId = ref(undefined as number | undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
@@ -75,11 +74,11 @@ const openForm = (payload: number | MouseEvent) => {
   } else {
     permissionId.value = undefined
   }
-  visible.value = true
+  formVisible.value = true
 }
 
-const onSubmitted = () => {
-  visible.value = false
+const onFormSubmitted = () => {
+  formVisible.value = false
   loadPermissions()
 }
 

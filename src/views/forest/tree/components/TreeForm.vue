@@ -6,12 +6,12 @@
       </el-form-item>
       <el-form-item label="所属林场" prop="farmId">
         <el-select v-model="tree.farmId" placeholder="请选择林场">
-          <el-option v-for="farm in farms" :key="farm.id" :label="farm.name" :value="farm.id" />
+          <el-option v-for="(farm, i) in farms" :key="i" :label="farm.name" :value="farm.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="林场区域" prop="areaId">
         <el-select v-model="tree.areaId" placeholder="请选择区域">
-          <el-option v-for="area in areas" :key="area.id" :label="area.name" :value="area.id" />
+          <el-option v-for="(area, i) in areas" :key="i" :label="area.name" :value="area.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="行" prop="positionX">
@@ -85,27 +85,26 @@ const loadAreasByFarm = async (id: number) => {
 }
 
 // 树木信息
-const tree = reactive({
-  name: '',
-  farmId: undefined as number | undefined,
-  areaId: undefined as number | undefined,
-  positionX: undefined as number | undefined,
-  positionY: undefined as number | undefined,
-  machineCode: '',
-  plantedAt: undefined as Date | undefined
-})
-
+const tree = reactive({})
 const loadTree = async () => {
   const {
     farm: { id: farmId },
     area: { id: areaId },
-    ...attrs
+    name,
+    positionX,
+    positionY,
+    machineCode,
+    plantedAt
   } = await getTreeById(props.id)
 
   Object.assign(tree, {
     farmId,
     areaId,
-    ...attrs
+    name,
+    positionX,
+    positionY,
+    machineCode,
+    plantedAt
   })
 
   isEditFirstLoad = true

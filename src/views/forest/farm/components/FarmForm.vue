@@ -55,7 +55,8 @@ onMounted(() => {
 // 林场信息
 const farm = reactive({})
 const loadFarm = async () => {
-  Object.assign(farm, await getFarmById(props.id))
+  const { name, province, city, district, remark } = await getFarmById(props.id)
+  Object.assign(farm, { name, province, city, district, remark })
 }
 
 // 表单提交

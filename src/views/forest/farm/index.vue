@@ -1,20 +1,18 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-form ref="form" inline :model="listParams" :disabled="store.state.isLoading">
-        <el-form-item label="林场名称" prop="name">
-          <el-input v-model="listParams.name" placeholder="请输入林场名称" />
-        </el-form-item>
-        <el-form-item>
-          <el-button-group>
-            <el-button type="primary" :icon="'Search'" @click="loadFarms">搜索</el-button>
-            <el-button type="primary" @click="resetFields(form)">重置</el-button>
-          </el-button-group>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="openForm">新增林场</el-button>
+  <Index
+    title="林场"
+    :params="listParams"
+    :count="count"
+    :data="farms"
+    :load="loadFarms"
+    :handler-a="openForm"
+  >
+    <template #form-item>
+      <el-form-item label="林场名称" prop="name">
+        <el-input v-model="listParams.name" placeholder="请输入林场名称" />
+      </el-form-item>
     </template>
-    <el-table :data="farms" v-loading="store.state.isLoading">
+    <template #table-column>
       <el-table-column type="expand">
         <template #default="scope">
           <el-descriptions :column="1" border>
@@ -48,28 +46,22 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadFarms"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <FarmForm
-    v-if="formVisible"
-    v-model="formVisible"
-    :id="farmId"
-    @submit="onFormSubmitted"
-  />
+    </template>
+    <template #a>
+      <FarmForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="farmId"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
 import FarmForm from './components/FarmForm.vue'
 import { getFarmsByConditions, deleteFarm } from '@/api/forest/farm'
 import { Farm } from '@/api/forest/types/farm'
-import store from '@/store'
 
 onMounted(() => {
   loadFarms()
@@ -87,13 +79,6 @@ const loadFarms = async () => {
   const data = await getFarmsByConditions(listParams)
   farms.value = data.results
   count.value = data.count
-}
-
-const form = ref<typeof ElForm>()
-const resetFields = (form: ElForm | undefined) => {
-  if (!form) return
-  form.resetFields()
-  loadFarms()
 }
 
 // 新增与编辑组件

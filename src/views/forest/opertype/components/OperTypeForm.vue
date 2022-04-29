@@ -37,7 +37,8 @@ onMounted(() => {
 // 记录类信息
 const operType = reactive({})
 const loadOperType = async () => {
-  Object.assign(operType, await getOperTypeById(props.id))
+  const { name, remark } = await getOperTypeById(props.id)
+  Object.assign(operType, { name, remark })
 }
 
 // 表单提交

@@ -1,35 +1,26 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-form ref="form" inline :disabled="store.state.isLoading">
-        <el-form-item label="销售单号">
-          <el-input v-model="listParams.orderNum" placeholder="请输入销售单号">
-            <template #append>
-              <el-button :icon="'Search'" @click="loadSales" />
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="产品名称">
-          <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
-            <el-option
-              v-for="product in products"
-              :key="product.id"
-              :label="product.name"
-              :value="product.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="客户编号">
-          <el-input v-model="listParams.customerId" placeholder="请输入客户编号">
-            <template #append>
-              <el-button :icon="'Search'" @click="loadSales" />
-            </template>
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="visible = true">新增销售</el-button>
+  <Index
+    title="销售"
+    :params="listParams"
+    :count="count"
+    :data="sales"
+    :load="loadSales"
+    :handler-a="() => {formVisible = true }"
+  >
+    <template #form-item>
+      <el-form-item label="销售单号" prop="orderNum">
+        <el-input v-model="listParams.orderNum" placeholder="请输入销售单号" />
+      </el-form-item>
+      <el-form-item label="产品" prop="productId">
+        <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
+          <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="客户编号" prop="customerId">
+        <el-input v-model="listParams.customerId" placeholder="请输入客户编号" />
+      </el-form-item>
     </template>
-    <el-table :data="sales" style="width: 100%" v-loading="store.state.isLoading">
+    <template #table-column>
       <el-table-column label="销售单号" prop="orderNum" align="center" />
       <el-table-column label="时间" align="center">
         <template #default="scope">
@@ -45,7 +36,11 @@
       <el-table-column label="单价" prop="price" align="center" />
       <el-table-column label="数量" prop="quantity" align="center" />
       <el-table-column label="金额" prop="amount" align="center" />
-      <el-table-column label="备注" prop="comment" align="center" />
+      <el-table-column label="备注" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.comment ? scope.row.comment : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space>
@@ -57,21 +52,16 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadSales"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <SaleForm
-    v-if="visible"
-    v-model="visible"
-    :products="products"
-    @submit="onSubmitted"
-  />
+    </template>
+    <template #a>
+      <SaleForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :products="products"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
@@ -80,7 +70,6 @@ import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getSalesByConditions, deleteSale } from '@/api/inventory/sale'
 import { Sale } from '@/api/inventory/types/sale'
-import store from '@/store'
 import moment from 'moment'
 
 onMounted(() => {
@@ -110,11 +99,11 @@ const loadSales = async () => {
   count.value = data.count
 }
 
-// 显示隐藏 form
-const visible = ref(false)
+// 新增组件
+const formVisible = ref(false)
 
-const onSubmitted = () => {
-  visible.value = false
+const onFormSubmitted = () => {
+  formVisible.value = false
   loadSales()
 }
 
@@ -128,12 +117,11 @@ const handleDelete = async (id: number) => {
 watch(() => listParams.orderNum, orderNum => {
   listParams.orderNum = !orderNum ? undefined : orderNum
 })
-watch(() => listParams.customerId, customerId => {
-  listParams.customerId = !customerId ? undefined : customerId
+watch(() => listParams.customerId, id => {
+  listParams.customerId = !id ? undefined : id
 })
-watch(() => listParams.productId, productId => {
-  listParams.productId = !productId ? undefined : productId
-  loadSales()
+watch(() => listParams.productId, id => {
+  listParams.productId = !id ? undefined : id
 })
 </script>
 

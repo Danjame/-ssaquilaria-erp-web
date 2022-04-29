@@ -1,20 +1,12 @@
 <template>
-  <Dialog
-    title="新增销售"
-    :submit="handleSubmit"
-  >
+  <Dialog title="新增销售" :submit="handleSubmit">
     <el-form ref="form" :model="sale" :rules="rules" label-width="100px">
       <el-form-item label="销售单号" prop="orderNum">
         <el-input v-model="sale.orderNum" placeholder="请输入销售单号" />
       </el-form-item>
       <el-form-item label="产品名称" prop="productId">
         <el-select v-model="sale.productId" placeholder="请选择产品名称" clearable>
-          <el-option
-            v-for="product in products"
-            :key="product.id"
-            :label="product.name"
-            :value="product.id"
-          />
+          <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="客户编号" prop="customerId">
@@ -75,18 +67,10 @@ const rules = reactive({
 })
 
 // 销售信息
-const sale = reactive({
-  orderNum: '',
-  productId: undefined as number | undefined,
-  customerId: undefined as number | undefined,
-  price: 0,
-  quantity: 1,
-  amount: 0,
-  comment: ''
-})
+const sale = reactive({})
 
 // 表单提交
-const form = ref<typeof ElForm | null>(null)
+const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()

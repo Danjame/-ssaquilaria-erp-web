@@ -8,7 +8,7 @@
       <el-descriptions-item label="区域" align="center">{{ task.area?.name }}</el-descriptions-item>
       <el-descriptions-item label="数据" align="center">{{ task.operData }}</el-descriptions-item>
       <el-descriptions-item label="树木" align="center">
-        <el-tag v-for="(tree, index) in task.trees" :key="index">{{ tree.serialNum }}</el-tag>
+        <el-tag v-for="(tree, i) in task.trees" :key="i">{{ tree.serialNum }}</el-tag>
       </el-descriptions-item>
       <el-descriptions-item label="用时(分)" align="center">{{ task.duration }}</el-descriptions-item>
       <el-descriptions-item label="棵数" align="center">{{ task.treeCount }}</el-descriptions-item>
@@ -17,7 +17,7 @@
       <el-descriptions-item label="审核人" align="center">{{ task.reviewer?.name }}</el-descriptions-item>
       <el-descriptions-item label="审核状态" align="center">
         <el-select v-model="taskParams.status" placeholder="请选择状态" clearable :disabled="task.status">
-          <el-option v-for="item in status" :key="item.value" :label="item.name" :value="item.value" />
+          <el-option v-for="(item, i) in status" :key="i" :label="item.name" :value="item.value" />
         </el-select>
       </el-descriptions-item>
       <el-descriptions-item label="审核意见" align="center">
@@ -25,7 +25,7 @@
       </el-descriptions-item>
       <el-descriptions-item label="图片" align="center">
         <el-space size="large">
-          <el-image v-for="(image, index) in task.imgSrc" :key="index" style="height: 100px" fit="cover" :src="image" :preview-src-list="task.imgSrc" />
+          <el-image v-for="(image, i) in task.imgSrc" :key="i" style="height: 100px" fit="cover" :src="image" :preview-src-list="task.imgSrc" />
         </el-space>
       </el-descriptions-item>
     </el-descriptions>
@@ -66,9 +66,7 @@ const status = [
 ]
 
 // 工单信息
-const task = reactive({
-  imgSrc: []
-})
+const task = reactive({ imgSrc: [] })
 const loadTask = async () => {
   Object.assign(task, await getTaskById(props.id))
   taskParams.status = task.status ? task.status : undefined

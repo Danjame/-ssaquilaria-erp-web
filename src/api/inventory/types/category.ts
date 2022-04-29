@@ -12,14 +12,14 @@ export interface Category {
   updatedAt: Date
 }
 
-export interface CategoryAttrs {
-  name: string
-  value: string
-  label: string
-}
-
 export interface CategoryConditions {
   productId?: number
   page?: number
   size?: number
+}
+
+export interface CategoryAttrs {
+  name: string
+  value: string
+  label: string
 }

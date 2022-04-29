@@ -42,9 +42,10 @@ declare module 'vue' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
-    ElTooltip: typeof import('element-plus/es')['ElTooltip']
+    ElTree: typeof import('element-plus/es')['ElTree']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     Icon: typeof import('./components/Icon/index.vue')['default']
+    Index: typeof import('./components/Index/index.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     Pagination: typeof import('./components/Pagination/index.vue')['default']
   }

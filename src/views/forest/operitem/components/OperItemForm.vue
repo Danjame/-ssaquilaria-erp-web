@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="记录类" prop="operTypeId">
         <el-select v-model="operItem.operTypeId" placeholder="请选择记录类">
-          <el-option v-for="operType in operTypes" :key="operType.id" :label="operType.name" :value="operType.id" />
+          <el-option v-for="(operType, i) in operTypes" :key="i" :label="operType.name" :value="operType.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
@@ -51,12 +51,8 @@ onMounted(() => {
 // 区域信息
 const operItem = reactive({})
 const loadOperItem = async () => {
-  const {
-    operType: { id: operTypeId },
-    ...attrs
-  } = await getOperItemById(props.id)
-
-  Object.assign(operItem, { operTypeId, ...attrs })
+  const { operType: { id: operTypeId }, name, remark } = await getOperItemById(props.id)
+  Object.assign(operItem, { operTypeId, name, remark })
 }
 
 // 表单提交

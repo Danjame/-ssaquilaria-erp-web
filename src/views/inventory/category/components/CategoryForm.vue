@@ -42,18 +42,14 @@ onMounted(() => {
 })
 
 // 类别信息
-const category = reactive({
-  name: '',
-  value: '',
-  label: ''
-})
+const category = reactive({})
 const loadCategory = async () => {
   const { name, value, label } = await getCategoryById(props.id)
   Object.assign(category, { name, value, label })
 }
 
 // 表单提交
-const form = ref<typeof ElForm | null>(null)
+const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()

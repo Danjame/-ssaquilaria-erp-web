@@ -15,6 +15,13 @@ export interface Sale {
   updatedAt: Date
 }
 
+export interface SaleConditions {
+  orderNum?: number
+  productId?: number
+  page?: number
+  size?: number
+}
+
 export interface SaleAttrs {
   orderNum: string
   productId: number | undefined
@@ -23,11 +30,4 @@ export interface SaleAttrs {
   quantity: number
   amount: number
   comment?: string
-}
-
-export interface SaleConditions {
-  orderNum?: number
-  productId?: number
-  page?: number
-  size?: number
 }

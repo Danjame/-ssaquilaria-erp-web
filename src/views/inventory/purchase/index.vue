@@ -1,38 +1,28 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-form ref="form" inline :disabled="store.state.isLoading">
-        <el-form-item label="采购单号">
-          <el-input v-model="listParams.orderNum" placeholder="请输入采购单号">
-            <template #append>
-              <el-button :icon="'Search'" @click="loadPurchases" />
-            </template>
-          </el-input>
-        </el-form-item>
-        <el-form-item label="产品名称">
-          <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
-            <el-option
-              v-for="product in products"
-              :key="product.id"
-              :label="product.name"
-              :value="product.id"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="供应商">
-          <el-select v-model="listParams.supplierId" placeholder="请选择供应商" clearable>
-            <el-option
-              v-for="supplier in suppliers"
-              :key="supplier.value"
-              :label="supplier.label"
-              :value="supplier.id"
-            />
-          </el-select>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="visible = true">新增采购</el-button>
+  <Index
+    title="采购"
+    :params="listParams"
+    :count="count"
+    :data="purchases"
+    :load="loadPurchases"
+    :handler-a="() => {formVisible = true }"
+  >
+    <template #form-item>
+      <el-form-item label="采购单号" prop="orderNum">
+        <el-input v-model="listParams.orderNum" placeholder="请输入采购单号" />
+      </el-form-item>
+      <el-form-item label="产品名称" prop="productId">
+        <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
+          <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="供应商" prop="supplierId">
+        <el-select v-model="listParams.supplierId" placeholder="请选择供应商" clearable>
+          <el-option v-for="(supplier, i) in suppliers" :key="i" :label="supplier.label" :value="supplier.id" />
+        </el-select>
+      </el-form-item>
     </template>
-    <el-table :data="purchases" style="width: 100%" v-loading="store.state.isLoading">
+    <template #table-column>
       <el-table-column label="采购单号" prop="orderNum" align="center" />
       <el-table-column label="时间" align="center">
         <template #default="scope">
@@ -57,7 +47,11 @@
           <span>{{ scope.row.applicant.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" prop="comment" align="center" />
+      <el-table-column label="备注" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.comment ? scope.row.comment : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space>
@@ -69,22 +63,17 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadPurchases"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <PurchaseForm
-    v-if="visible"
-    v-model="visible"
-    :products="products"
-    :suppliers="suppliers"
-    @submit="onSubmitted"
-  />
+    </template>
+    <template #a>
+      <PurchaseForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :products="products"
+        :suppliers="suppliers"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
@@ -95,7 +84,6 @@ import { getAllSuppliers } from '@/api/inventory/supplier'
 import { Supplier } from '@/api/inventory/types/supplier'
 import { getPurchasesByConditions, deletePurchase } from '@/api/inventory/purchase'
 import { Purchase } from '@/api/inventory/types/purchase'
-import store from '@/store'
 import moment from 'moment'
 
 onMounted(() => {
@@ -133,11 +121,10 @@ const loadPurchases = async () => {
   count.value = data.count
 }
 
-// 显示隐藏 form
-const visible = ref(false)
-
-const onSubmitted = () => {
-  visible.value = false
+// 新增组件
+const formVisible = ref(false)
+const onFormSubmitted = () => {
+  formVisible.value = false
   loadPurchases()
 }
 
@@ -151,10 +138,11 @@ const handleDelete = async (id: number) => {
 watch(() => listParams.orderNum, orderNum => {
   listParams.orderNum = !orderNum ? undefined : orderNum
 })
-watch(() => [listParams.productId, listParams.supplierId], ([productId, supplierId]) => {
-  listParams.productId = !productId ? undefined : productId
-  listParams.supplierId = !supplierId ? undefined : supplierId
-  loadPurchases()
+watch(() => listParams.productId, id => {
+  listParams.productId = !id ? undefined : id
+})
+watch(() => listParams.supplierId, id => {
+  listParams.supplierId = !id ? undefined : id
 })
 </script>
 

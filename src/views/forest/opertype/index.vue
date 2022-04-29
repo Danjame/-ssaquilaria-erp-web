@@ -1,11 +1,16 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-button type="primary" :icon="'Plus'" @click="openForm">新增记录类</el-button>
-    </template>
-    <el-table :data="operTypes" v-loading="store.state.isLoading">
+  <Index
+    title="记录类"
+    :params="listParams"
+    :count="count"
+    :data="operTypes"
+    :load="loadOperTypes"
+    :handler-a="openForm"
+    :filter="false"
+  >
+    <template #table-column>
       <el-table-column label="记录类名称" prop="name" align="center" />
-      <el-table-column label="记录项" min-width="1200" align="center">
+      <el-table-column label="记录项" min-width="600" align="center">
         <template #default="scope">
           <span v-if="!scope.row.operItems.length">-</span>
           <el-space v-else>
@@ -30,28 +35,22 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadOperTypes"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <OperTypeForm
-    v-if="formVisible"
-    v-model="formVisible"
-    :id="operTypeId"
-    @submit="onFormSubmitted"
-  />
+    </template>
+    <template #a>
+      <OperTypeForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="operTypeId"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
 import OperTypeForm from './components/OperTypeForm.vue'
 import { getOperTypesByConditions, deleteOperType } from '@/api/forest/operType'
 import { OperType } from '@/api/forest/types/operType'
-import store from '@/store'
 
 onMounted(() => {
   loadOperTypes()

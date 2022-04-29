@@ -1,15 +1,31 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-button type="primary" :icon="'Plus'" @click="openForm">新增部门</el-button>
-    </template>
-    <el-table :data="departments" style="width: 100%" v-loading="store.state.isLoading">
+  <Index
+    title="部门"
+    :params="listParams"
+    :count="count"
+    :data="departments"
+    :load="loadDepartments"
+    :handler-a="openForm"
+    :filter="false"
+  >
+    <template #table-column>
       <el-table-column type="expand">
-        <template #default="props">
-          <el-space>
+        <template #default="scope">
+          <!-- <el-space>
             <span>部门成员（{{ props.row.users.length }} 人）:</span>
-            <el-tag v-for="(user, index) in props.row.users" size="large" :key="index">{{ user.name }}</el-tag>
-          </el-space>
+            <el-tag v-for="(user, i) in props.row.users" size="large" :key="i">{{ user.name }}</el-tag>
+          </el-space> -->
+          <el-descriptions :column="1" border>
+            <el-descriptions-item align="center" label-class-name="department-desc-label">
+              <template #label>
+                <span>部门成员（{{ scope.row.users.length }} 人）</span>
+              </template>
+              <span v-if="!scope.row.users.length">-</span>
+              <el-space v-else>
+                <el-tag v-for="(user, i) in scope.row.users" :key="i" size="large">{{ user.name }}</el-tag>
+              </el-space>
+            </el-descriptions-item>
+          </el-descriptions>
         </template>
       </el-table-column>
       <el-table-column label="部门名称" prop="name" align="center" />
@@ -19,7 +35,7 @@
         <template #default="scope">
           <el-space>
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
-            <el-button type="text" @click="openSetting(scope.row.id)">设置</el-button>
+            <el-button type="text" @click="openSetting(scope.row.id)">配置</el-button>
             <el-popconfirm title="确定要删除该部门吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
@@ -28,27 +44,24 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadDepartments"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <DepartmentForm
-    v-if="formVisible"
-    v-model="formVisible"
-    :id="departmentId"
-    @submit="onSubmitted"
-  />
-  <DepartmentSetting
-    v-if="settingVisible"
-    v-model="settingVisible"
-    :id="departmentId"
-    @submit="onSubmitted"
-  />
+    </template>
+    <template #a>
+      <DepartmentForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="departmentId"
+        @submit="onFormSubmitted"
+      />
+    </template>
+    <template #b>
+      <DepartmentSetting
+        v-if="settingVisible"
+        v-model="settingVisible"
+        :id="departmentId"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
@@ -56,7 +69,6 @@ import DepartmentForm from './components/DepartmentForm.vue'
 import DepartmentSetting from './components/DepartmentSetting.vue'
 import { getDepartmentsByConditions, deleteDepartment } from '@/api/organization/department'
 import { Department } from '@/api/organization/types/department'
-import store from '@/store'
 
 onMounted(() => {
   loadDepartments()
@@ -75,7 +87,7 @@ const loadDepartments = async () => {
   count.value = data.count
 }
 
-// 显示隐藏 form
+// 新增与编辑组件
 const formVisible = ref(false)
 const departmentId = ref(undefined as number | undefined)
 const openForm = (payload: number | MouseEvent) => {
@@ -87,14 +99,14 @@ const openForm = (payload: number | MouseEvent) => {
   formVisible.value = true
 }
 
-// 显示隐藏 setting
+// 配置组件
 const settingVisible = ref(false)
 const openSetting = (id: number) => {
   departmentId.value = id
   settingVisible.value = true
 }
 
-const onSubmitted = (type: string) => {
+const onFormSubmitted = (type: string) => {
   if (type && type === 'setting') {
     settingVisible.value = false
   } else {
@@ -110,5 +122,8 @@ const handleDelete = async (id: number) => {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.department-desc-label.el-descriptions__label {
+  width: 20%;
+}
 </style>

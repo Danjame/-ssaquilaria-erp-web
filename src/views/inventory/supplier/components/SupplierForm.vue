@@ -1,8 +1,5 @@
 <template>
-  <Dialog
-    :title="id ? '编辑供应商' : '新增供应商'"
-    :submit="handleSubmit"
-  >
+  <Dialog :title="id ? '编辑供应商' : '新增供应商'" :submit="handleSubmit">
     <el-form ref="form" :model="supplier" :rules="rules" label-width="100px">
       <el-form-item label="供应商名称" prop="name">
         <el-input v-model="supplier.name" placeholder="请输入供应商名称" />
@@ -51,19 +48,14 @@ onMounted(() => {
 })
 
 // 供应商信息
-const supplier = reactive({
-  name: '',
-  value: '',
-  label: '',
-  description: ''
-})
+const supplier = reactive({})
 const loadSupplier = async () => {
   const { name, value, label, description } = await getSupplierById(props.id)
   Object.assign(supplier, { name, value, label, description })
 }
 
 // 表单提交
-const form = ref<typeof ElForm | null>(null)
+const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()

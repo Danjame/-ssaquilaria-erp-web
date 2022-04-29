@@ -10,14 +10,14 @@ export interface Department {
   updatedAt: Date
 }
 
+export interface DepartmentConditions {
+  page?: number
+  size?: number
+}
+
 export interface DepartmentAttrs {
   name?: string
   value?: string
   label?: string
   userIds?: number[]
-}
-
-export interface DepartmentConditions {
-  page?: number
-  size?: number
 }

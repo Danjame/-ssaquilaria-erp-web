@@ -1,31 +1,27 @@
 <template>
-  <el-card>
-    <template #header>
-      <el-form ref="form" inline :disabled="store.state.isLoading">
-        <el-form-item label="角色名称">
-          <el-input v-model="listParams.name" placeholder="请输入角色名称">
-            <template #append>
-              <el-button :icon="'Search'" @click="loadRoles" />
-            </template>
-          </el-input>
-        </el-form-item>
-      </el-form>
-      <el-button type="primary" :icon="'Plus'" @click="openForm">新增角色</el-button>
+  <Index
+    title="角色"
+    :params="listParams"
+    :count="count"
+    :data="roles"
+    :load="loadRoles"
+    :handler-a="openForm"
+  >
+    <template #form-item>
+      <el-form-item label="角色名称" prop="name">
+        <el-input v-model="listParams.name" placeholder="请输入角色名称" />
+      </el-form-item>
     </template>
-    <el-table :data="roles" style="width: 100%" v-loading="store.state.isLoading">
+    <template #table-column>
       <el-table-column type="expand">
         <template #default="props">
-          <el-descriptions border>
-            <el-descriptions-item label="角色权限">
+          <el-descriptions :column="2" border>
+            <el-descriptions-item label="角色权限" align="center" label-class-name="role-desc-label" class-name="role-desc-content">
               <el-space>
-                <el-tag
-                  v-for="(permission, index) in props.row.permissions"
-                  :key="index"
-                  size="large"
-                >{{ permission.label }}</el-tag>
+                <el-tag v-for="(permission, i) in props.row.permissions" :key="i" size="large">{{ permission.label }}</el-tag>
               </el-space>
             </el-descriptions-item>
-            <el-descriptions-item label="角色菜单">
+            <el-descriptions-item label="角色菜单" align="center" label-class-name="role-desc-label" class-name="role-desc-content">
               <el-tree :data="props.row.menus" :props="{ children: 'children', label: 'label' }" />
             </el-descriptions-item>
           </el-descriptions>
@@ -57,28 +53,22 @@
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
-    <Pagination
-      v-model:page="listParams.page"
-      v-model:size="listParams.size"
-      :count="count"
-      :load-list="loadRoles"
-      :disabled="store.state.isLoading"
-    />
-  </el-card>
-  <RoleForm
-    v-if="visible"
-    v-model="visible"
-    :id="roleId"
-    @submit="onSubmitted"
-  />
+    </template>
+    <template #a>
+      <RoleForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="roleId"
+        @submit="onFormSubmitted"
+      />
+    </template>
+  </Index>
 </template>
 
 <script lang="ts" setup>
 import RoleForm from './components/RoleForm.vue'
 import { getRolesByConditions, updateRole, deleteRole } from '@/api/system/role'
 import { Role } from '@/api/system/types/role'
-import store from '@/store'
 
 onMounted(() => {
   loadRoles()
@@ -103,8 +93,8 @@ const loadRoles = async () => {
   count.value = total
 }
 
-// 显示隐藏 form
-const visible = ref(false)
+// 新增与编辑组件
+const formVisible = ref(false)
 const roleId = ref(undefined as number | undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
@@ -112,7 +102,7 @@ const openForm = (payload: number | MouseEvent) => {
   } else {
     roleId.value = undefined
   }
-  visible.value = true
+  formVisible.value = true
 }
 
 // 角色状态变更
@@ -125,8 +115,8 @@ const onStatusChange = async (role: Role) => {
   ElMessage.success(`${status ? '启用' : '禁用'}成功`)
 }
 
-const onSubmitted = () => {
-  visible.value = false
+const onFormSubmitted = () => {
+  formVisible.value = false
   loadRoles()
 }
 
@@ -142,5 +132,11 @@ watch(() => listParams.name, name => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.role-desc-label.el-descriptions__label {
+  width: 10%;
+}
+.role-desc-content.el-descriptions__content {
+  width: 40%;
+}
 </style>
