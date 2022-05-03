@@ -20,6 +20,7 @@
 import { PropType } from 'vue'
 import { Farm } from '@/api/forest/types/farm'
 import { getAreaById, createArea, updateArea } from '@/api/forest/area'
+import { AreaAttrs } from '@/api/forest/types/area'
 
 const props = defineProps({
   id: {
@@ -49,7 +50,7 @@ onMounted(() => {
 })
 
 // 区域信息
-const area = reactive({})
+const area = reactive({} as AreaAttrs)
 const loadArea = async () => {
   const { farm: { id: farmId }, name, remark } = await getAreaById(props.id)
   Object.assign(area, { farmId, name, remark })

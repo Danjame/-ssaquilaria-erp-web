@@ -67,7 +67,7 @@ const loadPermissions = async () => {
 
 // 新增与编辑组件
 const formVisible = ref(false)
-const permissionId = ref(undefined as number | undefined)
+const permissionId = ref<number | undefined>(undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     permissionId.value = payload

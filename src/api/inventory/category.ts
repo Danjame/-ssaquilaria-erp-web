@@ -10,7 +10,7 @@ export const getAllCategories = () => {
 }
 
 export const getCategoriesByConditions = (params?: CategoryConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Category>>({
     method: 'GET',
     url: '/inventory/categories/by-conditions',
     params

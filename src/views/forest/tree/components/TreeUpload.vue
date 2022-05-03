@@ -34,7 +34,7 @@ import store from '@/store'
 const url = `${import.meta.env.VITE_BASE_URL}/forest/trees/import`
 const limit = 1
 const headers = {
-  Authorization: `Bearer ${store.state.user.token}`
+  Authorization: `Bearer ${store.state.user?.token}`
 }
 
 const onExceed = () => {
@@ -45,14 +45,15 @@ const onFail = (error: Error) => {
   ElMessage.error(`上传失败: ${error.message}`)
 }
 
+const emit = defineEmits(['submit'])
 const onSuccess = () => {
   ElMessage.success('上传成功')
+  emit('submit')
 }
 
 const upload = ref<typeof ElUpload>()
-const handleSubmit = () => {
-  upload.value?.submit()
-  return new Promise(resolve => resolve())
+const handleSubmit = async () => {
+  await upload.value?.submit()
 }
 
 </script>

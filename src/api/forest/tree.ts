@@ -3,7 +3,7 @@ import { Tree, TreeAttrs, TreeConditions } from './types/tree'
 import { PageResult } from '../types'
 
 export const getTreesByConditions = (params?: TreeConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Tree>>({
     method: 'GET',
     url: '/forest/trees/by-conditions',
     params

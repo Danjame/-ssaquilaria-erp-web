@@ -10,7 +10,7 @@ export const getAreasByFarm = (id: number) => {
 }
 
 export const getAreasByConditions = (params: AreaConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Area>>({
     method: 'GET',
     url: '/forest/areas/by-conditions',
     params

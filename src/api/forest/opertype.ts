@@ -3,14 +3,14 @@ import { OperType, OperTypeAttrs, OperTypeConditions } from './types/opertype'
 import { PageResult } from '../types'
 
 export const getAllOperTypes = () => {
-  return request<PageResult>({
+  return request<OperType[]>({
     method: 'GET',
     url: '/forest/opertypes'
   })
 }
 
 export const getOperTypesByConditions = (params: OperTypeConditions) => {
-  return request<PageResult>({
+  return request<PageResult<OperType>>({
     method: 'GET',
     url: '/forest/opertypes/by-conditions',
     params

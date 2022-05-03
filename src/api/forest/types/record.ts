@@ -23,6 +23,6 @@ export interface Record {
 }
 
 export interface RecordConditions {
-  TreeId: number
+  treeId: number
   operTypeId?: number
 }

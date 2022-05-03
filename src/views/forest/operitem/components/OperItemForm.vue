@@ -20,6 +20,7 @@
 import { PropType } from 'vue'
 import { OperType } from '@/api/forest/types/opertype'
 import { getOperItemById, createOperItem, updateOperItem } from '@/api/forest/operitem'
+import { OperItemAttrs } from '@/api/forest/types/operitem'
 
 const props = defineProps({
   id: {
@@ -49,7 +50,7 @@ onMounted(() => {
 })
 
 // 区域信息
-const operItem = reactive({})
+const operItem = reactive({} as OperItemAttrs)
 const loadOperItem = async () => {
   const { operType: { id: operTypeId }, name, remark } = await getOperItemById(props.id)
   Object.assign(operItem, { operTypeId, name, remark })

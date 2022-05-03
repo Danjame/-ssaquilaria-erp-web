@@ -6,6 +6,7 @@
     :data="tasks"
     :load="loadTasks"
     :handler-a="openForm"
+    :handler-btns="false"
   >
     <template #form-item>
       <el-form-item label="记录类" prop="operTypeId">
@@ -16,6 +17,16 @@
       <el-form-item label="记录项" prop="operItemId">
         <el-select v-model="listParams.operItemId" placeholder="请选择记录项" clearable>
           <el-option v-for="(operItem, i) in operItems" :key="i" :label="operItem.name" :value="operItem.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="操作人" prop="operatorId">
+        <el-select v-model="listParams.operatorId" placeholder="请选择操作人" clearable>
+          <el-option v-for="(user, i) in users" :key="i" :label="user.name" :value="user.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="审核人" prop="reviewerId">
+        <el-select v-model="listParams.reviewerId" placeholder="请选择审核人" clearable>
+          <el-option v-for="(user, i) in users" :key="i" :label="user.name" :value="user.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="状态" prop="status">
@@ -107,12 +118,15 @@ import { getAllOperTypes } from '@/api/forest/opertype'
 import { OperType } from '@/api/forest/types/opertype'
 import { getOperItemsByOperType } from '@/api/forest/operitem'
 import { OperItem } from '@/api/forest/types/operitem'
+import { getAllUsers } from '@/api/system/user'
+import { User } from '@/api/system/types/user'
 import { getTasksByConditions } from '@/api/forest/task'
 import { Task } from '@/api/forest/types/task'
 import moment from 'moment'
 
 onMounted(() => {
   loadAllOperTypes()
+  loadAllUsers()
   loadTasks()
 })
 
@@ -126,6 +140,12 @@ const loadAllOperTypes = async () => {
 const operItems = ref<OperItem[]>([])
 const loadOperItemsByOperType = async (id: number) => {
   operItems.value = await getOperItemsByOperType(id)
+}
+
+// 操作人/审核人
+const users = ref<User[]>([])
+const loadAllUsers = async () => {
+  users.value = await getAllUsers()
 }
 
 // 状态
@@ -152,6 +172,8 @@ const status = [
 const listParams = reactive({
   operTypeId: undefined,
   operItemId: undefined,
+  operatorId: undefined,
+  reviewerId: undefined,
   status: undefined,
   page: 1,
   size: 10
@@ -165,10 +187,10 @@ const loadTasks = async () => {
 }
 
 // 审查组件
-const taskId = ref(undefined as number | undefined)
+const taskId = ref<number | undefined>(undefined)
 const formVisible = ref(false)
-const openForm = (payload: number) => {
-  taskId.value = payload
+const openForm = (payload: number | MouseEvent) => {
+  if (typeof payload === 'number') taskId.value = payload
   formVisible.value = true
 }
 
@@ -184,6 +206,12 @@ watch(() => listParams.operTypeId, id => {
 })
 watch(() => listParams.operItemId, id => {
   listParams.operItemId = !id ? undefined : id
+})
+watch(() => listParams.operatorId, id => {
+  listParams.operatorId = !id ? undefined : id
+})
+watch(() => listParams.reviewerId, id => {
+  listParams.reviewerId = !id ? undefined : id
 })
 watch(() => listParams.status, status => {
   listParams.status = status === '' ? undefined : status

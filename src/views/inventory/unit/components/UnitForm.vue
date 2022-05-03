@@ -19,6 +19,7 @@
 
 <script lang="ts" setup>
 import { createUnit, getUnitById, updateUnit } from '@/api/inventory/unit'
+import { UnitAttrs } from '@/api/inventory/types/unit'
 
 const props = defineProps({
   id: {
@@ -48,7 +49,7 @@ onMounted(() => {
 })
 
 // 单位信息
-const unit = reactive({})
+const unit = reactive({} as UnitAttrs)
 const loadUnit = async () => {
   const { name, value, label, description } = await getUnitById(props.id)
   Object.assign(unit, { name, value, label, description })

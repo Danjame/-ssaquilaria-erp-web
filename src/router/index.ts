@@ -4,6 +4,7 @@ import sysRoutes from './modules/system'
 import orgRoutes from './modules/organization'
 import invRoutes from './modules/inventory'
 import frstRoutes from './modules/forest'
+import fileRoutes from './modules/file'
 import { Menu } from '@/api/system/types/menu'
 import store from '@/store'
 
@@ -30,7 +31,8 @@ const routes: RouteRecordRaw[] = [
       sysRoutes,
       orgRoutes,
       invRoutes,
-      frstRoutes
+      frstRoutes,
+      fileRoutes
     ]
   },
   {

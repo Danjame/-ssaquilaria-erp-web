@@ -35,6 +35,7 @@ import { PropType } from 'vue'
 import { Product } from '@/api/inventory/types/product'
 import { Supplier } from '@/api/inventory/types/supplier'
 import { createPurchase } from '@/api/inventory/purchase'
+import { PurchaseAttrs } from '@/api/inventory/types/purchase'
 import { validateQty } from '@/utils/validator'
 
 defineProps({
@@ -74,7 +75,7 @@ const rules = reactive({
 })
 
 // 采购信息
-const purchase = reactive({})
+const purchase = reactive({} as PurchaseAttrs)
 
 // 表单提交
 const form = ref<typeof ElForm>()

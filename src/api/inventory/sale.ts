@@ -3,7 +3,7 @@ import { Sale, SaleAttrs, SaleConditions } from './types/sale'
 import { PageResult } from '../types'
 
 export const getSalesByConditions = (params?: SaleConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Sale>>({
     method: 'GET',
     url: '/inventory/sales/by-conditions',
     params

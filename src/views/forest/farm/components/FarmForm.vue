@@ -22,6 +22,7 @@
 
 <script lang="ts" setup>
 import { getFarmById, createFarm, updateFarm } from '@/api/forest/farm'
+import { FarmAttrs } from '@/api/forest/types/farm'
 
 const props = defineProps({
   id: {
@@ -53,7 +54,7 @@ onMounted(() => {
 })
 
 // 林场信息
-const farm = reactive({})
+const farm = reactive({} as FarmAttrs)
 const loadFarm = async () => {
   const { name, province, city, district, remark } = await getFarmById(props.id)
   Object.assign(farm, { name, province, city, district, remark })

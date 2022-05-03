@@ -20,12 +20,14 @@
 import { getAllRoles } from '@/api/system/role'
 import { Role } from '@/api/system/types/role'
 import { getUserById, updateUser } from '@/api/system/user'
+import { UserAttrs } from '@/api/system/types/user'
 import store from '@/store'
 
 const props = defineProps({
   id: {
     type: Number,
-    required: true
+    required: true,
+    default: null
   }
 })
 
@@ -53,7 +55,7 @@ const loadAllRoles = async () => {
 }
 
 // 用户信息
-const user = reactive({})
+const user = reactive({} as UserAttrs)
 const loadUser = async () => {
   const { name, email, roles } = await getUserById(props.id)
   Object.assign(user, { name, email, roleIds: roles.map(role => role.id) })

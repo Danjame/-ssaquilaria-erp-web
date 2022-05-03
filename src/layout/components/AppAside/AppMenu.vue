@@ -1,7 +1,7 @@
 <template>
   <el-menu :default-active="route" router :collapse="store.state.isCollapse">
-    <template v-for="menu in menus">
-      <el-sub-menu v-if="menu.children && menu.children.length" :key="menu.id" :index="menu.value">
+    <template v-for="(menu, i) in menus">
+      <el-sub-menu v-if="menu.children && menu.children.length" :key="i" :index="menu.value">
         <template #title>
           <el-icon>
             <component :is="menu.icon" />

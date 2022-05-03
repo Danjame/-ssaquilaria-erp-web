@@ -10,7 +10,7 @@ export const getAllProducts = () => {
 }
 
 export const getProductsByConditions = (params?: ProductConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Product>>({
     method: 'GET',
     url: '/inventory/products/by-conditions',
     params

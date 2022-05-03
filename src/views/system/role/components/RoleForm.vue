@@ -35,6 +35,8 @@ import { Permission } from '@/api/system/types/permission'
 import { getAllMenus } from '@/api/system/menu'
 import { Menu } from '@/api/system/types/menu'
 import { createRole, getRoleById, updateRole } from '@/api/system/role'
+import { RoleAttrs } from '@/api/system/types/role'
+import { ElTree } from 'element-plus'
 
 const props = defineProps({
   id: {
@@ -87,7 +89,7 @@ const loadAllMenus = async () => {
 }
 
 // 角色信息
-const role = reactive({})
+const role = reactive({} as RoleAttrs)
 
 const loadRole = async () => {
   const {
@@ -107,7 +109,7 @@ const loadRole = async () => {
   })
 
   // 回显选中菜单
-  role.menuIds.forEach(id => {
+  role.menuIds?.forEach(id => {
     const node = tree.value?.getNode(id)
     if (node && node.isLeaf) tree.value?.setChecked(id, true, false)
   })

@@ -10,7 +10,7 @@ export const getAllRoles = () => {
 }
 
 export const getRolesByConditions = (params?: RoleConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Role>>({
     method: 'GET',
     url: '/system/roles/by-conditions',
     params

@@ -1,7 +1,7 @@
 <template>
   <Dialog :title="!task.status ? '审核工单' : '工单详情'" :submit="handleSubmit">
     <el-descriptions :column="2" border>
-      <el-descriptions-item label="时间" align="center">{{ moment(task.starteddAt).format('YYYY/MM/DD HH:MM') }}</el-descriptions-item>
+      <el-descriptions-item label="时间" align="center">{{ moment(task.startedAt).format('YYYY/MM/DD HH:MM') }}</el-descriptions-item>
       <el-descriptions-item label="记录类" align="center">{{ task.operType?.name }}</el-descriptions-item>
       <el-descriptions-item label="林场" align="center">{{ task.farm?.name }}</el-descriptions-item>
       <el-descriptions-item label="记录项" align="center">{{ task.operItem?.name }}</el-descriptions-item>
@@ -16,16 +16,16 @@
       <el-descriptions-item label="申请人" align="center">{{ task.operator?.name }}</el-descriptions-item>
       <el-descriptions-item label="审核人" align="center">{{ task.reviewer?.name }}</el-descriptions-item>
       <el-descriptions-item label="审核状态" align="center">
-        <el-select v-model="taskParams.status" placeholder="请选择状态" clearable :disabled="task.status">
+        <el-select v-model="taskParams.status" placeholder="请选择状态" clearable :disabled="!!task.status">
           <el-option v-for="(item, i) in status" :key="i" :label="item.name" :value="item.value" />
         </el-select>
       </el-descriptions-item>
       <el-descriptions-item label="审核意见" align="center">
-        <el-input v-model="taskParams.review" placeholder="请输入审核意见" type="textarea" autosize :disabled="task.status" />
+        <el-input v-model="taskParams.review" placeholder="请输入审核意见" type="textarea" autosize :disabled="!!task.status" />
       </el-descriptions-item>
       <el-descriptions-item label="图片" align="center">
         <el-space size="large">
-          <el-image v-for="(image, i) in task.imgSrc" :key="i" style="height: 100px" fit="cover" :src="image" :preview-src-list="task.imgSrc" />
+          <el-image v-for="(image, i) in srcList" :key="i" style="height: 100px" fit="cover" :src="image" :preview-src-list="srcList" />
         </el-space>
       </el-descriptions-item>
     </el-descriptions>
@@ -34,13 +34,15 @@
 
 <script lang="ts" setup>
 import { getTaskById, updateTask } from '@/api/forest/task'
+import { Task } from '@/api/forest/types/task'
 import { downloadImage } from '@/api/file/image'
 import moment from 'moment'
 
 const props = defineProps({
   id: {
     type: Number,
-    required: true
+    required: true,
+    default: null
   }
 })
 
@@ -49,8 +51,8 @@ onMounted(() => {
 })
 
 const taskParams = reactive({
-  status: undefined,
-  review: undefined
+  status: undefined as number | undefined,
+  review: undefined as string | undefined
 })
 
 // 状态
@@ -66,14 +68,15 @@ const status = [
 ]
 
 // 工单信息
-const task = reactive({ imgSrc: [] })
+const task = reactive({} as Task)
+const srcList = ref<string[]>([])
 const loadTask = async () => {
   Object.assign(task, await getTaskById(props.id))
   taskParams.status = task.status ? task.status : undefined
   taskParams.review = task.review
 
   // 图片处理
-  task.imgSrc = await downloadImage(task.images)
+  srcList.value = await downloadImage(task.images)
 }
 
 // 表单提交

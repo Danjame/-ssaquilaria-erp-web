@@ -10,7 +10,7 @@ export const getAllUnits = () => {
 }
 
 export const getUnitsByConditions = (params?: UnitConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Unit>>({
     method: 'GET',
     url: '/inventory/units/by-conditions',
     params

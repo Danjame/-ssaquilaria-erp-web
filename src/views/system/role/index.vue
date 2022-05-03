@@ -95,7 +95,7 @@ const loadRoles = async () => {
 
 // 新增与编辑组件
 const formVisible = ref(false)
-const roleId = ref(undefined as number | undefined)
+const roleId = ref<number | undefined>(undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     roleId.value = payload

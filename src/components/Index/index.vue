@@ -57,7 +57,7 @@ const props = defineProps({
     default: () => Promise.resolve()
   },
   handlerA: {
-    type: Function,
+    type: Function as PropType<(payload: number | MouseEvent) => void>,
     default: () => {}
   },
   filter: {
@@ -73,7 +73,7 @@ const props = defineProps({
 const { title, params, count, data } = toRefs(props)
 
 const form = ref<typeof ElForm>()
-const resetFields = (form: ElForm | undefined) => {
+const resetFields = (form: typeof ElForm | undefined) => {
   if (!form) return
   form.resetFields()
   props.load()

@@ -16,6 +16,7 @@
 
 <script lang="ts" setup>
 import { createCategory, getCategoryById, updateCategory } from '@/api/inventory/category'
+import { CategoryAttrs } from '@/api/inventory/types/category'
 
 const props = defineProps({
   id: {
@@ -42,7 +43,7 @@ onMounted(() => {
 })
 
 // 类别信息
-const category = reactive({})
+const category = reactive({} as CategoryAttrs)
 const loadCategory = async () => {
   const { name, value, label } = await getCategoryById(props.id)
   Object.assign(category, { name, value, label })

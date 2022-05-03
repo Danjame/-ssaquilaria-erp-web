@@ -110,9 +110,9 @@ const loadUsers = async () => {
 
 // 编辑组件
 const formVisible = ref(false)
-const userId = ref(undefined as number | undefined)
-const openForm = (payload: number) => {
-  userId.value = payload
+const userId = ref<number | undefined>(undefined)
+const openForm = (payload: number | MouseEvent) => {
+  if (typeof payload === 'number') userId.value = payload
   formVisible.value = true
 }
 

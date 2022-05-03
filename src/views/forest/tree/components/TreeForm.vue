@@ -32,6 +32,7 @@
 
 <script lang="ts" setup>
 import { PropType } from 'vue'
+import { TreeAttrs } from '@/api/forest/types/tree'
 import { Farm } from '@/api/forest/types/farm'
 import { getAreasByFarm } from '@/api/forest/area'
 import { Area } from '@/api/forest/types/area'
@@ -85,7 +86,7 @@ const loadAreasByFarm = async (id: number) => {
 }
 
 // 树木信息
-const tree = reactive({})
+const tree = reactive({} as TreeAttrs)
 const loadTree = async () => {
   const {
     farm: { id: farmId },

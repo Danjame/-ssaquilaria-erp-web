@@ -10,7 +10,7 @@ export const getAllPermissions = () => {
 }
 
 export const getPermissionsByConditions = (params?: PermissionConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Permission>>({
     method: 'GET',
     url: '/system/permissions/by-conditions',
     params

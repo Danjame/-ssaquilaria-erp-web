@@ -16,6 +16,7 @@
 
 <script lang="ts" setup>
 import { createDepartment, getDepartmentById, updateDepartment } from '@/api/organization/department'
+import { DepartmentAttrs } from '@/api/organization/types/department'
 
 const props = defineProps({
   id: {
@@ -42,7 +43,7 @@ onMounted(() => {
 })
 
 // 部门信息
-const department = reactive({})
+const department = reactive({} as DepartmentAttrs)
 const loadDepartment = async () => {
   const { name, value, label } = await getDepartmentById(props.id)
   Object.assign(department, { name, value, label })

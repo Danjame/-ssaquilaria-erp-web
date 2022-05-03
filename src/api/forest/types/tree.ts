@@ -19,8 +19,8 @@ export interface Tree {
 
 export interface TreeAttrs {
   name: string
-  farmId: number
-  areaId: number
+  farmId: number | undefined
+  areaId: number | undefined
   positionX: number
   positionY: number
   machineCode: string

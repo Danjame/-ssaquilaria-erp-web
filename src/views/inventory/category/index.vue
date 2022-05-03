@@ -76,7 +76,7 @@ const loadCategories = async () => {
 
 // 新增与编辑组件
 const formVisible = ref(false)
-const categoryId = ref(undefined as number | undefined)
+const categoryId = ref<number | undefined>(undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     categoryId.value = payload

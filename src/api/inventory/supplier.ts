@@ -10,7 +10,7 @@ export const getAllSuppliers = () => {
 }
 
 export const getSuppliersByConditions = (params?: SupplierConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Supplier>>({
     method: 'GET',
     url: '/inventory/suppliers/by-conditions',
     params

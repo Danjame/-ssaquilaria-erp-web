@@ -13,6 +13,7 @@
 
 <script lang="ts" setup>
 import { getOperTypeById, createOperType, updateOperType } from '@/api/forest/opertype'
+import { OperType } from '@/api/forest/types/opertype'
 
 const props = defineProps({
   id: {
@@ -35,7 +36,7 @@ onMounted(() => {
 })
 
 // 记录类信息
-const operType = reactive({})
+const operType = reactive({} as OperType)
 const loadOperType = async () => {
   const { name, remark } = await getOperTypeById(props.id)
   Object.assign(operType, { name, remark })

@@ -10,7 +10,7 @@ export const getAllFarms = () => {
 }
 
 export const getFarmsByConditions = (params: FarmConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Farm>>({
     method: 'GET',
     url: '/forest/farms/by-conditions',
     params

@@ -10,7 +10,7 @@ export const getAllDepartments = () => {
 }
 
 export const getDepartmentsByConditions = (params?: DepartmentConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Department>>({
     method: 'GET',
     url: '/organization/departments/by-conditions',
     params

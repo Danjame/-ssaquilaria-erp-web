@@ -30,7 +30,7 @@ export const getAllUsers = () => {
 }
 
 export const getUsersByConditions = (params?: UserConditions) => {
-  return request<PageResult>({
+  return request<PageResult<User>>({
     method: 'GET',
     url: '/system/users/by-conditions',
     params

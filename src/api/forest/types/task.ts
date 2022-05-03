@@ -29,7 +29,7 @@ export interface Task {
 }
 
 export interface TaskAttrs {
-  status: number
+  status?: number
   review?: string
 }
 

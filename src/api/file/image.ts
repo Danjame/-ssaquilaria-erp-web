@@ -8,7 +8,7 @@ const getFileBlob = (fileNum: string) => {
   })
 }
 
-export const downloadImage = async (files: string[]) => {
+export const downloadImage = async (files: string[]): Promise<string[]> => {
   const pendingFiles = files.map(file => getFileBlob(file))
   const resolved = await Promise.allSettled(pendingFiles)
   return resolved.map(({ value }: any) => {

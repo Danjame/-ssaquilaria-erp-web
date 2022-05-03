@@ -81,7 +81,7 @@ const loadSuppliers = async () => {
 
 // 新增与编辑组件
 const formVisible = ref(false)
-const supplierId = ref(undefined as number | undefined)
+const supplierId = ref<number | undefined>(undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     supplierId.value = payload

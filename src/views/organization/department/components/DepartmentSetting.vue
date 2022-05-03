@@ -1,6 +1,6 @@
 <template>
   <Dialog :title="`部门成员（${userIds?.length} 人）`" :submit="handleSubmit">
-    <el-table :data="users" style="width: 100%" ref="multipleTableRef" @selection-change="onSelect">
+    <el-table :data="users" style="width: 100%" ref="multipleTable" @selection-change="onSelect">
       <el-table-column type="selection" width="55" />
       <el-table-column label="用户名称" prop="name" align="center" />
       <el-table-column label="用户邮箱" prop="email" align="center" />
@@ -12,6 +12,7 @@
 import { getAllUsers } from '@/api/system/user'
 import { User } from '@/api/system/types/user'
 import { getDepartmentById, updateDepartment } from '@/api/organization/department'
+import { ElTable } from 'element-plus'
 
 const props = defineProps({
   id: {
@@ -40,11 +41,11 @@ const loadUserIds = async () => {
 }
 
 // 默认选中
-const multipleTableRef = ref<typeof ElTable>()
+const multipleTable = ref<typeof ElTable>()
 const selectDefault = () => {
   userIds.value?.forEach((id: number) => {
     users.value.forEach((user: User) => {
-      if (id === user.id) multipleTableRef.value!.toggleRowSelection(user, true)
+      if (id === user.id) multipleTable.value!.toggleRowSelection(user, true)
     })
   })
 }

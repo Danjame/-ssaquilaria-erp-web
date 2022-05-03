@@ -11,10 +11,6 @@
     <template #table-column>
       <el-table-column type="expand">
         <template #default="scope">
-          <!-- <el-space>
-            <span>部门成员（{{ props.row.users.length }} 人）:</span>
-            <el-tag v-for="(user, i) in props.row.users" size="large" :key="i">{{ user.name }}</el-tag>
-          </el-space> -->
           <el-descriptions :column="1" border>
             <el-descriptions-item align="center" label-class-name="department-desc-label">
               <template #label>
@@ -89,7 +85,7 @@ const loadDepartments = async () => {
 
 // 新增与编辑组件
 const formVisible = ref(false)
-const departmentId = ref(undefined as number | undefined)
+const departmentId = ref<number | undefined>(undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     departmentId.value = payload

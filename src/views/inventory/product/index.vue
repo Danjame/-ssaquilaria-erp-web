@@ -102,7 +102,7 @@ const loadProducts = async () => {
 
 // 新增与编辑组件
 const formVisible = ref(false)
-const productId = ref(undefined as number | undefined)
+const productId = ref<number | undefined>(undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     productId.value = payload

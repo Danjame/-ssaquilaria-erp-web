@@ -10,7 +10,7 @@ export const getOperItemsByOperType = (id: number) => {
 }
 
 export const getOperItemsByConditions = (params: OperItemConditions) => {
-  return request<PageResult>({
+  return request<PageResult<OperItem>>({
     method: 'GET',
     url: '/forest/operitems/by-conditions',
     params

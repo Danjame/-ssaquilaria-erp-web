@@ -39,6 +39,7 @@ import { PropType } from 'vue'
 import { getAllUnits } from '@/api/inventory/unit'
 import { Unit } from '@/api/inventory/types/unit'
 import { getProductById, createProduct, updateProduct } from '@/api/inventory/product'
+import { ProductAttrs } from '@/api/inventory/types/product'
 import { validateQty } from '@/utils/validator'
 
 const props = defineProps({
@@ -92,7 +93,7 @@ const loadAllUnits = async () => {
 }
 
 // 产品信息
-const product = reactive({})
+const product = reactive({} as ProductAttrs)
 const loadProduct = async () => {
   const {
     name,

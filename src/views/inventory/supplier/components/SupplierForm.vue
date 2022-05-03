@@ -19,6 +19,7 @@
 
 <script lang="ts" setup>
 import { createSupplier, getSupplierById, updateSupplier } from '@/api/inventory/supplier'
+import { SupplierAttrs } from '@/api/inventory/types/supplier'
 
 const props = defineProps({
   id: {
@@ -48,7 +49,7 @@ onMounted(() => {
 })
 
 // 供应商信息
-const supplier = reactive({})
+const supplier = reactive({} as SupplierAttrs)
 const loadSupplier = async () => {
   const { name, value, label, description } = await getSupplierById(props.id)
   Object.assign(supplier, { name, value, label, description })

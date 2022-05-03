@@ -3,6 +3,7 @@
     title="操作记录"
     custom-class="record-dialog-container"
     destroy-on-close
+    :model-value="false"
     :close-on-click-modal="false"
     :close-on-press-escape="false"
     center
@@ -23,7 +24,7 @@
     </el-descriptions>
     <el-divider />
     <!-- 筛选表单 -->
-    <el-form style="text-align: center" ref="form" inline :model="listParams" :disabled="store.state.isLoading">
+    <el-form ref="form" inline :model="listParams" :disabled="store.state.isLoading">
       <el-form-item label="记录类" prop="operType">
         <el-select v-model="listParams.operTypeId" placeholder="请选择记录类" clearable>
           <el-option v-for="(operType, i) in operTypes" :key="i" :label="operType.name" :value="operType.id" />
@@ -32,6 +33,16 @@
       <el-form-item label="记录项" prop="operItem">
         <el-select v-model="listParams.operItemId" placeholder="请选择记录项" clearable>
           <el-option v-for="(operItem, i) in operItems" :key="i" :label="operItem.name" :value="operItem.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="操作人" prop="operatorId">
+        <el-select v-model="listParams.operatorId" placeholder="请选择操作人" clearable>
+          <el-option v-for="(user, i) in users" :key="i" :label="user.name" :value="user.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="审核人" prop="reviewerId">
+        <el-select v-model="listParams.reviewerId" placeholder="请选择审核人" clearable>
+          <el-option v-for="(user, i) in users" :key="i" :label="user.name" :value="user.id" />
         </el-select>
       </el-form-item>
     </el-form>
@@ -120,6 +131,8 @@ import { getAllOperTypes } from '@/api/forest/opertype'
 import { OperType } from '@/api/forest/types/opertype'
 import { getOperItemsByOperType } from '@/api/forest/operitem'
 import { OperItem } from '@/api/forest/types/operitem'
+import { getAllUsers } from '@/api/system/user'
+import { User } from '@/api/system/types/user'
 import { downloadImage } from '@/api/file/image'
 import store from '@/store'
 import moment from 'moment'
@@ -127,7 +140,8 @@ import moment from 'moment'
 const props = defineProps({
   id: {
     type: Number,
-    required: true
+    required: true,
+    default: null
   }
 })
 
@@ -135,18 +149,19 @@ onMounted(() => {
   loadTree()
   loadImgRecord()
   loadAllOperTypes()
+  loadAllUsers()
   loadRecordsByTree()
 })
 
 // 树木基本信息
-const tree: Tree = reactive({})
+const tree = reactive({} as Tree)
 const loadTree = async () => {
   Object.assign(tree, await getTreeById(props.id))
 }
 
 const imgRecord = reactive({
-  srcList: [],
-  createdAt: undefined
+  srcList: [] as string[],
+  createdAt: undefined as Date | undefined
 })
 const loadImgRecord = async () => {
   const { results } = await getRecordsByTree({ treeId: props.id, operTypeId: 8 })
@@ -169,11 +184,19 @@ const loadOperItemsByOperType = async (id: number) => {
   operItems.value = await getOperItemsByOperType(id)
 }
 
+// 操作人/审核人
+const users = ref<User[]>([])
+const loadAllUsers = async () => {
+  users.value = await getAllUsers()
+}
+
 // 记录列表
 const listParams = reactive({
   treeId: props.id,
   operTypeId: undefined,
   operItemId: undefined,
+  operatorId: undefined,
+  reviewerId: undefined,
   page: 1,
   size: 7
 })
@@ -186,7 +209,7 @@ const loadRecordsByTree = async () => {
 }
 
 // 图片处理
-const srcList = ref([])
+const srcList = ref([] as string[])
 const onImageShow = async (images: string[]) => {
   srcList.value = await downloadImage(images)
 }
@@ -201,10 +224,18 @@ watch(() => listParams.operItemId, id => {
   listParams.operItemId = !id ? undefined : id
   loadRecordsByTree()
 })
+watch(() => listParams.operatorId, id => {
+  listParams.operatorId = !id ? undefined : id
+  loadRecordsByTree()
+})
+watch(() => listParams.reviewerId, id => {
+  listParams.reviewerId = !id ? undefined : id
+  loadRecordsByTree()
+})
 </script>
 
 <style lang="scss">
 .record-dialog-container {
-  min-width: 900px;
+  min-width: 1020px;
 }
 </style>

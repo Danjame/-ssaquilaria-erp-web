@@ -8,11 +8,11 @@
     :handler-a="openForm"
   >
     <template #form-item>
-      <el-form-item label="树木品种" prop="name">
-        <el-input v-model="listParams.name" placeholder="请输入品种" />
-      </el-form-item>
       <el-form-item label="序列号" prop="serialNum">
         <el-input v-model="listParams.serialNum" placeholder="请输入序列号" />
+      </el-form-item>
+      <el-form-item label="树木品种" prop="name">
+        <el-input v-model="listParams.name" placeholder="请输入品种" />
       </el-form-item>
       <el-form-item label="所属林场" prop="farmId">
         <el-select v-model="listParams.farmId" placeholder="请选择林场" clearable>
@@ -29,8 +29,8 @@
       <el-button type="primary" :icon="'Upload'" @click="uploadVisible = true">批量上传</el-button>
     </template>
     <template #table-column>
-      <el-table-column label="序列号" prop="serialNum" align="center" />
-      <el-table-column label="树木品种" prop="name" align="center" />
+      <el-table-column label="序列号" prop="serialNum" align="center" min-width="120" />
+      <el-table-column label="树木品种" prop="name" align="center" min-width="120" />
       <el-table-column label="所属林场" align="center">
         <template #default="scope">
           <span>{{ scope.row.farm.name }}</span>
@@ -140,7 +140,7 @@ const handleDelete = async (id: number) => {
   loadTrees()
 }
 
-const treeId = ref(undefined as number | undefined)
+const treeId = ref<number | undefined>(undefined)
 // 新增与编辑组件
 const formVisible = ref(false)
 const openForm = (payload: number | MouseEvent) => {

@@ -3,7 +3,7 @@ import { Purchase, PurchaseAttrs, PurchaseConditions } from './types/purchase'
 import { PageResult } from '../types'
 
 export const getPurchasesByConditions = (params?: PurchaseConditions) => {
-  return request<PageResult>({
+  return request<PageResult<Purchase>>({
     method: 'GET',
     url: '/inventory/purchases/by-conditions',
     params

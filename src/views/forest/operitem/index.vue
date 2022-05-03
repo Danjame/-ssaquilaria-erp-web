@@ -53,9 +53,10 @@
 
 <script lang="ts" setup>
 import OperItemForm from './components/OperItemForm.vue'
+import { getAllOperTypes } from '@/api/forest/opertype'
+import { OperType } from '@/api/forest/types/opertype'
 import { getOperItemsByConditions, deleteOperItem } from '@/api/forest/operitem'
 import { OperItem } from '@/api/forest/types/operitem'
-import { getAllOperTypes } from '@/api/forest/opertype'
 
 onMounted(() => {
   loadAllOperTypes()
@@ -63,7 +64,7 @@ onMounted(() => {
 })
 
 // 记录类
-const operTypes = ref<OperItem[]>([])
+const operTypes = ref<OperType[]>([])
 const loadAllOperTypes = async () => {
   operTypes.value = await getAllOperTypes()
 }
@@ -84,7 +85,7 @@ const loadOperItems = async () => {
 
 // 新增与编辑组件
 const formVisible = ref(false)
-const operItemId = ref(undefined as number | undefined)
+const operItemId = ref<number | undefined>(undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
     operItemId.value = payload
