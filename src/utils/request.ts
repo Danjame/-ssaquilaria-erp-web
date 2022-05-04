@@ -28,68 +28,73 @@ request.interceptors.request.use(function (config) {
 // token 刷新锁
 let isRefreshing = false
 request.interceptors.response.use(function (response) {
+  // Any status code that lie within the range of 2xx cause this function to trigger
+  // Do something with response data
+
   // 复原 loding 状态
   if (response.config.url?.includes('/conditions')) {
     store.commit('setLoading', false)
   }
 
-  // Any status code that lie within the range of 2xx cause this function to trigger
-  // Do something with response data
   return response
 }, function (error) {
-  // 服务离线
+  // Any status codes that falls outside the range of 2xx cause this function to trigger
+  // Do something with response error
+
   if (!error.response) {
-    ElMessageBox.alert('服务不可用，请联系管理员', 'HTTP 503 错误')
-  }
+    // 服务离线
+    if (!axios.isCancel(error)) {
+      ElMessageBox.alert('服务不可用，请联系管理员', 'HTTP 503 错误')
+    }
+  } else {
+    // 复原 loding 状态
+    if (error.response.config.url.includes('/conditions')) {
+      store.commit('setLoading', false)
+    }
 
-  // 复原 loding 状态
-  if (error.response.config.url.includes('/conditions')) {
-    store.commit('setLoading', false)
-  }
-
-  // token 过期/无效
-  switch (error.response.status) {
-    case 401:
-      if (error.response.data.message === 'Invalid Username / Password') {
-        return ElMessage.error('账号/密码不正确')
-      }
-
-      if (isRefreshing) return
-      isRefreshing = true
-      ElMessageBox.confirm(
-        '您的登录状态已过期，请重新登录。',
-        '登录过期',
-        {
-          confirmButtonText: '登录',
-          cancelButtonText: '取消'
+    // token 过期/无效
+    switch (error.response.status) {
+      case 401:
+        if (error.response.data.message === 'Invalid Username / Password') {
+          return ElMessage.error('账号/密码不正确')
         }
-      ).then(() => {
-        toLogin()
-      }).finally(() => {
-        isRefreshing = false
-      })
-      break
-    case 403:
-      if (error.response.data.message === 'Account Disabled') {
+
+        if (isRefreshing) return
+        isRefreshing = true
         ElMessageBox.confirm(
-          '您的账号不可用，请联系管理员。',
-          '账号不可用',
+          '您的登录状态已过期，请重新登录。',
+          '登录过期',
           {
-            confirmButtonText: '重新登录',
+            confirmButtonText: '登录',
             cancelButtonText: '取消'
           }
         ).then(() => {
           toLogin()
+        }).finally(() => {
+          isRefreshing = false
         })
-      } else {
+        break
+      case 403:
+        if (error.response.data.message === 'Account Disabled') {
+          ElMessageBox.confirm(
+            '您的账号不可用，请联系管理员。',
+            '账号不可用',
+            {
+              confirmButtonText: '重新登录',
+              cancelButtonText: '取消'
+            }
+          ).then(() => {
+            toLogin()
+          })
+        } else {
+          ElMessage.error('操作失败：' + error.response.data.message)
+        }
+        break
+      default:
         ElMessage.error('操作失败：' + error.response.data.message)
-      }
-      break
-    default:
-      ElMessage.error('操作失败：' + error.response.data.message)
+    }
   }
-  // Any status codes that falls outside the range of 2xx cause this function to trigger
-  // Do something with response error
+
   return Promise.reject(error)
 })
 
