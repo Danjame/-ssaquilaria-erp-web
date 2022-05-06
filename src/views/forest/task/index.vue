@@ -201,8 +201,14 @@ const onFormSubmitted = () => {
 
 // 监听参数变化
 watch(() => listParams.operTypeId, id => {
-  listParams.operTypeId = !id ? undefined : id
-  if (id) loadOperItemsByOperType(id)
+  listParams.operItemId = undefined
+  if (id) {
+    listParams.operTypeId = id
+    loadOperItemsByOperType(id)
+  } else {
+    listParams.operTypeId = undefined
+    operItems.value = []
+  }
 })
 watch(() => listParams.operItemId, id => {
   listParams.operItemId = !id ? undefined : id
