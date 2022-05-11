@@ -6,11 +6,23 @@
     :data="farms"
     :load="loadFarms"
     :handler-a="openForm"
+    :filter="false"
   >
-    <template #form-item>
-      <el-form-item label="林场名称" prop="name">
-        <el-input v-model="listParams.name" placeholder="请输入林场名称" />
-      </el-form-item>
+    <template #form>
+      <el-form ref="form" inline :model="listParams" :disabled="store.state.isLoading">
+        <el-form-item label="林场名称" prop="name">
+          <el-input v-model="listParams.name" placeholder="请输入林场名称" />
+        </el-form-item>
+        <el-form-item label="地区" prop="region">
+          <el-cascader v-model="listParams.region" :props="cascaderProps" :options="provinces" clearable />
+        </el-form-item>
+        <el-form-item>
+          <el-button-group>
+            <el-button type="primary" :icon="'Search'" @click="loadFarms">搜索</el-button>
+            <el-button type="primary" @click="resetFields(form)">重置</el-button>
+          </el-button-group>
+        </el-form-item>
+      </el-form>
     </template>
     <template #table-column>
       <el-table-column type="expand">
@@ -27,7 +39,7 @@
         </template>
       </el-table-column>
       <el-table-column label="林场名称" prop="name" align="center" />
-      <el-table-column label="所在地" align="center">
+      <el-table-column label="地区" align="center">
         <el-table-column label="省份" prop="province" align="center" />
         <el-table-column label="城市" prop="city" align="center" />
         <el-table-column label="区/县" prop="district" align="center" />
@@ -62,21 +74,56 @@
 import FarmForm from './components/FarmForm.vue'
 import { getFarmsByConditions, deleteFarm } from '@/api/forest/farm'
 import { Farm } from '@/api/forest/types/farm'
+import { getAllProvinces } from '@/api/region/province'
+import { Province } from '@/api/region/types/province'
+import { getCitiesByProvince } from '@/api/region/city'
+import { getDistrictsByCity } from '@/api/region/district'
+import store from '@/store'
 
 onMounted(() => {
+  loadAllProvinces()
   loadFarms()
 })
+
+const cascaderProps = {
+  label: 'name',
+  value: 'code',
+  lazy: true,
+  lazyLoad (node: any, resolve: any) {
+    const { data: { code }, level } = node
+    if (level === 1) {
+      getCitiesByProvince(code).then(cities => resolve(cities as []))
+    } else if (level === 2) {
+      getDistrictsByCity(code).then(districts => {
+        districts.forEach(item => {
+          item.leaf = true
+        })
+        resolve(districts as [])
+      })
+    } else {
+      resolve()
+    }
+  }
+}
+
+const provinces = ref<Province[]>([])
+const loadAllProvinces = async () => {
+  provinces.value = await getAllProvinces()
+}
 
 // 林场列表
 const listParams = reactive({
   name: undefined,
+  region: undefined as string[] | undefined,
   page: 1,
   size: 10
 })
 const farms = ref<Farm[]>([])
 const count = ref(0)
 const loadFarms = async () => {
-  const data = await getFarmsByConditions(listParams)
+  const { name, region, page, size } = listParams
+  const regionCodes = region && region.length ? region.toString() : undefined
+  const data = await getFarmsByConditions({ name, regionCodes, page, size })
   farms.value = data.results
   count.value = data.count
 }
@@ -91,6 +138,15 @@ const openForm = (payload: number | MouseEvent) => {
     farmId.value = undefined
   }
   formVisible.value = true
+}
+
+const form = ref<typeof ElForm>()
+const cascader = ref<typeof ElCascader>()
+const resetFields = (form: typeof ElForm | undefined) => {
+  if (!cascader.value && !form) return
+  if (form) form.resetFields()
+  if (cascader.value) cascader.value.panel.clearCheckedNodes()
+  loadFarms()
 }
 
 const onFormSubmitted = () => {

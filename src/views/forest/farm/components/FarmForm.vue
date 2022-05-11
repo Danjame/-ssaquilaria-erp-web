@@ -4,14 +4,8 @@
       <el-form-item label="林场名称" prop="name">
         <el-input v-model="farm.name" placeholder="请输入林场名称" />
       </el-form-item>
-      <el-form-item label="省份" prop="province">
-        <el-input v-model="farm.province" placeholder="请输入省份" />
-      </el-form-item>
-      <el-form-item label="城市" prop="city">
-        <el-input v-model="farm.city" placeholder="请输入城市" />
-      </el-form-item>
-      <el-form-item label="区/县" prop="district">
-        <el-input v-model="farm.district" placeholder="请输入区/县" />
+      <el-form-item label="地区" prop="regionCodes">
+        <el-cascader ref="cascader" v-model="farm.regionCodes" :props="cascaderProps" :options="provinces" />
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="farm.remark" placeholder="请输入备注" type="textarea" autosize />
@@ -23,6 +17,10 @@
 <script lang="ts" setup>
 import { getFarmById, createFarm, updateFarm } from '@/api/forest/farm'
 import { FarmAttrs } from '@/api/forest/types/farm'
+import { getAllProvinces } from '@/api/region/province'
+import { Province } from '@/api/region/types/province'
+import { getCitiesByProvince } from '@/api/region/city'
+import { getDistrictsByCity } from '@/api/region/district'
 
 const props = defineProps({
   id: {
@@ -35,38 +33,65 @@ const rules = reactive({
   name: [
     { required: true, message: '林场名称不能为空', trigger: 'change' }
   ],
-  province: [
-    { required: true, message: '省份不能为空', trigger: 'change' }
-  ],
-  city: [
-    { required: true, message: '城市不能为空', trigger: 'change' }
-  ],
-  district: [
-    { required: true, message: '区/县不能为空', trigger: 'change' }
+  regionCodes: [
+    { required: true, message: '地区不能为空', trigger: 'change' }
   ],
   remark: [
     { required: false, message: '备注不能为空', trigger: 'change' }
   ]
 })
 
+const cascaderProps = {
+  label: 'name',
+  value: 'code',
+  lazy: true,
+  lazyLoad (node: any, resolve: any) {
+    const { data: { code }, level } = node
+    if (level === 1) {
+      getCitiesByProvince(code).then(cities => resolve(cities as []))
+    } else if (level === 2) {
+      getDistrictsByCity(code).then(districts => {
+        districts.forEach(item => {
+          item.leaf = true
+        })
+        resolve(districts as [])
+      })
+    } else {
+      resolve()
+    }
+  }
+}
+
 onMounted(() => {
   if (props.id) loadFarm()
+  loadAllProvinces()
 })
+
+const provinces = ref<Province[]>([])
+const loadAllProvinces = async () => {
+  provinces.value = await getAllProvinces()
+}
 
 // 林场信息
 const farm = reactive({} as FarmAttrs)
 const loadFarm = async () => {
-  const { name, province, city, district, remark } = await getFarmById(props.id)
-  Object.assign(farm, { name, province, city, district, remark })
+  const { name, province, city, district, regionCodes, remark } = await getFarmById(props.id)
+  Object.assign(farm, { name, province, city, district, regionCodes, remark })
 }
 
 // 表单提交
 const form = ref<typeof ElForm>()
+const cascader = ref<typeof ElCascader>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
+  const [province, city, district] = cascader.value?.getCheckedNodes()[0].pathLabels
+  farm.province = province
+  farm.city = city
+  farm.district = district
+
   if (!props.id) {
     await createFarm(farm)
     ElMessage.success('新增成功')

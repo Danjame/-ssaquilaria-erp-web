@@ -10,6 +10,7 @@
           </el-button-group>
         </el-form-item>
       </el-form>
+      <slot name="form" />
       <el-button-group v-if="handlerBtns">
         <el-button type="primary" :icon="'Plus'" @click="handlerA">新增{{ title }}</el-button>
         <slot name="form-item-button" />
