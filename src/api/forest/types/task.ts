@@ -10,6 +10,7 @@ export interface Task {
   taskNum: string
   farm: Farm
   area: Area
+  areas: Area[]
   trees: Tree[]
   treeCount: number
   operType: OperType

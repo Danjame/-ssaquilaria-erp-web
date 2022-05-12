@@ -21,7 +21,7 @@
       <el-table-column label="版本号" prop="version" align="center" />
       <el-table-column label="上传时间" align="center">
         <template #default="scope">
-          <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:MM') }}</span>
+          <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="文件名" prop="originalName" align="center" />

@@ -39,7 +39,7 @@
       <el-table-column type="expand">
         <template #default="scope">
           <el-descriptions :column="1" border>
-            <el-descriptions-item label="树木" align="center" label-class-name="task-desc-label">
+            <el-descriptions-item label="树木编号" align="center" label-class-name="task-desc-label">
               <span v-if="!scope.row.trees.length">-</span>
               <el-space v-else>
                 <el-tag v-for="(tree, i) in scope.row.trees" :key="i">{{ tree.serialNum }}</el-tag>
@@ -53,17 +53,15 @@
       </el-table-column>
       <el-table-column label="提交时间" align="center">
         <template #default="scope">
-          <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:MM') }}</span>
+          <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="林场" align="center">
+      <el-table-column label="林区" align="center" min-width="120">
         <template #default="scope">
-          <span>{{ scope.row.farm ? scope.row.farm.name : '-' }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="林区" align="center">
-        <template #default="scope">
-          <span>{{ scope.row.area ? scope.row.area.name : '-' }}</span>
+          <el-tag v-if="scope.row.farm && scope.row.area">{{ scope.row.farm.name + ': ' + scope.row.area.name }}</el-tag>
+          <el-space v-else>
+            <el-tag v-for="(area, i) in scope.row.areas" :key="i">{{ area.farm.name + ': ' + area.name }}</el-tag>
+          </el-space>
         </template>
       </el-table-column>
       <el-table-column label="棵数" prop="treeCount" align="center" />

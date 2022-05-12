@@ -14,7 +14,7 @@
           <el-input v-model="listParams.name" placeholder="请输入林场名称" />
         </el-form-item>
         <el-form-item label="地区" prop="region">
-          <el-cascader v-model="listParams.region" :props="cascaderProps" :options="provinces" clearable />
+          <el-cascader v-model="listParams.region" :props="cascaderProps" :options="provinces" />
         </el-form-item>
         <el-form-item>
           <el-button-group>
