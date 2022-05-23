@@ -21,7 +21,8 @@
       </div>
       <template #tip>
         <div class="el-upload__tip">
-          请上传 xlsx 格式的文件
+          <el-button size="small" type="text" @click="handleDownload" :disabled="isLoading"> 下载模板</el-button>
+          <p>请上传 xlsx 格式的文件</p>
         </div>
       </template>
     </el-upload>
@@ -29,6 +30,7 @@
 </template>
 
 <script lang="ts" setup>
+import { downloadTemplate } from '@/api/file/excel'
 import store from '@/store'
 
 const url = `${import.meta.env.VITE_BASE_URL}/forest/trees/import`
@@ -54,6 +56,19 @@ const onSuccess = () => {
 const upload = ref<typeof ElUpload>()
 const handleSubmit = async () => {
   await upload.value?.submit()
+}
+
+const isLoading = ref(false)
+const handleDownload = () => {
+  isLoading.value = true
+
+  downloadTemplate().then(() => {
+    ElMessage.success('模板下载成功')
+  }).catch(() => {
+    ElMessage.warning('模板下载失败')
+  }).finally(() => {
+    isLoading.value = false
+  })
 }
 
 </script>
