@@ -39,3 +39,11 @@ export const updateTree = (id: number, data: TreeAttrs) => {
     data
   })
 }
+
+export const replaceTree = (id: number, data: TreeAttrs) => {
+  return request<Tree>({
+    method: 'POST',
+    url: `/forest/trees/${id}`,
+    data
+  })
+}

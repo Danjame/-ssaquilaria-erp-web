@@ -24,12 +24,18 @@
           <el-option v-for="(area, i) in areas" :key="i" :label="area.name" :value="area.id" />
         </el-select>
       </el-form-item>
+      <el-form-item label="行" prop="positionX">
+        <el-input-number v-model="listParams.positionX" placeholder="请输入行" />
+      </el-form-item>
+      <el-form-item label="列" prop="positionY">
+        <el-input-number v-model="listParams.positionY" placeholder="请输入列" />
+      </el-form-item>
     </template>
     <template #form-item-button>
       <el-button type="primary" :icon="'Upload'" @click="uploadVisible = true">批量上传</el-button>
     </template>
     <template #table-column>
-      <el-table-column label="序列号" prop="serialNum" align="center" min-width="120" />
+      <el-table-column label="序列号" prop="serialNum" align="center" min-width="140" />
       <el-table-column label="树木品种" prop="name" align="center" min-width="120" />
       <el-table-column label="所属林场" align="center">
         <template #default="scope">
@@ -48,11 +54,12 @@
           <span>{{ moment(scope.row.plantedAt).format('YYYY/MM') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="160" align="center" fixed="right">
+      <el-table-column label="操作" width="210" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
             <el-button type="text" @click="openRecord(scope.row.id)">查看</el-button>
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
+            <el-button type="text" @click="openReplace(scope.row.id)">补种</el-button>
             <el-popconfirm title="确定要删除该树木吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
@@ -85,6 +92,14 @@
         @submit="onUploadSubmitted"
       />
     </template>
+    <template #d>
+      <TreeReplace
+        v-if="replaceVisible"
+        v-model="replaceVisible"
+        :id="treeId"
+        @submit="onReplaceSubmitted"
+      />
+    </template>
   </Index>
 </template>
 
@@ -92,6 +107,7 @@
 import TreeForm from './components/TreeForm.vue'
 import TreeUpload from './components/TreeUpload.vue'
 import TreeRecord from './components/TreeRecord.vue'
+import TreeReplace from './components/TreeReplace.vue'
 import { getAllFarms } from '@/api/forest/farm'
 import { Farm } from '@/api/forest/types/farm'
 import { getAreasByFarm } from '@/api/forest/area'
@@ -123,6 +139,8 @@ const listParams = reactive({
   name: undefined,
   farmId: undefined,
   areaId: undefined,
+  positionX: undefined,
+  positionY: undefined,
   page: 1,
   size: 10
 })
@@ -171,6 +189,17 @@ const onUploadSubmitted = () => {
   loadTrees()
 }
 
+// 批量替换组件
+const replaceVisible = ref(false)
+const openReplace = (payload: number) => {
+  treeId.value = payload
+  replaceVisible.value = true
+}
+const onReplaceSubmitted = () => {
+  replaceVisible.value = false
+  loadTrees()
+}
+
 // 监听参数变化
 watch(() => listParams.name, name => {
   if (name === '') listParams.name = undefined
@@ -179,6 +208,8 @@ watch(() => listParams.serialNum, serialNum => {
   if (serialNum === '') listParams.serialNum = undefined
 })
 watch(() => listParams.farmId, id => {
+  listParams.areaId = undefined
+  areas.value = []
   listParams.farmId = !id ? undefined : id
   if (id) loadAreasByFarm(id)
 })

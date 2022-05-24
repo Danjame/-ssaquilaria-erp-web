@@ -26,22 +26,22 @@
     <!-- 筛选表单 -->
     <el-form ref="form" inline :model="listParams" :disabled="store.state.isLoading">
       <el-form-item label="记录类" prop="operType">
-        <el-select v-model="listParams.operTypeId" placeholder="请选择记录类" clearable>
+        <el-select v-model="listParams.operTypeId" placeholder="请选择记录类" clearable class="record-form-select">
           <el-option v-for="(operType, i) in operTypes" :key="i" :label="operType.name" :value="operType.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="记录项" prop="operItem">
-        <el-select v-model="listParams.operItemId" placeholder="请选择记录项" clearable>
+        <el-select v-model="listParams.operItemId" placeholder="请选择记录项" clearable class="record-form-select">
           <el-option v-for="(operItem, i) in operItems" :key="i" :label="operItem.name" :value="operItem.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="操作人" prop="operatorId">
-        <el-select v-model="listParams.operatorId" placeholder="请选择操作人" clearable>
+        <el-select v-model="listParams.operatorId" placeholder="请选择操作人" clearable class="record-form-select">
           <el-option v-for="(user, i) in users" :key="i" :label="user.name" :value="user.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="审核人" prop="reviewerId">
-        <el-select v-model="listParams.reviewerId" placeholder="请选择审核人" clearable>
+        <el-select v-model="listParams.reviewerId" placeholder="请选择审核人" clearable class="record-form-select">
           <el-option v-for="(user, i) in users" :key="i" :label="user.name" :value="user.id" />
         </el-select>
       </el-form-item>
@@ -217,13 +217,9 @@ const onImageShow = async (images: string[]) => {
 // 监听参数变化
 watch(() => listParams.operTypeId, id => {
   listParams.operItemId = undefined
-  if (id) {
-    listParams.operTypeId = id
-    loadOperItemsByOperType(id)
-  } else {
-    listParams.operTypeId = undefined
-    operItems.value = []
-  }
+  operItems.value = []
+  listParams.operTypeId = !id ? undefined : id
+  if (id) loadOperItemsByOperType(id)
   loadRecordsByTree()
 })
 watch(() => listParams.operItemId, id => {
@@ -242,6 +238,9 @@ watch(() => listParams.reviewerId, id => {
 
 <style lang="scss">
 .record-dialog-container {
-  min-width: 1020px;
+  min-width: 1000px;
+  .record-form-select {
+    width: 150px;
+  }
 }
 </style>

@@ -30,6 +30,7 @@
   <slot name="a" />
   <slot name="b" />
   <slot name="c" />
+  <slot name="d" />
 </template>
 
 <script lang="ts" setup>
