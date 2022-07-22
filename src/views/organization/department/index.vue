@@ -25,8 +25,11 @@
         </template>
       </el-table-column>
       <el-table-column label="部门名称" prop="name" align="center" />
-      <el-table-column label="部门编号" prop="value" align="center" />
-      <el-table-column label="部门标签" prop="label" align="center" />
+      <el-table-column label="描述" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="150" align="center" fixed="right">
         <template #default="scope">
           <el-space>

@@ -5,6 +5,7 @@ export interface Permission {
   name: string
   value: string
   label: string
+  remark: string
   actions: Action[]
   createdAt: Date
   updatedAt: Date
@@ -17,8 +18,9 @@ export interface PermissionConditions {
 }
 
 export interface PermissionAttrs {
-  name: string
-  value: string
-  label: string
+  name?: string
+  value?: string
+  label?: string
+  remark?: string
   actionIds?: number[]
 }

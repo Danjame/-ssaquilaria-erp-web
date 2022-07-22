@@ -1,15 +1,20 @@
 <template>
   <Index
-    title="产品单位"
+    title="原料级别"
     :params="listParams"
     :count="count"
-    :data="units"
-    :load="loadUnits"
+    :data="ranks"
+    :load="loadRanks"
     :handler-a="openForm"
     :filter="false"
   >
     <template #table-column>
-      <el-table-column label="单位名称" prop="name" align="center" />
+      <el-table-column label="级别名称" prop="name" align="center" />
+      <el-table-column label="规格" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.specification ? scope.row.specification : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="描述" align="center">
         <template #default="scope">
           <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
@@ -19,7 +24,7 @@
         <template #default="scope">
           <el-space>
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
-            <el-popconfirm title="确定要删除该单位吗?" @confirm="handleDelete(scope.row.id)">
+            <el-popconfirm title="确定要删除该级别吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
               </template>
@@ -29,10 +34,10 @@
       </el-table-column>
     </template>
     <template #a>
-      <UnitForm
+      <RankForm
         v-if="formVisible"
         v-model="formVisible"
-        :id="unitId"
+        :id="rankId"
         @submit="onFormSubmitted"
       />
     </template>
@@ -40,48 +45,48 @@
 </template>
 
 <script lang="ts" setup>
-import UnitForm from './components/UnitForm.vue'
-import { getUnitsByConditions, deleteUnit } from '@/api/inventory/unit'
-import { Unit } from '@/api/inventory/types/unit'
+import RankForm from './components/RankForm.vue'
+import { getRanksByConditions, deleteRank } from '@/api/inventory/rank'
+import { Rank } from '@/api/inventory/types/rank'
 
 onMounted(() => {
-  loadUnits()
+  loadRanks()
 })
 
-// 类别列表
+// 级别列表
 const listParams = reactive({
   page: 1,
   size: 10
 })
-const units = ref<Unit[]>([])
+const ranks = ref<Rank[]>([])
 const count = ref(0)
-const loadUnits = async () => {
-  const data = await getUnitsByConditions(listParams)
-  units.value = data.results
+const loadRanks = async () => {
+  const data = await getRanksByConditions(listParams)
+  ranks.value = data.results
   count.value = data.count
 }
 
 // 新增与编辑组件
 const formVisible = ref(false)
-const unitId = ref<number | undefined>(undefined)
+const rankId = ref<number | undefined>(undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
-    unitId.value = payload
+    rankId.value = payload
   } else {
-    unitId.value = undefined
+    rankId.value = undefined
   }
   formVisible.value = true
 }
 
 const onFormSubmitted = () => {
   formVisible.value = false
-  loadUnits()
+  loadRanks()
 }
 
 const handleDelete = async (id: number) => {
-  await deleteUnit(id)
+  await deleteRank(id)
   ElMessage.success('删除成功')
-  loadUnits()
+  loadRanks()
 }
 </script>
 

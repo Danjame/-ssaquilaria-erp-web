@@ -6,12 +6,12 @@
       </el-form-item>
       <el-form-item label="产品类别" prop="categoryId">
         <el-select v-model="product.categoryId" placeholder="请选择产品类别">
-          <el-option v-for="(category, i) in categories" :key="i" :label="category.label" :value="category.id" />
+          <el-option v-for="(category, i) in categories" :key="i" :label="category.name" :value="category.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="单位" prop="unitId">
         <el-select v-model="product.unitId" placeholder="请选择产品单位">
-          <el-option v-for="(unit, i) in units" :key="i" :label="unit.label" :value="unit.id" />
+          <el-option v-for="(unit, i) in units" :key="i" :label="unit.name" :value="unit.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="规格" prop="size">
@@ -19,12 +19,6 @@
       </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input type="textarea" v-model="product.description" autosize placeholder="请输入产品描述" />
-      </el-form-item>
-      <el-form-item label="序列号" prop="serialNum">
-        <el-input v-model="product.serialNum" placeholder="请输入产品序列号" />
-      </el-form-item>
-      <el-form-item label="机器码" prop="machineCode">
-        <el-input v-model="product.machineCode" placeholder="请输入输入机器码" />
       </el-form-item>
       <el-form-item label="预警库存" prop="warnQty">
         <el-input-number v-model="product.warnQty" :min="0" :controls="false" placeholder="请输入产品预警数量" />
@@ -69,12 +63,6 @@ const rules = reactive({
   description: [
     { required: false, message: '产品描述不能为空', trigger: 'change' }
   ],
-  serialNum: [
-    { required: false, message: '产品序列号不能为空', trigger: 'change' }
-  ],
-  machineCode: [
-    { required: false, message: '产品机器码不能为空', trigger: 'change' }
-  ],
   warnQty: [
     { required: true, validator: validateQty, trigger: 'change' }
   ]
@@ -101,8 +89,6 @@ const loadProduct = async () => {
     unit: { id: unitId },
     size,
     description,
-    serialNum,
-    machineCode,
     warnQty
   } = await getProductById(props.id)
 
@@ -112,8 +98,6 @@ const loadProduct = async () => {
     unitId,
     size,
     description,
-    serialNum,
-    machineCode,
     warnQty
   })
 }

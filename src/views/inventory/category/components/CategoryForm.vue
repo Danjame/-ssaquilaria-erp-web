@@ -4,11 +4,8 @@
       <el-form-item label="类别名称" prop="name">
         <el-input v-model="category.name" placeholder="请输入类别名称" />
       </el-form-item>
-      <el-form-item label="类别编号" prop="value">
-        <el-input v-model="category.value" placeholder="请输入类别编号" />
-      </el-form-item>
-      <el-form-item label="类别标签" prop="label">
-        <el-input v-model="category.label" placeholder="请输入类别标签" />
+      <el-form-item label="描述" prop="remark">
+        <el-input type="textarea" v-model="category.remark" autosize placeholder="请输入描述" />
       </el-form-item>
     </el-form>
   </Dialog>
@@ -30,11 +27,8 @@ const rules = reactive({
   name: [
     { required: true, message: '类别名称不能为空', trigger: 'change' }
   ],
-  value: [
-    { required: true, message: '类别编号不能为空', trigger: 'change' }
-  ],
-  label: [
-    { required: true, message: '类别标签不能为空', trigger: 'change' }
+  remark: [
+    { required: false, message: '描述不能为空', trigger: 'change' }
   ]
 })
 
@@ -45,8 +39,8 @@ onMounted(() => {
 // 类别信息
 const category = reactive({} as CategoryAttrs)
 const loadCategory = async () => {
-  const { name, value, label } = await getCategoryById(props.id)
-  Object.assign(category, { name, value, label })
+  const { name, remark } = await getCategoryById(props.id)
+  Object.assign(category, { name, remark })
 }
 
 // 表单提交

@@ -4,11 +4,8 @@
       <el-form-item label="部门名称" prop="name">
         <el-input v-model="department.name" placeholder="请输入部门名称" />
       </el-form-item>
-      <el-form-item label="部门编号" prop="value">
-        <el-input v-model="department.value" placeholder="请输入部门编号" />
-      </el-form-item>
-      <el-form-item label="部门标签" prop="label">
-        <el-input v-model="department.label" placeholder="请输入部门标签" />
+      <el-form-item label="描述" prop="remark">
+        <el-input type="textarea" v-model="department.remark" autosize placeholder="请输入描述" />
       </el-form-item>
     </el-form>
   </Dialog>
@@ -30,11 +27,8 @@ const rules = reactive({
   name: [
     { required: true, message: '部门名称不能为空', trigger: 'change' }
   ],
-  value: [
-    { required: true, message: '部门编号不能为空', trigger: 'change' }
-  ],
-  label: [
-    { required: true, message: '部门标签不能为空', trigger: 'change' }
+  remark: [
+    { required: false, message: '描述不能为空', trigger: 'change' }
   ]
 })
 
@@ -45,8 +39,8 @@ onMounted(() => {
 // 部门信息
 const department = reactive({} as DepartmentAttrs)
 const loadDepartment = async () => {
-  const { name, value, label } = await getDepartmentById(props.id)
-  Object.assign(department, { name, value, label })
+  const { name, remark } = await getDepartmentById(props.id)
+  Object.assign(department, { name, remark })
 }
 
 // 表单提交

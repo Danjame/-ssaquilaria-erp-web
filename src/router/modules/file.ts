@@ -9,7 +9,7 @@ const routes: RouteRecordRaw = {
       path: 'apk',
       name: 'apk',
       component: () => import('@/views/file/apk/index.vue'),
-      meta: { title: '树木' }
+      meta: { title: '终端版本' }
     }
   ]
 }

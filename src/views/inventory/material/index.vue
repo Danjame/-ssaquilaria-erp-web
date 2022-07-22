@@ -1,30 +1,29 @@
 <template>
   <Index
-    title="产品"
+    title="原料"
     :params="listParams"
     :count="count"
-    :data="products"
-    :load="loadProducts"
+    :data="materials"
+    :load="loadMaterials"
     :handler-a="openForm"
   >
     <template #form-item>
-      <el-form-item label="产品名称" prop="name">
+      <el-form-item label="原料名称" prop="name">
         <el-input v-model="listParams.name" placeholder="请输入产品名称" />
       </el-form-item>
-      <el-form-item label="产品类别" prop="categoryId">
-        <el-select v-model="listParams.categoryId" placeholder="请选择产品类别" clearable>
-          <el-option v-for="(category, i) in categories" :key="i" :label="category.name" :value="category.id" />
+      <el-form-item label="原料级别" prop="rankId">
+        <el-select v-model="listParams.rankId" placeholder="请选择原料级别" clearable>
+          <el-option v-for="(rank, i) in ranks" :key="i" :label="rank.name" :value="rank.id" />
         </el-select>
       </el-form-item>
     </template>
     <template #table-column>
-      <el-table-column label="产品名称" prop="name" align="center" />
-      <el-table-column label="产品类别" align="center">
+      <el-table-column label="原料名称" prop="name" align="center" />
+      <el-table-column label="原料级别" align="center">
         <template #default="scope">
-          <span>{{ scope.row.category.name }}</span>
+          <span>{{ scope.row.rank.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="规格" prop="size" align="center" />
       <el-table-column label="单位" align="center">
         <template #default="scope">
           <span>{{ scope.row.unit.name }}</span>
@@ -34,7 +33,7 @@
       <el-table-column label="供应商" align="center">
         <template #default="scope">
           <el-space>
-            <el-tag v-for="(tag, i) in scope.row.suppliers.map((item: any) => item.name)" :key="i">{{ tag }}</el-tag>
+            <el-tag v-for="(tag, i) in scope.row.suppliers?.map((item: any) => item.name)" :key="i">{{ tag }}</el-tag>
           </el-space>
         </template>
       </el-table-column>
@@ -45,7 +44,7 @@
         <template #default="scope">
           <el-space spacer="|">
             <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
-            <el-popconfirm title="确定要删除该产品吗?" @confirm="handleDelete(scope.row.id)">
+            <el-popconfirm title="确定要删除该原料吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="text">删除</el-button>
               </template>
@@ -55,11 +54,11 @@
       </el-table-column>
     </template>
     <template #a>
-      <ProductForm
+      <MaterialForm
         v-if="formVisible"
         v-model="formVisible"
-        :id="productId"
-        :categories="categories"
+        :id="materialId"
+        :ranks="ranks"
         @submit="onFormSubmitted"
       />
     </template>
@@ -67,66 +66,66 @@
 </template>
 
 <script lang="ts" setup>
-import ProductForm from './components/ProductForm.vue'
-import { getAllCategories } from '@/api/inventory/category'
-import { Category } from '@/api/inventory/types/category'
-import { getProductsByConditions, deleteProduct } from '@/api/inventory/product'
-import { Product } from '@/api/inventory/types/product'
+import MaterialForm from './components/MaterialForm.vue'
+import { getAllRanks } from '@/api/inventory/rank'
+import { Rank } from '@/api/inventory/types/rank'
+import { getMaterialsByConditions, deleteMaterial } from '@/api/inventory/material'
+import { Material } from '@/api/inventory/types/material'
 
 onMounted(() => {
-  loadAllCategories()
-  loadProducts()
+  loadAllRanks()
+  loadMaterials()
 })
 
-// 产品类别
-const categories = ref<Category[]>([])
-const loadAllCategories = async () => {
-  categories.value = await getAllCategories()
+// 原料级别
+const ranks = ref<Rank[]>([])
+const loadAllRanks = async () => {
+  ranks.value = await getAllRanks()
 }
 
-// 产品列表
+// 原料列表
 const listParams = reactive({
   name: undefined,
-  categoryId: undefined,
+  rankId: undefined,
   page: 1,
   size: 10
 })
-const products = ref<Product[]>([])
+const materials = ref<Material[]>([])
 const count = ref(0)
-const loadProducts = async () => {
-  const data = await getProductsByConditions(listParams)
-  products.value = data.results
+const loadMaterials = async () => {
+  const data = await getMaterialsByConditions(listParams)
+  materials.value = data.results
   count.value = data.count
 }
 
 // 新增与编辑组件
 const formVisible = ref(false)
-const productId = ref<number | undefined>(undefined)
+const materialId = ref<number | undefined>(undefined)
 const openForm = (payload: number | MouseEvent) => {
   if (typeof payload === 'number') {
-    productId.value = payload
+    materialId.value = payload
   } else {
-    productId.value = undefined
+    materialId.value = undefined
   }
   formVisible.value = true
 }
 
 const onFormSubmitted = () => {
   formVisible.value = false
-  loadProducts()
+  loadMaterials()
 }
 
 const handleDelete = async (id: number) => {
-  await deleteProduct(id)
+  await deleteMaterial(id)
   ElMessage.success('删除成功')
-  loadProducts()
+  loadMaterials()
 }
 
 // 监听参数变化
 watch(() => listParams.name, name => {
   if (name === '') listParams.name = undefined
 })
-watch(() => listParams.categoryId, id => {
-  listParams.categoryId = !id ? undefined : id
+watch(() => listParams.rankId, id => {
+  listParams.rankId = !id ? undefined : id
 })
 </script>

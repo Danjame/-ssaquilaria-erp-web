@@ -4,12 +4,11 @@ import { Transaction } from './transaction'
 import { Purchase } from './purchase'
 import { Sale } from './sale'
 import { Supplier } from './supplier'
+import { Material } from './material'
 
 export interface Product {
   id: number
   name: string
-  serialNum: string
-  machineCode: string
   category: Category
   size: string
   unit: Unit
@@ -17,13 +16,12 @@ export interface Product {
   images: string[]
   stockQty: number
   warnQty: number
+  material: Material
   transactions: Transaction[]
   incomingQty: number
   outgoingQty: number
   purchases: Purchase[]
   sales: Sale[]
-  // cost: { default: number }
-  // price: { default: number }
   suppliers: Supplier[]
   createdAt: Date
   updatedAt: Date
@@ -42,7 +40,5 @@ export interface ProductAttrs {
   unitId: number | undefined
   size: string
   description?: string
-  serialNum?: string
-  machineCode?: string
   warnQty?: number
 }

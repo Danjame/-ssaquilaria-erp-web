@@ -1,18 +1,21 @@
 <template>
   <Dialog :title="id ? '编辑权限' : '新增权限'" :submit="handleSubmit">
     <el-form ref="form" :model="permission" :rules="rules" label-width="100px">
+      <el-form-item label="权限" prop="label">
+        <el-input v-model="permission.label" placeholder="请输入权限标签" />
+      </el-form-item>
       <el-form-item label="权限名" prop="name">
         <el-input v-model="permission.name" placeholder="请输入权限名" />
       </el-form-item>
       <el-form-item label="资源接口" prop="value">
         <el-input v-model="permission.value" placeholder="请输入资源接口" />
       </el-form-item>
-      <el-form-item label="权限标签" prop="label">
-        <el-input v-model="permission.label" placeholder="请输入权限标签" />
+      <el-form-item label="描述" prop="remark">
+        <el-input type="textarea" v-model="permission.remark" autosize placeholder="请输入描述" />
       </el-form-item>
       <el-form-item label="请求方法" prop="actionIds">
         <el-select v-model="permission.actionIds" multiple placeholder="请选择权限">
-          <el-option v-for="(action, i) in actions" :key="i" :label="action.label" :value="action.id" />
+          <el-option v-for="(action, i) in actions" :key="i" :label="action.name" :value="action.id" />
         </el-select>
       </el-form-item>
     </el-form>
@@ -42,6 +45,9 @@ const rules = reactive({
   label: [
     { required: true, message: '权限标签不能为空', trigger: 'change' }
   ],
+  remark: [
+    { required: false, message: '描述不能为空', trigger: 'change' }
+  ],
   actionIds: [
     { required: false, message: '请求方法不能为空', trigger: 'change' }
   ]
@@ -63,6 +69,7 @@ const permission = reactive({
   name: '',
   value: '',
   label: '',
+  remark: '',
   actionIds: [] as number[]
 })
 const loadPermission = async () => {
@@ -70,6 +77,7 @@ const loadPermission = async () => {
     name,
     value,
     label,
+    remark,
     actions
   } = await getPermissionById(props.id)
 
@@ -77,6 +85,7 @@ const loadPermission = async () => {
     name,
     value,
     label,
+    remark,
     actionIds: actions ? actions.map(action => action.id) : []
   })
 }

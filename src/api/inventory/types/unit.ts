@@ -3,8 +3,7 @@ import { Product } from './product'
 export interface Unit {
   id: number
   name: string
-  value: string
-  label: string
+  remark: string
   description: string
   products: Product[]
   createdAt: Date
@@ -18,7 +17,6 @@ export interface UnitConditions {
 
 export interface UnitAttrs {
   name: string
-  value: string
-  label: string
+  remark?: string
   description?: string
 }

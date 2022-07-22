@@ -9,13 +9,18 @@
     :filter="false"
   >
     <template #table-column>
+      <el-table-column label="权限" prop="label" align="center" />
       <el-table-column label="权限名" prop="name" align="center" />
       <el-table-column label="资源接口" prop="value" align="center" />
-      <el-table-column label="权限标签" prop="label" align="center" />
+      <el-table-column label="描述" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="请求方法" align="center">
         <template #default="scope">
           <el-space>
-            <el-tag v-for="(action, i) in scope.row.actions" :key="i"> {{ action.label }}</el-tag>
+            <el-tag v-for="(action, i) in scope.row.actions" :key="i"> {{ action.name }}</el-tag>
           </el-space>
         </template>
       </el-table-column>

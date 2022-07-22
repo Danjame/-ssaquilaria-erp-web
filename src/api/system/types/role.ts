@@ -5,8 +5,7 @@ import { Menu } from './menu'
 export interface Role {
   id: number
   name: string
-  value: string
-  label: string
+  remark: string
   users: User[]
   permissions: Permission[]
   menuIds: number[]
@@ -25,8 +24,7 @@ export interface RoleConditions {
 
 export interface RoleAttrs {
   name?: string
-  value?: string
-  label?: string
+  remark?: string
   permissionIds?: number[]
   menuIds?: number[]
   status?: boolean

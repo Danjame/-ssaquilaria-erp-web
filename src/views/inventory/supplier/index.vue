@@ -16,11 +16,9 @@
     </template>
     <template #table-column>
       <el-table-column label="供应商名称" prop="name" align="center" />
-      <el-table-column label="供应商编号" prop="value" align="center" />
-      <el-table-column label="供应商标签" prop="label" align="center" />
       <el-table-column label="描述" align="center">
         <template #default="scope">
-          <span>{{ scope.row.description ? scope.row.description : '-' }}</span>
+          <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="100" align="center" fixed="right">

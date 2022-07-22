@@ -3,8 +3,7 @@ import { User } from '@/api/system/types/user'
 export interface Department {
   id: number
   name: string
-  value: string
-  label: string
+  remark: string
   users: User[]
   createdAt: Date
   updatedAt: Date
@@ -17,7 +16,6 @@ export interface DepartmentConditions {
 
 export interface DepartmentAttrs {
   name?: string
-  value?: string
-  label?: string
+  remark?: string
   userIds?: number[]
 }

@@ -29,7 +29,7 @@
       <el-table-column label="用户角色" align="center">
         <template #default="scope">
           <el-space>
-            <el-tag v-for="(role, i) in scope.row.roles" :key="i"> {{ role.label }}</el-tag>
+            <el-tag v-for="(role, i) in scope.row.roles" :key="i"> {{ role.name }}</el-tag>
           </el-space>
         </template>
       </el-table-column>

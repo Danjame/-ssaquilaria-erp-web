@@ -4,11 +4,8 @@
       <el-form-item label="角色名称" prop="name">
         <el-input v-model="role.name" placeholder="请输入角色名称" />
       </el-form-item>
-      <el-form-item label="角色编号" prop="value">
-        <el-input v-model="role.value" placeholder="请输入角色编号" />
-      </el-form-item>
-      <el-form-item label="角色标签" prop="label">
-        <el-input v-model="role.label" placeholder="请输入角色标签" />
+      <el-form-item label="描述" prop="remark">
+        <el-input type="textarea" v-model="role.remark" autosize placeholder="请输入描述" />
       </el-form-item>
       <el-form-item label="角色权限" prop="permissionIds">
         <el-select v-model="role.permissionIds" multiple placeholder="请选择权限">
@@ -50,11 +47,8 @@ const rules = reactive({
   name: [
     { required: true, message: '角色名称不能为空', trigger: 'change' }
   ],
-  value: [
-    { required: true, message: '角色编号不能为空', trigger: 'change' }
-  ],
-  label: [
-    { required: true, message: '角色标签不能为空', trigger: 'change' }
+  remark: [
+    { required: false, message: '描述不能为空', trigger: 'change' }
   ],
   permissionIds: [
     { required: false, message: '角色权限不能为空', trigger: 'change' }
@@ -94,16 +88,14 @@ const role = reactive({} as RoleAttrs)
 const loadRole = async () => {
   const {
     name,
-    value,
-    label,
+    remark,
     permissions,
     menuIds
   } = await getRoleById(props.id)
 
   Object.assign(role, {
     name,
-    value,
-    label,
+    remark,
     permissionIds: permissions ? permissions.map(permission => permission.id) : [],
     menuIds: menuIds ? menuIds.map(Number) : []
   })

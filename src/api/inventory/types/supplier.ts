@@ -5,8 +5,7 @@ import { Product } from './product'
 export interface Supplier {
   id: number
   name: string
-  value: string
-  label: string
+  remark: string
   description: string
   categories: Category[]
   purchases: Purchase[]
@@ -23,7 +22,6 @@ export interface SupplierConditions {
 
 export interface SupplierAttrs {
   name: string
-  value: string
-  label: string
+  remark?: string
   description?: string
 }

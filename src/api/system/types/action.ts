@@ -2,7 +2,7 @@ export interface Action {
   id: number
   name: string
   value: string
-  label: string
+  remark: string
   createdAt: Date
   updatedAt: Date
 }

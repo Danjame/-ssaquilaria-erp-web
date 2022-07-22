@@ -28,8 +28,11 @@
         </template>
       </el-table-column>
       <el-table-column label="角色名称" prop="name" align="center" />
-      <el-table-column label="角色编号" prop="value" align="center" />
-      <el-table-column label="角色标签" prop="label" align="center" />
+      <el-table-column label="描述" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="角色状态" prop="status" align="center">
         <template #default="scope">
           <el-switch

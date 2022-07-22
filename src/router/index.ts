@@ -48,7 +48,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async to => {
-  document.title = import.meta.env.VITE_APP_TITLE + ' - ' + to.meta.title
+  document.title = to.meta.title + ' - ' + import.meta.env.VITE_APP_TITLE
   if (to.name === 'login') {
     // 登录页
     if (store.state.user && store.state.user.status) {

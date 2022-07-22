@@ -4,14 +4,8 @@
       <el-form-item label="单位名称" prop="name">
         <el-input v-model="unit.name" placeholder="请输入单位名称" />
       </el-form-item>
-      <el-form-item label="单位编号" prop="value">
-        <el-input v-model="unit.value" placeholder="请输入单位编号" />
-      </el-form-item>
-      <el-form-item label="单位标签" prop="label">
-        <el-input v-model="unit.label" placeholder="请输入单位标签" />
-      </el-form-item>
-      <el-form-item label="描述" prop="description">
-        <el-input type="textarea" v-model="unit.description" autosize placeholder="请输入描述" />
+      <el-form-item label="描述" prop="remark">
+        <el-input type="textarea" v-model="unit.remark" autosize placeholder="请输入描述" />
       </el-form-item>
     </el-form>
   </Dialog>

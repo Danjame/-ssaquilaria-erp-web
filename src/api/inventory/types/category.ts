@@ -4,8 +4,7 @@ import { Supplier } from './supplier'
 export interface Category {
   id: number
   name: string
-  value: string
-  label: string
+  remark: string
   products?: Product[]
   suppliers?: Supplier[]
   createdAt: Date
@@ -20,6 +19,5 @@ export interface CategoryConditions {
 
 export interface CategoryAttrs {
   name: string
-  value: string
-  label: string
+  remark?: string
 }
