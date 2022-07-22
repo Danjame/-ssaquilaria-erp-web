@@ -18,18 +18,23 @@
           <el-option v-for="(type, i) in types" :key="i" :label="type.label" :value="type.value" />
         </el-select>
       </el-form-item>
+      <el-form-item label="资产类型" prop="target">
+        <el-select v-model="listParams.target" placeholder="请选择资产类型" clearable>
+          <el-option v-for="(target, i) in targets" :key="i" :label="target.label" :value="target.value" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="产品" prop="productId">
-        <el-select v-model="listParams.productId" placeholder="请选择产品" clearable>
+        <el-select v-model="listParams.productId" placeholder="请选择产品" clearable :disabled="listParams.target && listParams.target != PRODUCT">
           <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="原料" prop="materialId">
-        <el-select v-model="listParams.materialId" placeholder="请选择原料" clearable>
+        <el-select v-model="listParams.materialId" placeholder="请选择原料" clearable :disabled="listParams.target && listParams.target != MATERIAL">
           <el-option v-for="(material, i) in materials" :key="i" :label="material.name" :value="material.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="树苗" prop="seedlingId">
-        <el-select v-model="listParams.seedlingId" placeholder="请选择树苗" clearable>
+        <el-select v-model="listParams.seedlingId" placeholder="请选择树苗" clearable :disabled="listParams.target && listParams.target != SEEDLING">
           <el-option v-for="(seedling, i) in seedlings" :key="i" :label="seedling.name" :value="seedling.id" />
         </el-select>
       </el-form-item>
@@ -61,6 +66,11 @@
         </template>
       </el-table-column>
       <el-table-column label="数量" prop="quantity" align="center" />
+      <el-table-column label="原料消耗" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.weight ? scope.row.weight : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="备注" align="center">
         <template #default="scope">
           <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
@@ -102,7 +112,7 @@ import { Seedling } from '@/api/inventory/types/seedling'
 import { getTransactionsByConditions, deleteTransaction } from '@/api/inventory/transaction'
 import { Transaction } from '@/api/inventory/types/transaction'
 import moment from 'moment'
-import { DECR, INCR, PROD, TAR } from '@/utils/constants'
+import { DECR, INCR, MATERIAL, PROD, PRODUCT, SEEDLING, TAR } from '@/utils/constants'
 
 const types = [
   {
@@ -123,6 +133,21 @@ const methods = [
   {
     label: '贸易',
     value: TAR
+  }
+]
+
+const targets = [
+  {
+    label: '产品',
+    value: PRODUCT
+  },
+  {
+    label: '原料',
+    value: MATERIAL
+  },
+  {
+    label: '树苗',
+    value: SEEDLING
   }
 ]
 
@@ -155,6 +180,7 @@ const loadAllSeedlings = async () => {
 const listParams = reactive({
   type: undefined,
   method: undefined,
+  target: undefined,
   productId: undefined,
   materialId: undefined,
   seedlingId: undefined,
@@ -184,6 +210,15 @@ const handleDelete = async (id: number) => {
 }
 
 // 监听参数变化
+watch(() => listParams.type, type => {
+  listParams.type = !type ? undefined : type
+})
+watch(() => listParams.method, method => {
+  listParams.method = !method ? undefined : method
+})
+watch(() => listParams.target, target => {
+  listParams.target = !target ? undefined : target
+})
 watch(() => listParams.productId, id => {
   listParams.productId = !id ? undefined : id
 })

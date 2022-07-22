@@ -2,7 +2,7 @@
   <Dialog title="新增变动" :submit="handleSubmit">
     <el-form ref="form" :model="transaction" :rules="rules" label-width="100px">
       <el-form-item label="资产类型">
-        <el-radio-group v-model="target" @change="onTargetChange">
+        <el-radio-group v-model="target">
           <el-radio-button :label="1">产品</el-radio-button>
           <el-radio-button :label="2">原料</el-radio-button>
           <el-radio-button :label="3">树苗</el-radio-button>
@@ -20,31 +20,34 @@
       </el-form-item>
       <el-form-item v-if="target === 1" label="产品" prop="productId">
         <el-select v-model="transaction.productId" placeholder="请选择产品">
-          <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
+          <el-option v-for="(product, i) in products" :key="i" :label="product.name + '(' + product.unit.name + ')'" :value="product.id" />
         </el-select>
       </el-form-item>
       <el-form-item v-if="target === 2" label="原料" prop="materialId">
         <el-select v-model="transaction.materialId" placeholder="请选择原料">
-          <el-option v-for="(material, i) in materials" :key="i" :label="material.name" :value="material.id" />
+          <el-option v-for="(material, i) in materials" :key="i" :label="material.name + '(' + material.unit.name + ')'" :value="material.id" />
         </el-select>
       </el-form-item>
       <el-form-item v-if="target === 3" label="树苗" prop="seedlingId">
         <el-select v-model="transaction.seedlingId" placeholder="请选择树苗">
-          <el-option v-for="(seedling, i) in seedlings" :key="i" :label="seedling.name" :value="seedling.id" />
+          <el-option v-for="(seedling, i) in seedlings" :key="i" :label="seedling.name + '(' + seedling.unit.name + ')'" :value="seedling.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="数量" prop="quantity">
         <el-input-number v-model="transaction.quantity" :min="1" :controls="false" placeholder="请输入产品数量" />
       </el-form-item>
-      <el-form-item v-if="target === 1" label="重量" prop="weight">
-        <el-input-number v-model="transaction.weight" :min="0" :controls="false" :precision="2" placeholder="请输入重量" />
-      </el-form-item>
+      <template v-if="target === 1 && transaction.type === INCR && transaction.method === PROD">
+        <el-form-item label="重量" prop="weight">
+          <el-input-number v-model="transaction.weight" :min="0" :controls="false" :precision="2" placeholder="请输入重量" />
+        </el-form-item>
+        <el-form-item>
+          <span>提示：产品生产入库将消耗对应原料。</span>
+        </el-form-item>
+      </template>
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" v-model="transaction.remark" autosize placeholder="请输入备注" />
       </el-form-item>
-      <el-form-item v-if="target === 1">
-        <span>提示：产品生产入库将消耗对应原料。</span>
-      </el-form-item>
+
     </el-form>
   </Dialog>
 </template>
@@ -54,7 +57,7 @@ import { PropType } from 'vue'
 import { Product } from '@/api/inventory/types/product'
 import { Material } from '@/api/inventory/types/material'
 import { Seedling } from '@/api/inventory/types/seedling'
-import { createTransaction } from '@/api/inventory/transaction'
+import { createProductTransaction, createMaterialTransaction, createSeedlingTransaction } from '@/api/inventory/transaction'
 import { TransactionAttrs } from '@/api/inventory/types/transaction'
 import { validateQty } from '@/utils/validator'
 import { DECR, INCR, PROD, TAR } from '@/utils/constants'
@@ -139,32 +142,19 @@ const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
   // 验证通过
-  await createTransaction(transaction)
+  const { type, method, quantity, weight, productId, materialId, seedlingId, remark } = transaction
+  switch (target.value) {
+    case 1:
+      await createProductTransaction({ type, method, quantity, weight, productId, remark })
+      break
+    case 2:
+      await createMaterialTransaction({ type, method, quantity, materialId, remark })
+      break
+    case 3:
+      await createSeedlingTransaction({ type, method, quantity, seedlingId, remark })
+      break
+  }
   ElMessage.success('新增成功')
   emit('submit')
 }
-
-const onTargetChange = (v:number) => {
-  switch (v) {
-    case 1 :
-      transaction.materialId = undefined
-      transaction.seedlingId = undefined
-      if (transaction.type !== INCR && transaction.method !== PROD) transaction.weight = undefined
-      break
-    case 2 :
-      transaction.productId = undefined
-      transaction.seedlingId = undefined
-      transaction.weight = undefined
-      break
-    case 3 :
-      transaction.productId = undefined
-      transaction.materialId = undefined
-      transaction.weight = undefined
-      break
-  }
-}
-
-// watch(() => [sale.price, sale.quantity], () => {
-//   sale.amount = sale.price! * sale.quantity!
-// })
 </script>

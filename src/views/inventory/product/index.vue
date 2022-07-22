@@ -30,12 +30,22 @@
           <span>{{ scope.row.unit.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="描述" prop="description" align="center" />
+      <el-table-column label="原料" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.material ? scope.row.material.name : '-' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="描述" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="供应商" align="center">
         <template #default="scope">
-          <el-space>
-            <el-tag v-for="(tag, i) in scope.row.suppliers.map((item: any) => item.name)" :key="i">{{ tag }}</el-tag>
+          <el-space v-if="scope.row.suppliers && scope.row.suppliers.length > 0">
+            <el-tag v-for="(tag, i) in scope.row.suppliers?.map((item: any) => item.name)" :key="i">{{ tag }}</el-tag>
           </el-space>
+          <span v-else>-</span>
         </template>
       </el-table-column>
       <el-table-column label="库存" prop="stockQty" align="center" />

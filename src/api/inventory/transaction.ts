@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-import { Transaction, TransactionAttrs, TransactionConditions } from './types/transaction'
+import { MaterialTransactionAttrs, ProductTransactionAttrs, SeedlingTransactionAttrs, Transaction, TransactionConditions } from './types/transaction'
 import { PageResult } from '../types'
 
 export const getTransactionsByConditions = (params?: TransactionConditions) => {
@@ -24,18 +24,26 @@ export const getTransactionById = (id: number) => {
   })
 }
 
-export const createTransaction = (data: TransactionAttrs) => {
+export const createProductTransaction = (data: ProductTransactionAttrs) => {
   return request<Transaction>({
     method: 'POST',
-    url: '/inventory/transactions',
+    url: '/inventory/transactions/products',
     data
   })
 }
 
-export const updateTransaction = (id: number, data: TransactionAttrs) => {
+export const createMaterialTransaction = (data: MaterialTransactionAttrs) => {
   return request<Transaction>({
-    method: 'PATCH',
-    url: `/inventory/transactions/${id}`,
+    method: 'POST',
+    url: '/inventory/transactions/materials',
+    data
+  })
+}
+
+export const createSeedlingTransaction = (data: SeedlingTransactionAttrs) => {
+  return request<Transaction>({
+    method: 'POST',
+    url: '/inventory/transactions/seedlings',
     data
   })
 }

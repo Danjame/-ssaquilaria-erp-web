@@ -38,6 +38,7 @@ export interface ProductAttrs {
   name: string
   categoryId: number | undefined
   unitId: number | undefined
+  materialId?: number
   size: string
   description?: string
   warnQty?: number
