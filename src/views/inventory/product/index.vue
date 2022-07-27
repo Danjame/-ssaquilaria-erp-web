@@ -40,24 +40,16 @@
           <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="供应商" align="center">
-        <template #default="scope">
-          <el-space v-if="scope.row.suppliers && scope.row.suppliers.length > 0">
-            <el-tag v-for="(tag, i) in scope.row.suppliers?.map((item: any) => item.name)" :key="i">{{ tag }}</el-tag>
-          </el-space>
-          <span v-else>-</span>
-        </template>
-      </el-table-column>
       <el-table-column label="库存" prop="stockQty" align="center" />
       <el-table-column label="入库数量" prop="incomingQty" align="center" />
       <el-table-column label="出库数量" prop="outgoingQty" align="center" />
       <el-table-column label="操作" width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
-            <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
+            <el-button type="primary" link @click="openForm(scope.row.id)">编辑</el-button>
             <el-popconfirm title="确定要删除该产品吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
-                <el-button type="text">删除</el-button>
+                <el-button type="primary" link>删除</el-button>
               </template>
             </el-popconfirm>
           </el-space>

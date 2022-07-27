@@ -1,9 +1,8 @@
 import { Category } from './category'
 import { Unit } from './unit'
 import { Transaction } from './transaction'
-import { Purchase } from './purchase'
-import { Sale } from './sale'
-import { Supplier } from './supplier'
+import { Purchase } from '../../commerce/types/purchase'
+import { Sale } from '../../commerce/types/sale'
 import { Material } from './material'
 
 export interface Product {
@@ -22,7 +21,6 @@ export interface Product {
   outgoingQty: number
   purchases: Purchase[]
   sales: Sale[]
-  suppliers: Supplier[]
   createdAt: Date
   updatedAt: Date
 }

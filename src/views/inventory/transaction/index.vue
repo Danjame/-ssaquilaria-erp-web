@@ -81,7 +81,7 @@
           <el-space>
             <el-popconfirm title="确定要删除该变动吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
-                <el-button type="text">删除</el-button>
+                <el-button type="primary" link>删除</el-button>
               </template>
             </el-popconfirm>
           </el-space>

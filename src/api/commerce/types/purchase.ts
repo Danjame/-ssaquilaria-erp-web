@@ -1,7 +1,7 @@
 import { User } from '@/api/system/types/user'
-import { Product } from './product'
+import { Product } from '../../inventory/types/product'
 import { Supplier } from './supplier'
-import { Transaction } from './transaction'
+import { Transaction } from '../../inventory/types/transaction'
 
 export interface Purchase {
   id: number

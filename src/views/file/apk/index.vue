@@ -33,9 +33,9 @@
       </el-table-column>
       <el-table-column label="操作" align="center" fixed="right">
         <template #default="scope">
-          <el-button v-if="!scope.row.isDownLoading" type="text" @click="handleDownload(scope.row)">下载</el-button>
+          <el-button v-if="!scope.row.isDownLoading" type="primary" link @click="handleDownload(scope.row)">下载</el-button>
           <span v-else>
-            <el-button type="text" @click="handleCancel(scope.row)">取消</el-button>
+            <el-button type="primary" link @click="handleCancel(scope.row)">取消</el-button>
             <el-progress
               type="line"
               :stroke-width="1"

@@ -31,8 +31,8 @@
 <script lang="ts" setup>
 import { PropType } from 'vue'
 import { Product } from '@/api/inventory/types/product'
-import { createSale } from '@/api/inventory/sale'
-import { SaleAttrs } from '@/api/inventory/types/sale'
+import { createSale } from '@/api/commerce/sale'
+import { SaleAttrs } from '@/api/commerce/types/sale'
 import { validateQty } from '@/utils/validator'
 
 defineProps({

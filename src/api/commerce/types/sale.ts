@@ -1,5 +1,5 @@
-import { Product } from './product'
-import { Transaction } from './transaction'
+import { Product } from '../../inventory/types/product'
+import { Transaction } from '../../inventory/types/transaction'
 
 export interface Sale {
   id: number

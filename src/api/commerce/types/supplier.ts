@@ -1,6 +1,6 @@
-import { Category } from './category'
+import { Category } from '../../inventory/types/category'
 import { Purchase } from './purchase'
-import { Product } from './product'
+import { Product } from '../../inventory/types/product'
 
 export interface Supplier {
   id: number

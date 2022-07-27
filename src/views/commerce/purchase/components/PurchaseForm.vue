@@ -4,14 +4,14 @@
       <el-form-item label="采购单号" prop="orderNum" placeholder="请输入采购单号">
         <el-input v-model="purchase.orderNum" placeholder="请输入采购单号" />
       </el-form-item>
-      <el-form-item label="产品名称" prop="productId">
-        <el-select v-model="purchase.productId" placeholder="请选择产品名称" clearable>
+      <el-form-item label="产品" prop="productId">
+        <el-select v-model="purchase.productId" placeholder="请选择产品" clearable>
           <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="供应商" prop="supplierId">
         <el-select v-model="purchase.supplierId" placeholder="请选择供应商" clearable>
-          <el-option v-for="(supplier, i) in suppliers" :key="i" :label="supplier.label" :value="supplier.id" />
+          <el-option v-for="(supplier, i) in suppliers" :key="i" :label="supplier.name" :value="supplier.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="单价" prop="price">
@@ -33,9 +33,9 @@
 <script lang="ts" setup>
 import { PropType } from 'vue'
 import { Product } from '@/api/inventory/types/product'
-import { Supplier } from '@/api/inventory/types/supplier'
-import { createPurchase } from '@/api/inventory/purchase'
-import { PurchaseAttrs } from '@/api/inventory/types/purchase'
+import { Supplier } from '@/api/commerce/types/supplier'
+import { createPurchase } from '@/api/commerce/purchase'
+import { PurchaseAttrs } from '@/api/commerce/types/purchase'
 import { validateQty } from '@/utils/validator'
 
 defineProps({
@@ -55,7 +55,7 @@ const rules = reactive({
     { required: true, message: '采购单号不能为空', trigger: 'change' }
   ],
   productId: [
-    { required: true, message: '产品名称不能为空', trigger: 'change' }
+    { required: true, message: '产品不能为空', trigger: 'change' }
   ],
   supplierId: [
     { required: true, message: '供应商不能为空', trigger: 'change' }

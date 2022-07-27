@@ -24,10 +24,10 @@
       <el-table-column label="操作" width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space>
-            <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
+            <el-button type="primary" link @click="openForm(scope.row.id)">编辑</el-button>
             <el-popconfirm title="确定要删除该供应商吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
-                <el-button type="text">删除</el-button>
+                <el-button type="primary" link>删除</el-button>
               </template>
             </el-popconfirm>
           </el-space>
@@ -49,8 +49,8 @@
 import SupplierForm from './components/SupplierForm.vue'
 import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
-import { getSuppliersByConditions, deleteSupplier } from '@/api/inventory/supplier'
-import { Supplier } from '@/api/inventory/types/supplier'
+import { getSuppliersByConditions, deleteSupplier } from '@/api/commerce/supplier'
+import { Supplier } from '@/api/commerce/types/supplier'
 
 onMounted(() => {
   loadAllProducts()

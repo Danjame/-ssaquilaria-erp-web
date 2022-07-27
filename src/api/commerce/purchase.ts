@@ -5,7 +5,7 @@ import { PageResult } from '../types'
 export const getPurchasesByConditions = (params?: PurchaseConditions) => {
   return request<PageResult<Purchase>>({
     method: 'GET',
-    url: '/inventory/purchases/by-conditions',
+    url: '/commerce/purchases/by-conditions',
     params
   })
 }
@@ -13,14 +13,14 @@ export const getPurchasesByConditions = (params?: PurchaseConditions) => {
 export const deletePurchase = (id: number) => {
   return request<Purchase>({
     method: 'DELETE',
-    url: `/inventory/purchases/${id}`
+    url: `/commerce/purchases/${id}`
   })
 }
 
 export const createPurchase = (data: PurchaseAttrs) => {
   return request<Purchase>({
     method: 'POST',
-    url: '/inventory/purchases',
+    url: '/commerce/purchases',
     data
   })
 }

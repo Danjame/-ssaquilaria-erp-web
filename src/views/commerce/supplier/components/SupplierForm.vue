@@ -4,22 +4,16 @@
       <el-form-item label="供应商名称" prop="name">
         <el-input v-model="supplier.name" placeholder="请输入供应商名称" />
       </el-form-item>
-      <el-form-item label="供应商编号" prop="value">
-        <el-input v-model="supplier.value" placeholder="请输入供应商编号" />
-      </el-form-item>
-      <el-form-item label="供应商标签" prop="label">
-        <el-input v-model="supplier.label" placeholder="请输入供应商标签" />
-      </el-form-item>
-      <el-form-item label="描述" prop="description">
-        <el-input type="textarea" v-model="supplier.description" autosize placeholder="请输入描述" />
+      <el-form-item label="描述" prop="remark">
+        <el-input type="textarea" v-model="supplier.remark" autosize placeholder="请输入描述" />
       </el-form-item>
     </el-form>
   </Dialog>
 </template>
 
 <script lang="ts" setup>
-import { createSupplier, getSupplierById, updateSupplier } from '@/api/inventory/supplier'
-import { SupplierAttrs } from '@/api/inventory/types/supplier'
+import { createSupplier, getSupplierById, updateSupplier } from '@/api/commerce/supplier'
+import { SupplierAttrs } from '@/api/commerce/types/supplier'
 
 const props = defineProps({
   id: {
@@ -33,13 +27,7 @@ const rules = reactive({
   name: [
     { required: true, message: '供应商名称不能为空', trigger: 'change' }
   ],
-  value: [
-    { required: true, message: '供应商编号不能为空', trigger: 'change' }
-  ],
-  label: [
-    { required: true, message: '供应商标签不能为空', trigger: 'change' }
-  ],
-  description: [
+  remark: [
     { required: false, message: '描述不能为空', trigger: 'change' }
   ]
 })
@@ -51,8 +39,8 @@ onMounted(() => {
 // 供应商信息
 const supplier = reactive({} as SupplierAttrs)
 const loadSupplier = async () => {
-  const { name, value, label, description } = await getSupplierById(props.id)
-  Object.assign(supplier, { name, value, label, description })
+  const { name, remark, description } = await getSupplierById(props.id)
+  Object.assign(supplier, { name, remark, description })
 }
 
 // 表单提交

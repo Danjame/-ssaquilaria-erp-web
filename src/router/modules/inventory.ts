@@ -11,18 +11,6 @@ const routes: RouteRecordRaw = {
       component: () => import('@/views/inventory/product/index.vue'),
       meta: { title: '产品' }
     },
-    // {
-    //   path: 'sale',
-    //   name: 'sale',
-    //   component: () => import('@/views/inventory/sale/index.vue'),
-    //   meta: { title: '销售' }
-    // },
-    // {
-    //   path: 'purchase',
-    //   name: 'purchase',
-    //   component: () => import('@/views/inventory/purchase/index.vue'),
-    //   meta: { title: '采购' }
-    // },
     {
       path: 'material',
       name: 'material',
@@ -33,7 +21,7 @@ const routes: RouteRecordRaw = {
       path: 'seedling',
       name: 'seedling',
       component: () => import('@/views/inventory/seedling/index.vue'),
-      meta: { title: '树苗' }
+      meta: { title: '苗木' }
     },
     {
       path: 'transaction',
@@ -58,12 +46,6 @@ const routes: RouteRecordRaw = {
       name: 'unit',
       component: () => import('@/views/inventory/unit/index.vue'),
       meta: { title: '单位' }
-    },
-    {
-      path: 'supplier',
-      name: 'supplier',
-      component: () => import('@/views/inventory/supplier/index.vue'),
-      meta: { title: '供应商' }
     }
   ]
 }

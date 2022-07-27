@@ -57,12 +57,12 @@
       <el-table-column label="操作" width="210" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
-            <el-button type="text" @click="openRecord(scope.row.id)">查看</el-button>
-            <el-button type="text" @click="openForm(scope.row.id)">编辑</el-button>
-            <el-button type="text" @click="openReplace(scope.row.id)">补种</el-button>
+            <el-button type="primary" link @click="openRecord(scope.row.id)">查看</el-button>
+            <el-button type="primary" link @click="openForm(scope.row.id)">编辑</el-button>
+            <el-button type="primary" link @click="openReplace(scope.row.id)">补种</el-button>
             <el-popconfirm title="确定要删除该树木吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
-                <el-button type="text">删除</el-button>
+                <el-button type="primary" link>删除</el-button>
               </template>
             </el-popconfirm>
           </el-space>

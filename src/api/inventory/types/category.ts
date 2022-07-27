@@ -1,5 +1,5 @@
 import { Product } from './product'
-import { Supplier } from './supplier'
+import { Supplier } from '../../commerce/types/supplier'
 
 export interface Category {
   id: number
