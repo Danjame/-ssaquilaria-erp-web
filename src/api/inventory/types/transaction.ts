@@ -1,6 +1,8 @@
 import { Product } from './product'
 import { Material } from './material'
 import { Seedling } from './seedling'
+import { Farm } from '@/api/forest/types/farm'
+import { Area } from '@/api/forest/types/area'
 
 export interface Transaction {
   id: number
@@ -11,6 +13,8 @@ export interface Transaction {
   product: Product
   material: Material
   seedling: Seedling
+  farm: Farm
+  area: Area
   remark: string
   createdAt: Date
   updatedAt: Date
@@ -35,6 +39,8 @@ export interface TransactionAttrs {
   productId?: number | undefined
   materialId?: number | undefined
   seedlingId?: number | undefined
+  farmId?: number | undefined
+  areaId?: number | undefined
   remark?: string
 }
 
@@ -52,6 +58,8 @@ export interface MaterialTransactionAttrs {
   method: string
   quantity: number
   materialId: number | undefined
+  farmId?: number
+  areaId?: number
   remark?: string
 }
 

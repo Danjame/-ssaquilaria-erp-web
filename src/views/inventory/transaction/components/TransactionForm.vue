@@ -145,7 +145,11 @@ const handleSubmit = async () => {
   const { type, method, quantity, weight, productId, materialId, seedlingId, remark } = transaction
   switch (target.value) {
     case 1:
-      await createProductTransaction({ type, method, quantity, weight, productId, remark })
+      if (type === INCR && method === PROD) {
+        await createProductTransaction({ type, method, quantity, weight, productId, remark })
+      } else {
+        await createProductTransaction({ type, method, quantity, productId, remark })
+      }
       break
     case 2:
       await createMaterialTransaction({ type, method, quantity, materialId, remark })

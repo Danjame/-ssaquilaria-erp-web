@@ -28,4 +28,5 @@ export const downloadApk = async (file: string, fileName: string, onDownloadProg
   a.download = fileName
   a.click()
   URL.revokeObjectURL(a.href)
+  a.remove()
 }

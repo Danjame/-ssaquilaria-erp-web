@@ -2,7 +2,7 @@ import { Transaction } from '@/api/inventory/types/transaction'
 
 export interface Trace {
   id: number
-  code: string
+  serialNum: string
   queryCount: number
   transaction: Transaction;
   createdAt: Date

@@ -14,6 +14,16 @@
           <el-option v-for="(unit, i) in units" :key="i" :label="unit.name" :value="unit.id" />
         </el-select>
       </el-form-item>
+      <el-form-item label="所属林场" prop="farmId">
+        <el-select v-model="material.farmId" placeholder="请选择林场">
+          <el-option v-for="(farm, i) in farms" :key="i" :label="farm.name" :value="farm.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="林场区域" prop="areaId">
+        <el-select v-model="material.areaId" placeholder="请选择区域">
+          <el-option v-for="(area, i) in areas" :key="i" :label="area.name" :value="area.id" />
+        </el-select>
+      </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input type="textarea" v-model="material.description" autosize placeholder="请输入描述" />
       </el-form-item>
@@ -32,6 +42,9 @@ import { Unit } from '@/api/inventory/types/unit'
 import { getMaterialById, createMaterial, updateMaterial } from '@/api/inventory/material'
 import { MaterialAttrs } from '@/api/inventory/types/material'
 import { validateQty } from '@/utils/validator'
+import { getAreasByFarm } from '@/api/forest/area'
+import { Area } from '@/api/forest/types/area'
+import { Farm } from '@/api/forest/types/farm'
 
 const props = defineProps({
   id: {
@@ -40,6 +53,10 @@ const props = defineProps({
   },
   ranks: {
     type: Array as PropType<Rank[]>,
+    required: true
+  },
+  farms: {
+    type: Array as PropType<Farm[]>,
     required: true
   }
 })
@@ -53,6 +70,12 @@ const rules = reactive({
   ],
   unitId: [
     { required: true, message: '原料单位不能为空', trigger: 'change' }
+  ],
+  farmId: [
+    { required: false, message: '所属林场不能为空', trigger: 'change' }
+  ],
+  areaId: [
+    { required: false, message: '林场区域不能为空', trigger: 'change' }
   ],
   description: [
     { required: false, message: '描述不能为空', trigger: 'change' }
@@ -74,24 +97,31 @@ const loadAllUnits = async () => {
   units.value = results
 }
 
+// 林场区域
+const areas = ref<Area[]>([])
+const loadAreasByFarm = async (id: number) => {
+  areas.value = await getAreasByFarm(id)
+}
+
 // 原料信息
 const material = reactive({} as MaterialAttrs)
 const loadMaterial = async () => {
-  const {
-    name,
-    rank: { id: rankId },
-    unit: { id: unitId },
-    description,
-    warnQty
-  } = await getMaterialById(props.id)
+  const m = await getMaterialById(props.id)
+  const { name, rank: { id: rankId }, unit: { id: unitId }, description, warnQty } = m
+  const farmId = m.farm ? m.farm.id : undefined
+  const areaId = m.area ? m.area.id : undefined
 
   Object.assign(material, {
     name,
     rankId,
     unitId,
+    farmId,
+    areaId,
     description,
     warnQty
   })
+
+  isEditFirstLoad = true
 }
 
 // 表单提交
@@ -111,4 +141,17 @@ const handleSubmit = async () => {
   emit('submit')
 }
 
+let isEditFirstLoad = false
+watch(() => material.farmId, async id => {
+  material.farmId = !id ? undefined : id
+  if (id) {
+    // 是否为新增时的首次加载
+    if (isEditFirstLoad) {
+      isEditFirstLoad = false
+    } else {
+      material.areaId = undefined
+    }
+    await loadAreasByFarm(id)
+  }
+})
 </script>

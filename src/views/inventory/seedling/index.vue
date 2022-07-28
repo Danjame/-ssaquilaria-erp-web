@@ -24,14 +24,6 @@
           <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="供应商" align="center">
-        <template #default="scope">
-          <el-space v-if="scope.row.suppliers && scope.row.suppliers.length > 0">
-            <el-tag v-for="(tag, i) in scope.row.suppliers?.map((item: any) => item.name)" :key="i">{{ tag }}</el-tag>
-          </el-space>
-          <span v-else>-</span>
-        </template>
-      </el-table-column>
       <el-table-column label="库存" prop="stockQty" align="center" />
       <el-table-column label="入库数量" prop="incomingQty" align="center" />
       <el-table-column label="出库数量" prop="outgoingQty" align="center" />

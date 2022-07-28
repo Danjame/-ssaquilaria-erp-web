@@ -15,21 +15,40 @@
       </el-form-item>
     </template>
     <template #table-column>
-      <el-table-column label="溯源码" prop="code" align="center" />
+      <el-table-column label="序列号" prop="serialNum" align="center" />
       <el-table-column label="查询次数" prop="queryCount" align="center" />
       <el-table-column label="产品" align="center">
         <template #default="scope">
           <span>{{ scope.row.transaction?.product?.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="二维码" align="center">
+      <el-table-column label="产区" align="center">
+        <el-table-column label="林场" align="center">
+          <template #default="scope">
+            <span>{{ scope.row.transaction.product?.material?.farm ? scope.row.transaction.product?.material?.farm?.name : '-' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="林区" align="center">
+          <template #default="scope">
+            <span>{{ scope.row.transaction.product?.material?.area ? scope.row.transaction.product?.material?.area?.name : '-' }}</span>
+          </template>
+        </el-table-column>
+      </el-table-column>
+      <el-table-column label="批次" align="center">
         <template #default="scope">
-          <qrcode-vue :value="scope.row.code" :size="50" />
+          <span>{{ scope.row.transaction ? moment(scope.row.transaction.createdAt).format('YYYY/MM/DD HH:mm') : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="100" align="center" fixed="right">
+      <el-table-column label="状态" align="center">
+        <template #default="scope">
+          <el-tag v-if="scope.row.status === AVAILABLE" type="success">未售</el-tag>
+          <el-tag v-else type="danger">已售</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" fixed="right">
         <template #default="scope">
           <el-space>
+            <el-button type="primary" link @click="downloadQRCode(scope.row)">下载二维码</el-button>
             <el-popconfirm title="确定要删除该溯源项吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="primary" link>删除</el-button>
@@ -43,13 +62,15 @@
 </template>
 
 <script lang="ts" setup>
-import QrcodeVue from 'qrcode.vue'
 import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getTracesByConditions, deleteTrace } from '@/api/commerce/trace'
 import { getAllMaterials } from '@/api/inventory/material'
 import { Material } from '@/api/inventory/types/material'
 import { Trace } from '@/api/commerce/types/trace'
+import { AVAILABLE } from '@/utils/constants'
+import moment from 'moment'
+import QRCode from 'qrcode'
 
 onMounted(() => {
   loadAllProducts()
@@ -83,22 +104,14 @@ const loadTraces = async () => {
   count.value = data.count
 }
 
-// 新增与编辑组件
-// const formVisible = ref(false)
-// const traceId = ref<number | undefined>(undefined)
-// const openForm = (payload: number | MouseEvent) => {
-//   if (typeof payload === 'number') {
-//     traceId.value = payload
-//   } else {
-//     traceId.value = undefined
-//   }
-//   formVisible.value = true
-// }
-
-// const onFormSubmitted = () => {
-//   formVisible.value = false
-//   loadTraces()
-// }
+// 下载二维码
+const downloadQRCode = async (trace: Trace) => {
+  const a = document.createElement('a')
+  a.href = await QRCode.toDataURL(trace.code, { width: 300 })
+  a.download = `${trace.transaction.product.name}_${trace.code}`
+  a.click()
+  a.remove()
+}
 
 const handleDelete = async (id: number) => {
   await deleteTrace(id)

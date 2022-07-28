@@ -16,6 +16,16 @@
           <el-option v-for="(rank, i) in ranks" :key="i" :label="rank.name" :value="rank.id" />
         </el-select>
       </el-form-item>
+      <el-form-item label="所属林场" prop="farmId">
+        <el-select v-model="listParams.farmId" placeholder="请选择林场" clearable>
+          <el-option v-for="(farm, i) in farms" :key="i" :label="farm.name" :value="farm.id" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="林场区域" prop="areaId">
+        <el-select v-model="listParams.areaId" placeholder="请选择区域" clearable>
+          <el-option v-for="(area, i) in areas" :key="i" :label="area.name" :value="area.id" />
+        </el-select>
+      </el-form-item>
     </template>
     <template #table-column>
       <el-table-column label="原料名称" prop="name" align="center" />
@@ -34,13 +44,17 @@
           <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="供应商" align="center">
-        <template #default="scope">
-          <el-space v-if="scope.row.suppliers && scope.row.suppliers.length > 0">
-            <el-tag v-for="(tag, i) in scope.row.suppliers?.map((item: any) => item.name)" :key="i">{{ tag }}</el-tag>
-          </el-space>
-          <span v-else>-</span>
-        </template>
+      <el-table-column label="产区" align="center">
+        <el-table-column label="林场" align="center">
+          <template #default="scope">
+            <span>{{ scope.row.farm ? scope.row.farm.name : '-' }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="林区" align="center">
+          <template #default="scope">
+            <span>{{ scope.row.area ? scope.row.area.name : '-' }}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column label="库存" prop="stockQty" align="center" />
       <el-table-column label="入库数量" prop="incomingQty" align="center" />
@@ -64,6 +78,7 @@
         v-model="formVisible"
         :id="materialId"
         :ranks="ranks"
+        :farms="farms"
         @submit="onFormSubmitted"
       />
     </template>
@@ -76,9 +91,14 @@ import { getAllRanks } from '@/api/inventory/rank'
 import { Rank } from '@/api/inventory/types/rank'
 import { getMaterialsByConditions, deleteMaterial } from '@/api/inventory/material'
 import { Material } from '@/api/inventory/types/material'
+import { getAllFarms } from '@/api/forest/farm'
+import { Farm } from '@/api/forest/types/farm'
+import { getAreasByFarm } from '@/api/forest/area'
+import { Area } from '@/api/forest/types/area'
 
 onMounted(() => {
   loadAllRanks()
+  loadAllFarms()
   loadMaterials()
 })
 
@@ -88,10 +108,24 @@ const loadAllRanks = async () => {
   ranks.value = await getAllRanks()
 }
 
+// 所属林场
+const farms = ref<Farm[]>([])
+const loadAllFarms = async () => {
+  farms.value = await getAllFarms()
+}
+
+// 林场区域
+const areas = ref<Area[]>([])
+const loadAreasByFarm = async (id: number) => {
+  areas.value = await getAreasByFarm(id)
+}
+
 // 原料列表
 const listParams = reactive({
   name: undefined,
   rankId: undefined,
+  farmId: undefined,
+  areaId: undefined,
   page: 1,
   size: 10
 })
@@ -132,5 +166,14 @@ watch(() => listParams.name, name => {
 })
 watch(() => listParams.rankId, id => {
   listParams.rankId = !id ? undefined : id
+})
+watch(() => listParams.farmId, id => {
+  listParams.areaId = undefined
+  areas.value = []
+  listParams.farmId = !id ? undefined : id
+  if (id) loadAreasByFarm(id)
+})
+watch(() => listParams.areaId, id => {
+  listParams.areaId = !id ? undefined : id
 })
 </script>

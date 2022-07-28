@@ -14,4 +14,5 @@ export const downloadTemplate = async () => {
   a.download = '批量上传模版'
   a.click()
   URL.revokeObjectURL(a.href)
+  a.remove()
 }
