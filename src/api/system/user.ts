@@ -1,15 +1,7 @@
 import request from '@/utils/request'
-import { Auth, User, UserAttrs, UserConditions } from './types/user'
+import { User, UserAttrs, UserConditions } from './types/user'
 import { Menu } from './types/menu'
 import { PageResult } from '../types'
-
-export const login = (data: Auth) => {
-  return request({
-    method: 'POST',
-    url: '/auth/login',
-    data
-  })
-}
 
 export const getUserInfo = () => {
   return request<{

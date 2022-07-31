@@ -5,8 +5,8 @@
         <el-image style="width: 100px; height: 100px;" fit="fill" :src="logoSrc" />
         <p>中科沉香ERP系统</p>
       </div>
-      <el-form-item label="账号" prop="username">
-        <el-input v-model="user.username" placeholder="请输入账号">
+      <el-form-item label="手机号" prop="phone">
+        <el-input v-model="user.phone" placeholder="请输入手机号">
           <template #prefix>
             <el-icon style="width: 100%; height: 100%;">
               <component :is="'User'" />
@@ -14,12 +14,15 @@
           </template>
         </el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input v-model="user.password" type="password" placeholder="请输入密码">
+      <el-form-item label="验证码" prop="code">
+        <el-input v-model="user.code" type="password" placeholder="请输入短信验证码">
           <template #prefix>
             <el-icon style="width: 100%; height: 100%;">
               <component :is="'Lock'" />
             </el-icon>
+          </template>
+          <template #append>
+            <el-button @click="loadSmsCode()" :disabled="Boolean(count)">{{ count ? `${count}秒后重新发送` : '获取验证码' }}</el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -40,26 +43,75 @@
 
 <script lang="ts" setup>
 import logoSrc from '@/assets/logo.png'
-import { login } from '@/api/system/user'
+import { getSmsCode, login } from '@/api/system/auth'
 import store from '@/store'
 import router from '@/router'
 import { useRoute } from 'vue-router'
+import { ElForm } from 'element-plus'
 
 const form = ref<typeof ElForm>()
 
 const rules = ref({
-  username: [
-    { required: true, message: '请输入账号', trigger: 'change' }
+  phone: [
+    { required: true, message: '请输入手机号', trigger: 'blur' },
+    { pattern: /^1\d{10}$/, message: '请输入正确的手机号', trigger: 'blur' }
   ],
-  password: [
-    { required: true, message: '请输入密码', trigger: 'change' }
+  code: [
+    { required: true, message: '请输入验证码', trigger: 'blur' }
   ]
 })
 
 const user = reactive({
-  username: '',
-  password: ''
+  phone: '',
+  code: ''
 })
+
+const count = ref(0)
+const interval = 60
+
+onMounted(() => {
+  const restCount = JSON.parse(localStorage.getItem('restCount') || 'null')
+  const endTime = JSON.parse(localStorage.getItem('endTime') || 'null')
+
+  if (restCount && endTime) {
+    const passTime = Math.ceil((new Date().getTime() - endTime) / 1000)
+    if (passTime < restCount) {
+      count.value = restCount - passTime
+      downcount()
+    }
+  }
+})
+
+// 发送验证码
+const loadSmsCode = async () => {
+  if (count.value > 0 && count.value < interval) return
+  const valid = await form.value?.validateField('phone')
+  if (!valid) return
+  const res = await getSmsCode(user.phone)
+  if (res.message === 'OK' && res.code === 'OK') {
+    ElMessage.success('验证码发送成功')
+    count.value = interval
+    downcount()
+  }
+}
+
+let timer: any
+const downcount = () => {
+  if (timer) clearTimeout(timer)
+  timer = setTimeout(() => {
+    if (count.value > 0 && count.value <= interval) {
+      count.value--
+      localStorage.setItem('restCount', JSON.stringify(count.value))
+      localStorage.setItem('endTime', JSON.stringify((new Date()).getTime()))
+      downcount()
+    } else {
+      clearTimeout(timer)
+      timer = undefined
+      localStorage.removeItem('restCount')
+      localStorage.removeItem('endTime')
+    }
+  }, 1000)
+}
 
 // 登录
 const isLoading = ref(false)

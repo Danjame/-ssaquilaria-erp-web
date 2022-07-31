@@ -107,8 +107,8 @@ const loadTraces = async () => {
 // 下载二维码
 const downloadQRCode = async (trace: Trace) => {
   const a = document.createElement('a')
-  a.href = await QRCode.toDataURL(trace.code, { width: 300 })
-  a.download = `${trace.transaction.product.name}_${trace.code}`
+  a.href = await QRCode.toDataURL(trace.serialNum, { width: 300 })
+  a.download = `${trace.transaction.product.name}_${trace.serialNum}`
   a.click()
   a.remove()
 }

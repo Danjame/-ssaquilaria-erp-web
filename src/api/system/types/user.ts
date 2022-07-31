@@ -15,11 +15,6 @@ export interface User {
   updatedAt: Date
 }
 
-export interface Auth {
-  username: string;
-  password: string;
-}
-
 export interface CurrentUser {
   name: string
   status: boolean
