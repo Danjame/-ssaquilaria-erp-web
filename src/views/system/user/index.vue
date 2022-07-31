@@ -6,7 +6,6 @@
     :data="users"
     :load="loadUsers"
     :handler-a="openForm"
-    :handler-btns="false"
   >
     <template #form-item>
       <el-form-item label="用户名称" prop="name">
@@ -20,6 +19,7 @@
     </template>
     <template #table-column>
       <el-table-column label="用户名称" prop="name" align="center" />
+      <el-table-column label="手机号码" prop="phone" align="center" />
       <el-table-column label="用户邮箱" prop="email" align="center" />
       <el-table-column label="最近登录时间" align="center">
         <template #default="scope">
@@ -108,11 +108,15 @@ const loadUsers = async () => {
   count.value = total
 }
 
-// 编辑组件
+// 新增与编辑组件
 const formVisible = ref(false)
 const userId = ref<number | undefined>(undefined)
 const openForm = (payload: number | MouseEvent) => {
-  if (typeof payload === 'number') userId.value = payload
+  if (typeof payload === 'number') {
+    userId.value = payload
+  } else {
+    userId.value = undefined
+  }
   formVisible.value = true
 }
 

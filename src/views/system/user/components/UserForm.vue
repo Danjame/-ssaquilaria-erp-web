@@ -1,8 +1,11 @@
 <template>
-  <Dialog title="编辑用户" :submit="handleSubmit">
+  <Dialog :title="id ? '编辑用户' : '新增用户'" :submit="handleSubmit">
     <el-form ref="form" :model="user" :rules="rules" label-width="100px">
       <el-form-item label="用户名称" prop="name">
         <el-input v-model="user.name" placeholder="请输入用户名称" />
+      </el-form-item>
+      <el-form-item label="手机号" prop="phone">
+        <el-input v-model="user.phone" placeholder="请输入手机号" />
       </el-form-item>
       <el-form-item label="用户邮箱" prop="email">
         <el-input v-model="user.email" placeholder="请输入用户邮箱" />
@@ -19,14 +22,13 @@
 <script lang="ts" setup>
 import { getAllRoles } from '@/api/system/role'
 import { Role } from '@/api/system/types/role'
-import { getUserById, updateUser } from '@/api/system/user'
+import { createUser, getUserById, updateUser } from '@/api/system/user'
 import { UserAttrs } from '@/api/system/types/user'
 import store from '@/store'
 
 const props = defineProps({
   id: {
     type: Number,
-    required: true,
     default: null
   }
 })
@@ -36,8 +38,12 @@ const rules = reactive({
   name: [
     { required: true, message: '用户名称不能为空', trigger: 'change' }
   ],
+  phone: [
+    { required: false, message: '手机号不能为空', trigger: 'change' },
+    { pattern: /^1\d{10}$/, message: '请输入正确的手机号', trigger: 'change' }
+  ],
   email: [
-    { required: true, message: '用户邮箱不能为空', trigger: 'change' }
+    { required: false, message: '用户邮箱不能为空', trigger: 'change' }
   ],
   roleIds: [
     { required: false, message: '用户角色不能为空', trigger: 'change' }
@@ -46,7 +52,7 @@ const rules = reactive({
 
 onMounted(() => {
   loadAllRoles()
-  loadUser()
+  if (props.id) loadUser()
 })
 
 const roles = ref<Role[]>()
@@ -57,8 +63,8 @@ const loadAllRoles = async () => {
 // 用户信息
 const user = reactive({} as UserAttrs)
 const loadUser = async () => {
-  const { name, email, roles } = await getUserById(props.id)
-  Object.assign(user, { name, email, roleIds: roles.map(role => role.id) })
+  const { name, phone, email, roles } = await getUserById(props.id)
+  Object.assign(user, { name, phone, email, roleIds: roles.map(role => role.id) })
 }
 
 // 表单提交
@@ -67,9 +73,14 @@ const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
-  // 验证通过
-  await updateUser(props.id, user)
-  ElMessage.success('更新成功')
+  // // 验证通过
+  if (!props.id) {
+    await createUser(user)
+    ElMessage.success('新增成功')
+  } else {
+    await updateUser(props.id, user)
+    ElMessage.success('更新成功')
+  }
 
   emit('submit')
 }

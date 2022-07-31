@@ -3,8 +3,9 @@ import { Department } from '@/api/organization/types/department'
 
 export interface User {
   id: number
-  name: string
   username: string
+  name: string
+  phone: string
   email: string
   roles: Role[]
   department: Department
@@ -30,6 +31,7 @@ export interface UserConditions {
 
 export interface UserAttrs {
   name?: string
+  phone?: string
   email?: string
   status?: boolean
   lastLogin?: Date
