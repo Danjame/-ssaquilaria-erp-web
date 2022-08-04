@@ -45,16 +45,16 @@ const props = defineProps({
 // 表单验证
 const rules = reactive({
   name: [
-    { required: true, message: '角色名称不能为空', trigger: 'change' }
+    { required: true, message: '角色名称不能为空', trigger: 'blur' }
   ],
   remark: [
-    { required: false, message: '描述不能为空', trigger: 'change' }
+    { required: false, message: '描述不能为空', trigger: 'blur' }
   ],
   permissionIds: [
-    { required: false, message: '角色权限不能为空', trigger: 'change' }
+    { required: false, message: '角色权限不能为空', trigger: 'blur' }
   ],
   menuIds: [
-    { required: false, message: '角色菜单不能为空', trigger: 'change' }
+    { required: false, message: '角色菜单不能为空', trigger: 'blur' }
   ]
 })
 

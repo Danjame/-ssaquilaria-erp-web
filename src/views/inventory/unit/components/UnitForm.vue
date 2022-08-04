@@ -25,16 +25,16 @@ const props = defineProps({
 // 表单验证
 const rules = reactive({
   name: [
-    { required: true, message: '单位名称不能为空', trigger: 'change' }
+    { required: true, message: '单位名称不能为空', trigger: 'blur' }
   ],
   value: [
-    { required: true, message: '单位编号不能为空', trigger: 'change' }
+    { required: true, message: '单位编号不能为空', trigger: 'blur' }
   ],
   label: [
-    { required: true, message: '单位标签不能为空', trigger: 'change' }
+    { required: true, message: '单位标签不能为空', trigger: 'blur' }
   ],
   description: [
-    { required: false, message: '描述不能为空', trigger: 'change' }
+    { required: false, message: '描述不能为空', trigger: 'blur' }
   ]
 })
 

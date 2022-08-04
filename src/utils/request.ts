@@ -40,6 +40,7 @@ request.interceptors.response.use(function (response) {
 }, function (error) {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
+  const { user } = store.state
 
   if (!error.response) {
     // 服务离线
@@ -55,24 +56,33 @@ request.interceptors.response.use(function (response) {
     // token 过期/无效
     switch (error.response.status) {
       case 401:
-        if (error.response.data.message === 'Invalid Username / Password') {
+        if (error.response.data.message === 'Invalid User') {
           return ElMessage.error('账号/密码不正确')
         }
 
         if (isRefreshing) return
+
         isRefreshing = true
-        ElMessageBox.confirm(
-          '您的登录状态已过期，请重新登录。',
-          '登录过期',
-          {
-            confirmButtonText: '登录',
-            cancelButtonText: '取消'
-          }
-        ).then(() => {
+
+        if (!user || !user.token) {
+          // First Login
           toLogin()
-        }).finally(() => {
           isRefreshing = false
-        })
+        } else {
+          // Token Expirated
+          ElMessageBox.confirm(
+            '您的登录状态已过期，请重新登录。',
+            '登录过期',
+            {
+              confirmButtonText: '登录',
+              cancelButtonText: '取消'
+            }
+          ).then(() => {
+            toLogin()
+          }).finally(() => {
+            isRefreshing = false
+          })
+        }
         break
       case 403:
         if (error.response.data.message === 'Account Disabled') {

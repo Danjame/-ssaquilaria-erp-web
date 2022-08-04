@@ -36,17 +36,17 @@ const props = defineProps({
 // 表单验证
 const rules = reactive({
   name: [
-    { required: true, message: '用户名称不能为空', trigger: 'change' }
+    { required: true, message: '用户名称不能为空', trigger: 'blur' }
   ],
   phone: [
-    { required: false, message: '手机号不能为空', trigger: 'change' },
-    { pattern: /^1\d{10}$/, message: '请输入正确的手机号', trigger: 'change' }
+    { required: false, message: '手机号不能为空', trigger: 'blur' },
+    { pattern: /^1\d{10}$/, message: '请输入正确的手机号', trigger: 'blur' }
   ],
   email: [
-    { required: false, message: '用户邮箱不能为空', trigger: 'change' }
+    { required: false, message: '用户邮箱不能为空', trigger: 'blur' }
   ],
   roleIds: [
-    { required: false, message: '用户角色不能为空', trigger: 'change' }
+    { required: false, message: '用户角色不能为空', trigger: 'blur' }
   ]
 })
 

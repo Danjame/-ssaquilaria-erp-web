@@ -24,10 +24,10 @@ const props = defineProps({
 
 const rules = reactive({
   name: [
-    { required: true, message: '记录类名称不能为空', trigger: 'change' }
+    { required: true, message: '记录类名称不能为空', trigger: 'blur' }
   ],
   remark: [
-    { required: false, message: '备注不能为空', trigger: 'change' }
+    { required: false, message: '备注不能为空', trigger: 'blur' }
   ]
 })
 

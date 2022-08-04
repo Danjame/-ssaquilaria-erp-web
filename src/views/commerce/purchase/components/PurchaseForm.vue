@@ -52,25 +52,25 @@ defineProps({
 // 表单验证
 const rules = reactive({
   orderNum: [
-    { required: true, message: '采购单号不能为空', trigger: 'change' }
+    { required: true, message: '采购单号不能为空', trigger: 'blur' }
   ],
   productId: [
-    { required: true, message: '产品不能为空', trigger: 'change' }
+    { required: true, message: '产品不能为空', trigger: 'blur' }
   ],
   supplierId: [
-    { required: true, message: '供应商不能为空', trigger: 'change' }
+    { required: true, message: '供应商不能为空', trigger: 'blur' }
   ],
   price: [
-    { required: true, message: '产品单价不能为空', trigger: 'change' }
+    { required: true, message: '产品单价不能为空', trigger: 'blur' }
   ],
   quantity: [
-    { required: true, validator: validateQty, trigger: 'change' }
+    { required: true, validator: validateQty, trigger: 'blur' }
   ],
   amount: [
-    { required: true, message: '产品金额不能为空', trigger: 'change' }
+    { required: true, message: '产品金额不能为空', trigger: 'blur' }
   ],
   comment: [
-    { required: false, message: '备注不能为空', trigger: 'change' }
+    { required: false, message: '备注不能为空', trigger: 'blur' }
   ]
 })
 

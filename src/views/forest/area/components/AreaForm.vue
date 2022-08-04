@@ -35,13 +35,13 @@ const props = defineProps({
 
 const rules = reactive({
   name: [
-    { required: true, message: '区域名称不能为空', trigger: 'change' }
+    { required: true, message: '区域名称不能为空', trigger: 'blur' }
   ],
   farmId: [
-    { required: true, message: '林场不能为空', trigger: 'change' }
+    { required: true, message: '林场不能为空', trigger: 'blur' }
   ],
   remark: [
-    { required: false, message: '备注不能为空', trigger: 'change' }
+    { required: false, message: '备注不能为空', trigger: 'blur' }
   ]
 })
 

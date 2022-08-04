@@ -56,25 +56,25 @@ const props = defineProps({
 
 const rules = reactive({
   name: [
-    { required: true, message: '产品名称不能为空', trigger: 'change' }
+    { required: true, message: '产品名称不能为空', trigger: 'blur' }
   ],
   categoryId: [
-    { required: true, message: '产品类别不能为空', trigger: 'change' }
+    { required: true, message: '产品类别不能为空', trigger: 'blur' }
   ],
   unitId: [
-    { required: true, message: '产品单位不能为空', trigger: 'change' }
+    { required: true, message: '产品单位不能为空', trigger: 'blur' }
   ],
   materialId: [
-    { required: false, message: '产品原料不能为空', trigger: 'change' }
+    { required: false, message: '产品原料不能为空', trigger: 'blur' }
   ],
   size: [
-    { required: true, message: '产品规格不能为空', trigger: 'change' }
+    { required: true, message: '产品规格不能为空', trigger: 'blur' }
   ],
   description: [
-    { required: false, message: '产品描述不能为空', trigger: 'change' }
+    { required: false, message: '产品描述不能为空', trigger: 'blur' }
   ],
   warnQty: [
-    { required: true, validator: validateQty, trigger: 'change' }
+    { required: true, validator: validateQty, trigger: 'blur' }
   ]
 })
 

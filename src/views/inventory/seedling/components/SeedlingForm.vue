@@ -35,16 +35,16 @@ const props = defineProps({
 
 const rules = reactive({
   name: [
-    { required: true, message: '树苗名称不能为空', trigger: 'change' }
+    { required: true, message: '树苗名称不能为空', trigger: 'blur' }
   ],
   unitId: [
-    { required: true, message: '树苗单位不能为空', trigger: 'change' }
+    { required: true, message: '树苗单位不能为空', trigger: 'blur' }
   ],
   description: [
-    { required: false, message: '描述不能为空', trigger: 'change' }
+    { required: false, message: '描述不能为空', trigger: 'blur' }
   ],
   warnQty: [
-    { required: true, validator: validateQty, trigger: 'change' }
+    { required: true, validator: validateQty, trigger: 'blur' }
   ]
 })
 

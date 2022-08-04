@@ -50,10 +50,10 @@ import store from '@/store'
 
 const rules = reactive({
   version: [
-    { required: true, message: '版本号不能为空', trigger: 'change' }
+    { required: true, message: '版本号不能为空', trigger: 'blur' }
   ],
   needUpdate: [
-    { required: true, message: '请选择是否强制更新', trigger: 'change' }
+    { required: true, message: '请选择是否强制更新', trigger: 'blur' }
   ]
 })
 

@@ -37,19 +37,19 @@ const props = defineProps({
 // 表单验证
 const rules = reactive({
   name: [
-    { required: true, message: '权限名不能为空', trigger: 'change' }
+    { required: true, message: '权限名不能为空', trigger: 'blur' }
   ],
   value: [
-    { required: true, message: '资源接口不能为空', trigger: 'change' }
+    { required: true, message: '资源接口不能为空', trigger: 'blur' }
   ],
   label: [
-    { required: true, message: '权限标签不能为空', trigger: 'change' }
+    { required: true, message: '权限标签不能为空', trigger: 'blur' }
   ],
   remark: [
-    { required: false, message: '描述不能为空', trigger: 'change' }
+    { required: false, message: '描述不能为空', trigger: 'blur' }
   ],
   actionIds: [
-    { required: false, message: '请求方法不能为空', trigger: 'change' }
+    { required: false, message: '请求方法不能为空', trigger: 'blur' }
   ]
 })
 

@@ -5,7 +5,7 @@
         <el-radio-group v-model="target">
           <el-radio-button :label="1">产品</el-radio-button>
           <el-radio-button :label="2">原料</el-radio-button>
-          <el-radio-button :label="3">树苗</el-radio-button>
+          <el-radio-button :label="3">苗木</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="变动形式" prop="method">
@@ -60,7 +60,7 @@ import { Seedling } from '@/api/inventory/types/seedling'
 import { createProductTransaction, createMaterialTransaction, createSeedlingTransaction } from '@/api/inventory/transaction'
 import { TransactionAttrs } from '@/api/inventory/types/transaction'
 import { validateQty } from '@/utils/validator'
-import { DECR, INCR, PROD, TAR } from '@/utils/constants'
+import { DECR, INCR, LOSS, PROD, TAR } from '@/utils/constants'
 
 defineProps({
   products: {
@@ -96,6 +96,10 @@ const methods = [
   {
     label: '贸易',
     value: TAR
+  },
+  {
+    label: '折损',
+    value: LOSS
   }
 ]
 
@@ -104,31 +108,31 @@ const target = ref(1)
 // 表单验证
 const rules = reactive({
   method: [
-    { required: true, message: '变动形式不能为空', trigger: 'change' }
+    { required: true, message: '变动形式不能为空', trigger: 'blur' }
   ],
   type: [
-    { required: true, message: '变动类型不能为空', trigger: 'change' }
+    { required: true, message: '变动类型不能为空', trigger: 'blur' }
   ],
   target: [
-    { required: true, message: '资产类型为必选项', trigger: 'change' }
+    { required: true, message: '资产类型为必选项', trigger: 'blur' }
   ],
   productId: [
-    { required: true, message: '产品不能为空', trigger: 'change' }
+    { required: true, message: '产品不能为空', trigger: 'blur' }
   ],
   materialId: [
-    { required: true, message: '原料不能为空', trigger: 'change' }
+    { required: true, message: '原料不能为空', trigger: 'blur' }
   ],
   seedlingId: [
-    { required: true, message: '树苗不能为空', trigger: 'change' }
+    { required: true, message: '苗木不能为空', trigger: 'blur' }
   ],
   quantity: [
-    { required: true, validator: validateQty, trigger: 'change' }
+    { required: true, validator: validateQty, trigger: 'blur' }
   ],
   weight: [
-    { required: true, message: '重量不能为空', trigger: 'change' }
+    { required: true, message: '重量不能为空', trigger: 'blur' }
   ],
   remark: [
-    { required: false, message: '备注不能为空', trigger: 'change' }
+    { required: false, message: '备注不能为空', trigger: 'blur' }
   ]
 })
 

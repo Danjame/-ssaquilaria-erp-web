@@ -52,25 +52,25 @@ const props = defineProps({
 
 const rules = reactive({
   name: [
-    { required: true, message: '树木品种不能为空', trigger: 'change' }
+    { required: true, message: '树木品种不能为空', trigger: 'blur' }
   ],
   farmId: [
-    { required: true, message: '所属林场不能为空', trigger: 'change' }
+    { required: true, message: '所属林场不能为空', trigger: 'blur' }
   ],
   areaId: [
-    { required: true, message: '林场区域不能为空', trigger: 'change' }
+    { required: true, message: '林场区域不能为空', trigger: 'blur' }
   ],
   positionX: [
-    { required: true, validator: validatePositionX, trigger: 'change' }
+    { required: true, validator: validatePositionX, trigger: 'blur' }
   ],
   positionY: [
-    { required: true, validator: validatePositionY, trigger: 'change' }
+    { required: true, validator: validatePositionY, trigger: 'blur' }
   ],
   machineCode: [
-    { required: true, message: '芯片码不能为空', trigger: 'change' }
+    { required: true, message: '芯片码不能为空', trigger: 'blur' }
   ],
   plantedAt: [
-    { required: true, message: '种植时间不能为空', trigger: 'change' }
+    { required: true, message: '种植时间不能为空', trigger: 'blur' }
   ]
 })
 

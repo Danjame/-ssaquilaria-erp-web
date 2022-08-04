@@ -63,25 +63,25 @@ const props = defineProps({
 
 const rules = reactive({
   name: [
-    { required: true, message: '原料名称不能为空', trigger: 'change' }
+    { required: true, message: '原料名称不能为空', trigger: 'blur' }
   ],
   rankId: [
-    { required: true, message: '原料级别不能为空', trigger: 'change' }
+    { required: true, message: '原料级别不能为空', trigger: 'blur' }
   ],
   unitId: [
-    { required: true, message: '原料单位不能为空', trigger: 'change' }
+    { required: true, message: '原料单位不能为空', trigger: 'blur' }
   ],
   farmId: [
-    { required: false, message: '所属林场不能为空', trigger: 'change' }
+    { required: false, message: '所属林场不能为空', trigger: 'blur' }
   ],
   areaId: [
-    { required: false, message: '林场区域不能为空', trigger: 'change' }
+    { required: false, message: '林场区域不能为空', trigger: 'blur' }
   ],
   description: [
-    { required: false, message: '描述不能为空', trigger: 'change' }
+    { required: false, message: '描述不能为空', trigger: 'blur' }
   ],
   warnQty: [
-    { required: true, validator: validateQty, trigger: 'change' }
+    { required: true, validator: validateQty, trigger: 'blur' }
   ]
 })
 

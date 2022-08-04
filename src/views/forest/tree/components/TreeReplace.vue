@@ -25,10 +25,10 @@ const props = defineProps({
 
 const rules = reactive({
   name: [
-    { required: false, message: '树木品种不能为空', trigger: 'change' }
+    { required: false, message: '树木品种不能为空', trigger: 'blur' }
   ],
   plantedAt: [
-    { required: true, message: '种植时间不能为空', trigger: 'change' }
+    { required: true, message: '种植时间不能为空', trigger: 'blur' }
   ]
 })
 

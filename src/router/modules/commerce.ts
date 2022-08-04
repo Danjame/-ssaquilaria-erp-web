@@ -18,16 +18,22 @@ const routes: RouteRecordRaw = {
       meta: { title: '销售' }
     },
     {
-      path: 'supplier',
-      name: 'supplier',
-      component: () => import('@/views/commerce/supplier/index.vue'),
-      meta: { title: '供应商' }
+      path: 'client',
+      name: 'client',
+      component: () => import('@/views/commerce/client/index.vue'),
+      meta: { title: '客户' }
     },
     {
       path: 'trace',
       name: 'trace',
       component: () => import('@/views/commerce/trace/index.vue'),
       meta: { title: '溯源' }
+    },
+    {
+      path: 'supplier',
+      name: 'supplier',
+      component: () => import('@/views/commerce/supplier/index.vue'),
+      meta: { title: '供应商' }
     }
   ]
 }
