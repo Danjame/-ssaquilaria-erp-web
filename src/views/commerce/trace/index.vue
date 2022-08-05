@@ -65,8 +65,6 @@
 import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getTracesByConditions, deleteTrace } from '@/api/commerce/trace'
-import { getAllMaterials } from '@/api/inventory/material'
-import { Material } from '@/api/inventory/types/material'
 import { Trace } from '@/api/commerce/types/trace'
 import { AVAILABLE } from '@/utils/constants'
 import moment from 'moment'
@@ -74,7 +72,6 @@ import QRCode from 'qrcode'
 
 onMounted(() => {
   loadAllProducts()
-  loadAllMaterials()
   loadTraces()
 })
 
@@ -82,12 +79,6 @@ onMounted(() => {
 const products = ref<Product[]>([])
 const loadAllProducts = async () => {
   products.value = await getAllProducts()
-}
-
-// 原料
-const materials = ref<Material[]>([])
-const loadAllMaterials = async () => {
-  materials.value = await getAllMaterials()
 }
 
 // 溯源列表

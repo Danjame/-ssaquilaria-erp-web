@@ -34,7 +34,11 @@
           <span>{{ scope.row.name ? scope.row.name : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="性别" prop="gender" align="center" />
+      <el-table-column label="性别" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.gender == 0 ? '男' : '女' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="手机号" align="center">
         <template #default="scope">
           <span>{{ scope.row.phone ? scope.row.phone : '-' }}</span>

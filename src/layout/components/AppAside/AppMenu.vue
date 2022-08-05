@@ -14,8 +14,8 @@
         </el-menu-item>
       </el-sub-menu>
       <el-menu-item v-else :key="menu.id" :index="menu.value">
+        <el-icon><component :is="menu.icon" /></el-icon>
         <template #title>
-          <el-icon><component :is="menu.icon" /></el-icon>
           <span>{{ menu.label }}</span>
         </template>
       </el-menu-item>
