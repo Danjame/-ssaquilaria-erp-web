@@ -6,22 +6,29 @@
     :data="permissions"
     :load="loadPermissions"
     :handler-a="openForm"
-    :filter="false"
   >
+    <template #form-item>
+      <el-form-item label="权限名" prop="name">
+        <el-input v-model="listParams.name" placeholder="请输入权限名" />
+      </el-form-item>
+      <el-form-item label="标签" prop="label">
+        <el-input v-model="listParams.label" placeholder="请输入标签" />
+      </el-form-item>
+    </template>
     <template #table-column>
-      <el-table-column label="权限" prop="label" align="center" />
       <el-table-column label="权限名" prop="name" align="center" />
-      <el-table-column label="资源接口" prop="value" align="center" />
-      <el-table-column label="描述" align="center">
-        <template #default="scope">
-          <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
-        </template>
-      </el-table-column>
+      <el-table-column label="标签" prop="label" align="center" />
+      <el-table-column label="资源接口" prop="url" align="center" />
       <el-table-column label="请求方法" align="center">
         <template #default="scope">
           <el-space>
-            <el-tag v-for="(action, i) in scope.row.actions" :key="i"> {{ action.name }}</el-tag>
+            <el-tag> {{ scope.row.method }}</el-tag>
           </el-space>
+        </template>
+      </el-table-column>
+      <el-table-column label="描述" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="150" align="center" fixed="right">
@@ -59,6 +66,8 @@ onMounted(() => {
 
 // 权限列表
 const listParams = reactive({
+  name: undefined,
+  label: undefined,
   page: 1,
   size: 10
 })
@@ -92,6 +101,14 @@ const handleDelete = async (id: number) => {
   ElMessage.success('删除成功')
   loadPermissions()
 }
+
+// 监听参数变化
+watch(() => listParams.name, name => {
+  listParams.name = !name ? undefined : name
+})
+watch(() => listParams.label, label => {
+  listParams.label = !label ? undefined : label
+})
 </script>
 
 <style lang="scss" scoped>

@@ -9,7 +9,7 @@
       </el-form-item>
       <el-form-item label="角色权限" prop="permissionIds">
         <el-select v-model="role.permissionIds" multiple placeholder="请选择权限">
-          <el-option v-for="(permission, i) in permissions" :key="i" :label="permission.label" :value="permission.id" />
+          <el-option v-for="(permission, i) in permissions" :key="i" :label="permission.name" :value="permission.id" />
         </el-select>
       </el-form-item>
       <el-form-item label="角色菜单" prop="menuIds">

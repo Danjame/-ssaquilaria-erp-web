@@ -1,26 +1,25 @@
-import { Action } from './action'
-
 export interface Permission {
   id: number
   name: string
-  value: string
   label: string
+  url: string
+  method: string
   remark: string
-  actions: Action[]
   createdAt: Date
   updatedAt: Date
 }
 
 export interface PermissionConditions {
   name?: string
+  label?: string
   page?: number
   size?: number
 }
 
 export interface PermissionAttrs {
   name?: string
-  value?: string
   label?: string
+  url?: string
+  method?: string
   remark?: string
-  actionIds?: number[]
 }

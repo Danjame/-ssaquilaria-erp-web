@@ -2,10 +2,13 @@ import request from '@/utils/request'
 import { Area, AreaAttrs, AreaConditions } from './types/area'
 import { PageResult } from '../types'
 
-export const getAreasByFarm = (id: number) => {
+export const getAreasByFarm = (farmId: number) => {
   return request<Area[]>({
     method: 'GET',
-    url: `/forest/areas/by-farm/${id}`
+    url: '/forest/areas',
+    params: {
+      farmId
+    }
   })
 }
 

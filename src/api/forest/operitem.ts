@@ -2,10 +2,13 @@ import request from '@/utils/request'
 import { OperItem, OperItemAttrs, OperItemConditions } from './types/operitem'
 import { PageResult } from '../types'
 
-export const getOperItemsByOperType = (id: number) => {
+export const getOperItemsByOperType = (operTypeId: number) => {
   return request<OperItem[]>({
     method: 'GET',
-    url: `/forest/operitems/by-opertype/${id}`
+    url: '/forest/operitems',
+    params: {
+      operTypeId
+    }
   })
 }
 

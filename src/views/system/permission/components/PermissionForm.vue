@@ -1,30 +1,26 @@
 <template>
   <Dialog :title="id ? '编辑权限' : '新增权限'" :submit="handleSubmit">
     <el-form ref="form" :model="permission" :rules="rules" label-width="100px">
-      <el-form-item label="权限" prop="label">
-        <el-input v-model="permission.label" placeholder="请输入权限标签" />
-      </el-form-item>
       <el-form-item label="权限名" prop="name">
         <el-input v-model="permission.name" placeholder="请输入权限名" />
       </el-form-item>
-      <el-form-item label="资源接口" prop="value">
-        <el-input v-model="permission.value" placeholder="请输入资源接口" />
+      <el-form-item label="标签" prop="label">
+        <el-input v-model="permission.label" placeholder="请输入权限标签" />
+      </el-form-item>
+      <el-form-item label="资源接口" prop="url">
+        <el-input v-model="permission.url" placeholder="请输入资源接口" />
+      </el-form-item>
+      <el-form-item label="请求方法" prop="method">
+        <el-input v-model="permission.method" placeholder="请输入请求方法" />
       </el-form-item>
       <el-form-item label="描述" prop="remark">
         <el-input type="textarea" v-model="permission.remark" autosize placeholder="请输入描述" />
-      </el-form-item>
-      <el-form-item label="请求方法" prop="actionIds">
-        <el-select v-model="permission.actionIds" multiple placeholder="请选择权限">
-          <el-option v-for="(action, i) in actions" :key="i" :label="action.name" :value="action.id" />
-        </el-select>
       </el-form-item>
     </el-form>
   </Dialog>
 </template>
 
 <script lang="ts" setup>
-import { getAllActions } from '@/api/system/action'
-import { Action } from '@/api/system/types/action'
 import { createPermission, getPermissionById, updatePermission } from '@/api/system/permission'
 
 const props = defineProps({
@@ -39,54 +35,48 @@ const rules = reactive({
   name: [
     { required: true, message: '权限名不能为空', trigger: 'blur' }
   ],
-  value: [
+  label: [
+    { required: true, message: '标签不能为空', trigger: 'blur' }
+  ],
+  url: [
     { required: true, message: '资源接口不能为空', trigger: 'blur' }
   ],
-  label: [
-    { required: true, message: '权限标签不能为空', trigger: 'blur' }
+  method: [
+    { required: false, message: '请求方法不能为空', trigger: 'blur' }
   ],
   remark: [
     { required: false, message: '描述不能为空', trigger: 'blur' }
-  ],
-  actionIds: [
-    { required: false, message: '请求方法不能为空', trigger: 'blur' }
   ]
 })
 
 onMounted(() => {
-  loadAllActions()
   if (props.id) loadPermission()
 })
-
-// 方法
-const actions = ref<Action[]>()
-const loadAllActions = async () => {
-  actions.value = await getAllActions()
-}
 
 // 权限
 const permission = reactive({
   name: '',
-  value: '',
   label: '',
+  url: '',
+  method: '',
   remark: '',
   actionIds: [] as number[]
 })
 const loadPermission = async () => {
   const {
     name,
-    value,
     label,
-    remark,
-    actions
+    url,
+    method,
+    remark
   } = await getPermissionById(props.id)
 
   Object.assign(permission, {
     name,
-    value,
     label,
-    remark,
-    actionIds: actions ? actions.map(action => action.id) : []
+    url,
+    method,
+    remark
   })
 }
 
