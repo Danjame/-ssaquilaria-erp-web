@@ -1,7 +1,7 @@
 <template>
   <el-card>
     <div class="camera_header">
-      <span class="camera_title">实时监控</span>
+      <p class="camera_title">实时监控</p>
       <span class="title_line" />
     </div>
     <el-form class="camera_form">
@@ -92,7 +92,6 @@ watch(() => camera.channel, channel => {
   display: flex;
   align-items: center;
 }
-
 .camera_title {
   height: 60px;
   width: 60px;
