@@ -11,6 +11,7 @@
     "@element-plus/icons-vue": "^0.2.7",
     "axios": "^0.24.0",
     "element-plus": "^2.2.9",
+    "ezuikit-js": "^0.6.1",
     "moment": "^2.29.4",
     "qrcode": "^1.5.1",
     "vue": "^3.2.37",
