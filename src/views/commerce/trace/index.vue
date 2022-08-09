@@ -58,9 +58,9 @@
         </template>
       </el-table-column>
       <el-table-column label="查询次数" prop="queryCount" align="center" />
-      <el-table-column label="操作" align="center" fixed="right">
+      <el-table-column label="操作" min-width="150" align="center" fixed="right">
         <template #default="scope">
-          <el-space>
+          <el-space spacer="|">
             <el-button type="primary" link @click="downloadQRCode(scope.row)">下载二维码</el-button>
             <el-popconfirm title="确定要删除该溯源项吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>

@@ -46,7 +46,7 @@
       </el-table-column>
       <el-table-column label="林区数量" prop="areaCount" align="center" />
       <el-table-column label="树木数量" prop="treeCount" align="center" />
-      <el-table-column label="操作" width="120" align="center" fixed="right">
+      <el-table-column label="操作" min-width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
             <el-button type="primary" link @click="openForm(scope.row.id)">编辑</el-button>

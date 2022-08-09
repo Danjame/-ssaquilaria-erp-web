@@ -52,15 +52,13 @@
           <span>{{ scope.row.comment ? scope.row.comment : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="100" align="center" fixed="right">
+      <el-table-column label="操作" align="center" fixed="right">
         <template #default="scope">
-          <el-space>
-            <el-popconfirm title="确定要删除该采购订单吗?" @confirm="handleDelete(scope.row.id)">
-              <template #reference>
-                <el-button type="primary" link>删除</el-button>
-              </template>
-            </el-popconfirm>
-          </el-space>
+          <el-popconfirm title="确定要删除该采购订单吗?" @confirm="handleDelete(scope.row.id)">
+            <template #reference>
+              <el-button type="primary" link>删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </template>

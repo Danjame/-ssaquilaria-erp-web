@@ -30,9 +30,9 @@
           <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150" align="center" fixed="right">
+      <el-table-column label="操作" min-width="150" align="center" fixed="right">
         <template #default="scope">
-          <el-space>
+          <el-space spacer="|">
             <el-button type="primary" link @click="openForm(scope.row.id)">编辑</el-button>
             <el-button type="primary" link @click="openSetting(scope.row.id)">配置</el-button>
             <el-popconfirm title="确定要删除该部门吗?" @confirm="handleDelete(scope.row.id)">

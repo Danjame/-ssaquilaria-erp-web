@@ -44,11 +44,9 @@
           <span>{{ scope.row.phone ? scope.row.phone : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="100" align="center" fixed="right">
+      <el-table-column label="操作" align="center" fixed="right">
         <template #default="scope">
-          <el-space>
-            <el-button type="primary" link @click="openForm(scope.row.id)">编辑</el-button>
-          </el-space>
+          <el-button type="primary" link @click="openForm(scope.row.id)">编辑</el-button>
         </template>
       </el-table-column>
     </template>

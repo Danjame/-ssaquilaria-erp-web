@@ -59,7 +59,7 @@
       <el-table-column label="库存" prop="stockQty" align="center" />
       <el-table-column label="入库数量" prop="incomingQty" align="center" />
       <el-table-column label="出库数量" prop="outgoingQty" align="center" />
-      <el-table-column label="操作" width="100" align="center" fixed="right">
+      <el-table-column label="操作" min-width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
             <el-button type="primary" link @click="openForm(scope.row.id)">编辑</el-button>
