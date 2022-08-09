@@ -1,6 +1,6 @@
 <template>
   <Index
-    title="树苗"
+    title="苗木"
     :params="listParams"
     :count="count"
     :data="seedlings"
@@ -8,12 +8,12 @@
     :handler-a="openForm"
   >
     <template #form-item>
-      <el-form-item label="树苗名称" prop="name">
-        <el-input v-model="listParams.name" placeholder="请输入树苗名称" />
+      <el-form-item label="苗木名称" prop="name">
+        <el-input v-model="listParams.name" placeholder="请输入苗木名称" />
       </el-form-item>
     </template>
     <template #table-column>
-      <el-table-column label="树苗名称" prop="name" align="center" />
+      <el-table-column label="苗木名称" prop="name" align="center" />
       <el-table-column label="单位" align="center">
         <template #default="scope">
           <span>{{ scope.row.unit.name }}</span>
@@ -31,7 +31,7 @@
         <template #default="scope">
           <el-space spacer="|">
             <el-button type="primary" link @click="openForm(scope.row.id)">编辑</el-button>
-            <el-popconfirm title="确定要删除该树苗吗?" @confirm="handleDelete(scope.row.id)">
+            <el-popconfirm title="确定要删除该苗木吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="primary" link>删除</el-button>
               </template>
@@ -60,7 +60,7 @@ onMounted(() => {
   loadSeedlings()
 })
 
-// 树苗列表
+// 苗木列表
 const listParams = reactive({
   name: undefined,
   page: 1,

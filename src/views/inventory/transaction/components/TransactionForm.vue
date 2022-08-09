@@ -28,8 +28,8 @@
           <el-option v-for="(material, i) in materials" :key="i" :label="material.name + '(' + material.unit.name + ')'" :value="material.id" />
         </el-select>
       </el-form-item>
-      <el-form-item v-if="target === 3" label="树苗" prop="seedlingId">
-        <el-select v-model="transaction.seedlingId" placeholder="请选择树苗">
+      <el-form-item v-if="target === 3" label="苗木" prop="seedlingId">
+        <el-select v-model="transaction.seedlingId" placeholder="请选择苗木">
           <el-option v-for="(seedling, i) in seedlings" :key="i" :label="seedling.name + '(' + seedling.unit.name + ')'" :value="seedling.id" />
         </el-select>
       </el-form-item>

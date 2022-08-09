@@ -33,8 +33,8 @@
           <el-option v-for="(material, i) in materials" :key="i" :label="material.name" :value="material.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="树苗" prop="seedlingId">
-        <el-select v-model="listParams.seedlingId" placeholder="请选择树苗" clearable :disabled="listParams.target && listParams.target != SEEDLING">
+      <el-form-item label="苗木" prop="seedlingId">
+        <el-select v-model="listParams.seedlingId" placeholder="请选择苗木" clearable :disabled="listParams.target && listParams.target != SEEDLING">
           <el-option v-for="(seedling, i) in seedlings" :key="i" :label="seedling.name" :value="seedling.id" />
         </el-select>
       </el-form-item>
@@ -57,7 +57,7 @@
       </el-table-column>
       <el-table-column label="资产类型" align="center">
         <template #default="scope">
-          <span>{{ scope.row.product ? '产品' : (scope.row.material ? '原料' : '树苗') }}</span>
+          <span>{{ scope.row.product ? '产品' : (scope.row.material ? '原料' : '苗木') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="资产名称" align="center">
@@ -112,7 +112,7 @@ import { Seedling } from '@/api/inventory/types/seedling'
 import { getTransactionsByConditions, deleteTransaction } from '@/api/inventory/transaction'
 import { Transaction } from '@/api/inventory/types/transaction'
 import moment from 'moment'
-import { DECR, INCR, MATERIAL, PROD, PRODUCT, SEEDLING, TAR } from '@/utils/constants'
+import { DECR, INCR, LOSS, MATERIAL, PROD, PRODUCT, SEEDLING, TAR } from '@/utils/constants'
 
 const types = [
   {
@@ -133,6 +133,10 @@ const methods = [
   {
     label: '贸易',
     value: TAR
+  },
+  {
+    label: '折损',
+    value: LOSS
   }
 ]
 
@@ -146,7 +150,7 @@ const targets = [
     value: MATERIAL
   },
   {
-    label: '树苗',
+    label: '苗木',
     value: SEEDLING
   }
 ]
@@ -170,7 +174,7 @@ const loadAllMaterials = async () => {
   materials.value = await getAllMaterials()
 }
 
-// 树苗
+// 苗木
 const seedlings = ref<Seedling[]>([])
 const loadAllSeedlings = async () => {
   seedlings.value = await getAllSeedlings()

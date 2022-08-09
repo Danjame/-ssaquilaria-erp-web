@@ -1,8 +1,8 @@
 <template>
-  <Dialog :title="id ? '编辑树苗' : '新增树苗'" :submit="handleSubmit">
+  <Dialog :title="id ? '编辑苗木' : '新增苗木'" :submit="handleSubmit">
     <el-form ref="form" :rules="rules" :model="seedling" label-width="100px">
-      <el-form-item label="树苗名称" prop="name">
-        <el-input v-model="seedling.name" placeholder="请输入树苗名称" />
+      <el-form-item label="苗木名称" prop="name">
+        <el-input v-model="seedling.name" placeholder="请输入苗木名称" />
       </el-form-item>
       <el-form-item label="单位" prop="unitId">
         <el-select v-model="seedling.unitId" placeholder="请选择单位">
@@ -35,10 +35,10 @@ const props = defineProps({
 
 const rules = reactive({
   name: [
-    { required: true, message: '树苗名称不能为空', trigger: 'blur' }
+    { required: true, message: '苗木名称不能为空', trigger: 'blur' }
   ],
   unitId: [
-    { required: true, message: '树苗单位不能为空', trigger: 'blur' }
+    { required: true, message: '苗木单位不能为空', trigger: 'blur' }
   ],
   description: [
     { required: false, message: '描述不能为空', trigger: 'blur' }
@@ -60,7 +60,7 @@ const loadAllUnits = async () => {
   units.value = results
 }
 
-// 树苗信息
+// 苗木信息
 const seedling = reactive({} as SeedlingAttrs)
 const loadSeedling = async () => {
   const {
