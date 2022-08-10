@@ -1,7 +1,7 @@
 import { Transaction } from '@/api/inventory/types/transaction'
 import { Client } from './client'
 
-export interface Trace {
+export interface Commodity {
   id: number
   traceNum: string
   serialNum: string
@@ -12,7 +12,7 @@ export interface Trace {
   updatedAt: Date
 }
 
-export interface TraceConditions {
+export interface CommodityConditions {
   serialNum?: string
   productId?: number
   page?: number

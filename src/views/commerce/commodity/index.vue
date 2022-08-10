@@ -1,10 +1,10 @@
 <template>
   <Index
-    title="溯源"
+    title="商品"
     :params="listParams"
     :count="count"
-    :data="traces"
-    :load="loadTraces"
+    :data="commodities"
+    :load="loadCommodities"
     :handler-btns="false"
   >
     <template #form-item>
@@ -62,7 +62,7 @@
         <template #default="scope">
           <el-space spacer="|">
             <el-button type="primary" link @click="downloadQRCode(scope.row)">下载二维码</el-button>
-            <el-popconfirm title="确定要删除该溯源项吗?" @confirm="handleDelete(scope.row.id)">
+            <el-popconfirm title="确定要删除该商品项吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="primary" link>删除</el-button>
               </template>
@@ -77,8 +77,8 @@
 <script lang="ts" setup>
 import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
-import { getTracesByConditions, deleteTrace } from '@/api/commerce/trace'
-import { Trace } from '@/api/commerce/types/trace'
+import { getCommoditiesByConditions, deleteCommodity } from '@/api/commerce/commodity'
+import { Commodity } from '@/api/commerce/types/commodity'
 import { AVAILABLE, SOLD } from '@/utils/constants'
 import moment from 'moment'
 import QRCode from 'qrcode'
@@ -96,7 +96,7 @@ const statuses = [
 
 onMounted(() => {
   loadAllProducts()
-  loadTraces()
+  loadCommodities()
 })
 
 // 产品
@@ -105,7 +105,7 @@ const loadAllProducts = async () => {
   products.value = await getAllProducts()
 }
 
-// 溯源列表
+// 商品列表
 const listParams = reactive({
   serialNum: undefined,
   productId: undefined,
@@ -113,41 +113,39 @@ const listParams = reactive({
   page: 1,
   size: 10
 })
-const traces = ref<Trace[]>([])
+const commodities = ref<Commodity[]>([])
 const count = ref(0)
-const loadTraces = async () => {
-  const data = await getTracesByConditions(listParams)
-  traces.value = data.results
+const loadCommodities = async () => {
+  const data = await getCommoditiesByConditions(listParams)
+  commodities.value = data.results
   count.value = data.count
 }
 
 // 下载二维码
-const downloadQRCode = async (trace: Trace) => {
+const downloadQRCode = async (commodity: Commodity) => {
   const canvas = document.createElement('canvas')
 
-  QRCode.toCanvas(canvas, trace.traceNum, { margin: 6 }, error => {
-    console.log(error)
+  QRCode.toCanvas(canvas, commodity.traceNum, { margin: 6 }, error => {
+    ElMessage.error('下载失败：' + error.message)
   })
   const ctx = canvas.getContext('2d')
 
   if (ctx) {
-    console.log(canvas.width)
-    console.log(canvas.height)
     ctx.font = '14px Arial'
-    ctx.fillText(trace.serialNum, 23, 158)
+    ctx.fillText(commodity.serialNum, 23, 158)
   }
 
   const a = document.createElement('a')
   a.href = canvas.toDataURL()
-  a.download = `${trace.transaction.product.name}_${trace.serialNum}`
+  a.download = `${commodity.transaction.product.name}_${commodity.serialNum}`
   a.click()
   a.remove()
 }
 
 const handleDelete = async (id: number) => {
-  await deleteTrace(id)
+  await deleteCommodity(id)
   ElMessage.success('删除成功')
-  loadTraces()
+  loadCommodities()
 }
 
 // 监听参数变化

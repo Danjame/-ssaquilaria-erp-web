@@ -1,4 +1,4 @@
-import { Trace } from './trace'
+import { Commodity } from './commodity'
 
 export interface Client {
   id: number
@@ -8,7 +8,7 @@ export interface Client {
   gender: number
   phone: string
   avatar: string
-  traces: Trace[]
+  commodities: Commodity[]
   createdAt: Date
   updatedAt: Date
 }
