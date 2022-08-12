@@ -35,7 +35,7 @@
             <el-input v-model="apk.version" placeholder="请输入版本号" />
           </el-form-item>
           <el-form-item label="更新" prop="needUpdate">
-            <el-select v-model="apk.needUpdate" placeholder="是否强制更新" clearable>
+            <el-select v-model="apk.needUpdate" placeholder="是否强制更新">
               <el-option v-for="(item, i) in status" :key="i" :label="item.name" :value="item.value" />
             </el-select>
           </el-form-item>

@@ -5,65 +5,114 @@
     :count="count"
     :data="sales"
     :load="loadSales"
-    :handler-a="() => {formVisible = true }"
+    :handler-a="() => { saleFormVisible = true }"
   >
     <template #form-item>
-      <el-form-item label="销售单号" prop="orderNum">
-        <el-input v-model="listParams.orderNum" placeholder="请输入销售单号" />
+      <el-form-item label="单号" prop="orderNum">
+        <el-input v-model="listParams.orderNum" placeholder="请输入单号" />
+      </el-form-item>
+      <el-form-item label="下单客户" prop="customer">
+        <el-input v-model="listParams.customer" placeholder="请输入客户名" />
       </el-form-item>
       <el-form-item label="产品" prop="productId">
-        <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
+        <el-select v-model="listParams.productId" placeholder="请选择产品" clearable>
           <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="客户编号" prop="customerId">
-        <el-input v-model="listParams.customerId" placeholder="请输入客户编号" />
-      </el-form-item>
     </template>
     <template #table-column>
+      <el-table-column type="expand">
+        <template #default="props">
+          <h3>商品</h3>
+          <el-table :data="props.row.commodities" border>
+            <el-table-column label="序列号" prop="serialNum" align="center" />
+            <el-table-column label="商品名称" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.transaction?.product ? scope.row.transaction.product.name : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="规格" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.transaction?.product ? scope.row.transaction.product.size : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="单位" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.transaction?.product?.unit ? scope.row.transaction.product.unit.name : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="售价(元)" prop="price" align="center" />
+          </el-table>
+          <h3>退换历史</h3>
+          <el-table :data="props.row.changes" border>
+            <el-table-column label="时间" align="center">
+              <template #default="scope">
+                <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="退货" align="center">
+              <template #default="scope">
+                <template v-for="(item, i) in scope.row.return" :key="i">
+                  <el-tag>
+                    {{ item }}
+                  </el-tag>
+                  (-{{ scope.row.refund[i] }} 元)
+                </template>
+              </template>
+            </el-table-column>
+            <el-table-column label="补货" align="center">
+              <template #default="scope">
+                <template v-for="(item, i) in scope.row.leave" :key="i">
+                  <el-tag>
+                    {{ item }}
+                  </el-tag>
+                  ({{ scope.row.charge[i] }} 元)
+                </template>
+              </template>
+            </el-table-column>
+            <el-table-column label="退/补(元)" prop="amount" align="center" />
+          </el-table>
+        </template>
+      </el-table-column>
       <el-table-column label="销售单号" prop="orderNum" align="center" />
       <el-table-column label="时间" align="center">
         <template #default="scope">
           <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产品名称" align="center">
-        <template #default="scope">
-          <span>{{ scope.row.product.name }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="客户编号" prop="customerId" align="center" />
-      <el-table-column label="单价" prop="price" align="center" />
-      <el-table-column label="数量" prop="quantity" align="center" />
-      <el-table-column label="金额" prop="amount" align="center" />
+      <el-table-column label="商品数量" prop="quantity" align="center" />
+      <el-table-column label="金额(元)" prop="amount" align="center" />
+      <el-table-column label="下单客户" prop="customer" align="center" />
       <el-table-column label="备注" align="center">
         <template #default="scope">
-          <span>{{ scope.row.comment ? scope.row.comment : '-' }}</span>
+          <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" fixed="right">
+      <el-table-column label="操作" min-width="130" align="center" fixed="right">
         <template #default="scope">
-          <el-popconfirm title="确定要删除该销售订单吗?" @confirm="handleDelete(scope.row.id)">
-            <template #reference>
-              <el-button type="primary" link>删除</el-button>
-            </template>
-          </el-popconfirm>
+          <el-space spacer="|">
+            <el-button type="primary" link @click="openChangeForm(scope.row.id)">退换处理</el-button>
+            <el-popconfirm title="确定要删除该订单吗?" @confirm="handleDelete(scope.row.id)">
+              <template #reference>
+                <el-button type="primary" link>删除</el-button>
+              </template>
+            </el-popconfirm>
+          </el-space>
         </template>
       </el-table-column>
     </template>
     <template #a>
-      <SaleForm
-        v-if="formVisible"
-        v-model="formVisible"
-        :products="products"
-        @submit="onFormSubmitted"
-      />
+      <SaleForm v-if="saleFormVisible" v-model="saleFormVisible" @submit="onSaleFormSubmitted" />
+    </template>
+    <template #b>
+      <ChangeForm v-if="changeFormVisible" v-model="changeFormVisible" :id="saleId" @submit="onChangeFormSubmitted" />
     </template>
   </Index>
 </template>
 
 <script lang="ts" setup>
 import SaleForm from './components/SaleForm.vue'
+import ChangeForm from './components/ChangeForm.vue'
 import { getAllProducts } from '@/api/inventory/product'
 import { Product } from '@/api/inventory/types/product'
 import { getSalesByConditions, deleteSale } from '@/api/commerce/sale'
@@ -84,8 +133,8 @@ const loadAllProducts = async () => {
 // 销售列表
 const listParams = reactive({
   orderNum: undefined,
+  customer: undefined,
   productId: undefined,
-  customerId: undefined,
   page: 1,
   size: 10
 })
@@ -98,10 +147,23 @@ const loadSales = async () => {
 }
 
 // 新增组件
-const formVisible = ref(false)
+const saleFormVisible = ref(false)
 
-const onFormSubmitted = () => {
-  formVisible.value = false
+const onSaleFormSubmitted = () => {
+  saleFormVisible.value = false
+  loadSales()
+}
+
+// 变更组件
+const saleId = ref<number | undefined>(undefined)
+const changeFormVisible = ref(false)
+const openChangeForm = (id: number) => {
+  saleId.value = id
+  changeFormVisible.value = true
+}
+
+const onChangeFormSubmitted = () => {
+  changeFormVisible.value = false
   loadSales()
 }
 
@@ -115,8 +177,8 @@ const handleDelete = async (id: number) => {
 watch(() => listParams.orderNum, orderNum => {
   listParams.orderNum = !orderNum ? undefined : orderNum
 })
-watch(() => listParams.customerId, id => {
-  listParams.customerId = !id ? undefined : id
+watch(() => listParams.customer, customer => {
+  listParams.customer = !customer ? undefined : customer
 })
 watch(() => listParams.productId, id => {
   listParams.productId = !id ? undefined : id
@@ -124,5 +186,4 @@ watch(() => listParams.productId, id => {
 </script>
 
 <style lang="scss" scoped>
-
 </style>

@@ -29,7 +29,7 @@
       </el-descriptions-item>
       <el-descriptions-item label="审核人" align="center">{{ task.reviewer?.name }}</el-descriptions-item>
       <el-descriptions-item label="审核状态" align="center">
-        <el-select v-model="taskParams.status" placeholder="请选择状态" clearable :disabled="!!task.status">
+        <el-select v-model="taskParams.status" placeholder="请选择状态" :disabled="!!task.status">
           <el-option v-for="(item, i) in status" :key="i" :label="item.name" :value="item.value" />
         </el-select>
       </el-descriptions-item>

@@ -11,7 +11,14 @@
         <el-input v-model="user.email" placeholder="请输入用户邮箱" />
       </el-form-item>
       <el-form-item label="用户角色" prop="roleIds">
-        <el-select v-model="user.roleIds" multiple placeholder="请选择用户角色" :disabled="user.name === store.state.user?.name">
+        <el-select
+          v-model="user.roleIds"
+          multiple
+          collapse-tags
+          collapse-tags-tooltip
+          placeholder="请选择用户角色"
+          :disabled="user.name === store.state.user?.name"
+        >
           <el-option v-for="(role, i) in roles" :key="i" :label="role.name" :value="role.id" />
         </el-select>
       </el-form-item>

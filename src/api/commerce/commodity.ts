@@ -10,6 +10,14 @@ export const getCommoditiesByConditions = (params?: CommodityConditions) => {
   })
 }
 
+export const getCommoditiesBySerialNums = (data: string[]) => {
+  return request<Commodity[]>({
+    method: 'POST',
+    url: '/commerce/commodities/by-serial-numbers/validate',
+    data
+  })
+}
+
 export const deleteCommodity = (id: number) => {
   return request<Commodity>({
     method: 'DELETE',
@@ -21,5 +29,12 @@ export const getCommodityById = (id: number) => {
   return request<Commodity>({
     method: 'GET',
     url: `/commerce/commodities/${id}`
+  })
+}
+
+export const getCommodityBySerialNum = (serialNum: string) => {
+  return request<Commodity>({
+    method: 'GET',
+    url: `/commerce/commodities/by-serial-number/${serialNum}`
   })
 }

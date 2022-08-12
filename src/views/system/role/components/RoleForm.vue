@@ -8,7 +8,13 @@
         <el-input type="textarea" v-model="role.remark" autosize placeholder="请输入描述" />
       </el-form-item>
       <el-form-item label="角色权限" prop="permissionIds">
-        <el-select v-model="role.permissionIds" multiple placeholder="请选择权限">
+        <el-select
+          v-model="role.permissionIds"
+          multiple
+          collapse-tags
+          collapse-tags-tooltip
+          placeholder="请选择权限"
+        >
           <el-option v-for="(permission, i) in permissions" :key="i" :label="permission.name" :value="permission.id" />
         </el-select>
       </el-form-item>

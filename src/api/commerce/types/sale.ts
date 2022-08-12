@@ -1,16 +1,18 @@
-import { Product } from '../../inventory/types/product'
-import { Transaction } from '../../inventory/types/transaction'
+import { Commodity } from './commodity'
+
+interface Goods {
+  serialNum: string
+  price: number
+}
 
 export interface Sale {
   id: number
   orderNum: string
-  customerId: number
-  product: Product
+  customer: string
+  commodities: Commodity[]
   quantity: number
-  price: number
   amount: number
-  comment: string
-  transaction: Transaction
+  remark: string
   createdAt: Date
   updatedAt: Date
 }
@@ -23,11 +25,7 @@ export interface SaleConditions {
 }
 
 export interface SaleAttrs {
-  orderNum: string
-  productId: number | undefined
-  customerId?: number | undefined
-  price: number
-  quantity: number
-  amount: number
-  comment?: string
+  customer: string
+  goods: Goods[]
+  remark: string
 }

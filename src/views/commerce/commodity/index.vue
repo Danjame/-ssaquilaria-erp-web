@@ -52,7 +52,17 @@
           <el-tag v-else type="danger">已售</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="目标客户" align="center">
+      <el-table-column label="售价（元）" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.price ? scope.row.price : '-' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="下单客户" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.customer ? scope.row.customer : '-' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="客户微信" align="center">
         <template #default="scope">
           <span>{{ scope.row.client ? scope.row.client.nickname : '-' }}</span>
         </template>

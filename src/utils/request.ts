@@ -97,11 +97,11 @@ request.interceptors.response.use(function (response) {
             toLogin()
           })
         } else {
-          ElMessage.error('操作失败：' + error.response.data.message)
+          ElMessage.error(error.response.data.message)
         }
         break
       default:
-        ElMessage.error('操作失败：' + error.response.data.message)
+        ElMessage.error(error.response.data.message)
     }
   }
 

@@ -8,6 +8,8 @@ export interface Commodity {
   queryCount: number
   transaction: Transaction;
   client: Client
+  customer: string
+  price: number
   createdAt: Date
   updatedAt: Date
 }
