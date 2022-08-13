@@ -16,6 +16,7 @@
       </el-form-item>
     </template>
     <template #table-column>
+      <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="权限名" prop="name" align="center" />
       <el-table-column label="标签" prop="label" align="center" />
       <el-table-column label="资源接口" prop="url" align="center" />

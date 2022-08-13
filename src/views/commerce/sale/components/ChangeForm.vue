@@ -46,14 +46,14 @@
               <el-option
                 v-for="(commodity, i) in sale.commodities"
                 :key="i"
-                :label="commodity.transaction?.product?.name + ': ' + commodity.serialNum" :value="commodity.serialNum"
+                :label="commodity.product?.name + ': ' + commodity.serialNum" :value="commodity.serialNum"
               />
             </el-select>
           </el-form-item>
         </el-form>
         <el-form inline>
           <template v-for="(p, i) in change.return" :key="i">
-            <el-form-item :label="sale.commodities.find(item => item.serialNum === change.return[i])?.transaction?.product?.name">
+            <el-form-item :label="sale.commodities.find(item => item.serialNum === change.return[i])?.product?.name">
               <el-input v-model="change.return[i]" disabled />
             </el-form-item>
             <el-form-item label="退款(元)">
@@ -66,7 +66,7 @@
         <el-form inline>
           <template v-for="(c, i) in leave" :key="i">
             <el-form-item :label="c.productName">
-              <el-input v-model="change.leave[i]" placeholder="请输入序列号" @blur="onLeaveInputBlur(i)">
+              <el-input v-model="change.leave[i]" placeholder="请输入编号" @blur="onLeaveInputBlur(i)">
                 <template #append>
                   <el-button :icon="'Minus'" @click="handleDelete(i)" />
                 </template>
@@ -137,7 +137,7 @@ const handleDelete = (index: number) => {
 
 const onLeaveInputBlur = async (index: number) => {
   const commodity = await getCommodityBySerialNum(change.leave[index])
-  leave.value[index].productName = commodity?.transaction?.product?.name
+  leave.value[index].productName = commodity?.product?.name
 }
 
 // 表单提交

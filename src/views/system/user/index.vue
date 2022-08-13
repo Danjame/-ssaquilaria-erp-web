@@ -18,7 +18,8 @@
       </el-form-item>
     </template>
     <template #table-column>
-      <el-table-column label="用户名称" prop="name" align="center" />
+      <el-table-column label="序号" type="index" align="center" width="60" />
+      <el-table-column label="用户名" prop="name" align="center" />
       <el-table-column label="手机号码" prop="phone" align="center" />
       <el-table-column label="用户邮箱" prop="email" align="center" />
       <el-table-column label="最近登录时间" align="center">

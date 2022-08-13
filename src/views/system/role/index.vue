@@ -27,7 +27,8 @@
           </el-descriptions>
         </template>
       </el-table-column>
-      <el-table-column label="角色名称" prop="name" align="center" />
+      <el-table-column label="序号" type="index" align="center" width="60" />
+      <el-table-column label="角色名" prop="name" align="center" />
       <el-table-column label="描述" align="center">
         <template #default="scope">
           <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>

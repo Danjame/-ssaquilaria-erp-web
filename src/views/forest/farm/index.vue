@@ -38,7 +38,8 @@
           </el-descriptions>
         </template>
       </el-table-column>
-      <el-table-column label="林场名称" prop="name" align="center" />
+      <el-table-column label="序号" type="index" align="center" width="60" />
+      <el-table-column label="名称" prop="name" align="center" />
       <el-table-column label="地区" align="center">
         <el-table-column label="省份" prop="province" align="center" />
         <el-table-column label="城市" prop="city" align="center" />

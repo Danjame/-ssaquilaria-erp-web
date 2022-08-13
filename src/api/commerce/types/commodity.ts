@@ -1,4 +1,5 @@
 import { Transaction } from '@/api/inventory/types/transaction'
+import { Product } from '@/api/inventory/types/product'
 import { Client } from './client'
 
 export interface Commodity {
@@ -7,6 +8,7 @@ export interface Commodity {
   serialNum: string
   queryCount: number
   transaction: Transaction;
+  product: Product;
   client: Client
   customer: string
   price: number

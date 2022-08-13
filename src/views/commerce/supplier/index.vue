@@ -15,6 +15,7 @@
       </el-form-item>
     </template>
     <template #table-column>
+      <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="供应商名称" prop="name" align="center" />
       <el-table-column label="描述" align="center">
         <template #default="scope">

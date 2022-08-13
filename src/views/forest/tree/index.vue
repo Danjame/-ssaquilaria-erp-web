@@ -8,8 +8,8 @@
     :handler-a="openForm"
   >
     <template #form-item>
-      <el-form-item label="序列号" prop="serialNum">
-        <el-input v-model="listParams.serialNum" placeholder="请输入序列号" />
+      <el-form-item label="树木编号" prop="serialNum">
+        <el-input v-model="listParams.serialNum" placeholder="请输入树木编号" />
       </el-form-item>
       <el-form-item label="树木品种" prop="name">
         <el-input v-model="listParams.name" placeholder="请输入品种" />
@@ -35,7 +35,8 @@
       <el-button type="primary" :icon="'Upload'" @click="uploadVisible = true">批量上传</el-button>
     </template>
     <template #table-column>
-      <el-table-column label="序列号" prop="serialNum" align="center" min-width="140" />
+      <el-table-column label="序号" type="index" align="center" width="60" />
+      <el-table-column label="树木编号" prop="serialNum" align="center" min-width="140" />
       <el-table-column label="树木品种" prop="name" align="center" min-width="120" />
       <el-table-column label="所属林场" align="center">
         <template #default="scope">

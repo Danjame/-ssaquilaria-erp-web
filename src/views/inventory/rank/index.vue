@@ -9,6 +9,7 @@
     :filter="false"
   >
     <template #table-column>
+      <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="级别名称" prop="name" align="center" />
       <el-table-column label="规格" align="center">
         <template #default="scope">

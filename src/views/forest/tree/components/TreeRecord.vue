@@ -10,7 +10,7 @@
   >
     <!-- 基本信息 -->
     <el-descriptions :column="3" border>
-      <el-descriptions-item label="序列号" align="center">{{ tree.serialNum }}</el-descriptions-item>
+      <el-descriptions-item label="树木编号" align="center">{{ tree.serialNum }}</el-descriptions-item>
       <el-descriptions-item label="树木品种" align="center">{{ tree.name }}</el-descriptions-item>
       <el-descriptions-item label="所属林场" align="center">{{ tree.farm?.name }}</el-descriptions-item>
       <el-descriptions-item label="林场区域" align="center">{{ tree.area?.name }}</el-descriptions-item>
@@ -48,6 +48,7 @@
     </el-form>
     <!-- 内容表格 -->
     <el-table :data="records" v-loading="store.state.isLoading">
+      <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="时间" align="center" min-width="81">
         <template #default="scope">
           <span>{{ moment(scope.row.startedAt).format('YYYY/MM/DD HH:mm') }}</span>

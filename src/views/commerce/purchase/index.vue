@@ -23,6 +23,7 @@
       </el-form-item>
     </template>
     <template #table-column>
+      <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="采购单号" prop="orderNum" align="center" />
       <el-table-column label="时间" align="center">
         <template #default="scope">

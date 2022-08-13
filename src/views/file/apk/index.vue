@@ -18,6 +18,7 @@
       </el-form-item>
     </template>
     <template #table-column>
+      <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="版本号" prop="version" align="center" />
       <el-table-column label="上传时间" align="center">
         <template #default="scope">

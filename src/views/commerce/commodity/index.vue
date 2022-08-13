@@ -8,8 +8,8 @@
     :handler-btns="false"
   >
     <template #form-item>
-      <el-form-item label="序列号" prop="serialNum">
-        <el-input v-model="listParams.serialNum" placeholder="请输入序列号" />
+      <el-form-item label="商品编号" prop="serialNum">
+        <el-input v-model="listParams.serialNum" placeholder="请输入商品编号" />
       </el-form-item>
       <el-form-item label="产品" prop="productId">
         <el-select v-model="listParams.productId" placeholder="请选择产品" clearable>
@@ -23,27 +23,28 @@
       </el-form-item>
     </template>
     <template #table-column>
-      <el-table-column label="序列号" prop="serialNum" align="center" />
+      <el-table-column label="序号" type="index" align="center" width="60" />
+      <el-table-column label="商品编号" prop="serialNum" align="center" />
       <el-table-column label="产品" align="center">
         <template #default="scope">
-          <span>{{ scope.row.transaction?.product?.name }}</span>
+          <span>{{ scope.row.product?.name }}</span>
         </template>
       </el-table-column>
       <el-table-column label="产区" align="center">
         <el-table-column label="林场" align="center">
           <template #default="scope">
-            <span>{{ scope.row.transaction.product?.material?.farm ? scope.row.transaction.product?.material?.farm?.name : '-' }}</span>
+            <span>{{ scope.row.product?.material?.farm ? scope.row.product.material.farm.name : '-' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="林区" align="center">
           <template #default="scope">
-            <span>{{ scope.row.transaction.product?.material?.area ? scope.row.transaction.product?.material?.area?.name : '-' }}</span>
+            <span>{{ scope.row.product?.material?.area ? scope.row.product.material.area.name : '-' }}</span>
           </template>
         </el-table-column>
       </el-table-column>
       <el-table-column label="批次" align="center">
         <template #default="scope">
-          <span>{{ scope.row.transaction ? moment(scope.row.transaction.createdAt).format('YYYY/MM/DD HH:mm') : '-' }}</span>
+          <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" align="center">

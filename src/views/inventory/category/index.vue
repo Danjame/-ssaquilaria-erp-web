@@ -9,12 +9,13 @@
   >
     <template #form-item>
       <el-form-item label="产品名称" prop="productId">
-        <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
+        <el-select v-model="listParams.productId" placeholder="请选择产品" clearable>
           <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
         </el-select>
       </el-form-item>
     </template>
     <template #table-column>
+      <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="类别名称" prop="name" align="center" />
       <el-table-column label="描述" align="center">
         <template #default="scope">

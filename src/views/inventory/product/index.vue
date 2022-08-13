@@ -18,6 +18,7 @@
       </el-form-item>
     </template>
     <template #table-column>
+      <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="产品名称" prop="name" align="center" />
       <el-table-column label="产品类别" align="center">
         <template #default="scope">

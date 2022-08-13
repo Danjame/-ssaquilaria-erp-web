@@ -9,7 +9,8 @@
     :filter="false"
   >
     <template #table-column>
-      <el-table-column label="记录类名称" prop="name" align="center" />
+      <el-table-column label="序号" type="index" align="center" width="60" />
+      <el-table-column label="名称" prop="name" align="center" />
       <el-table-column label="记录项" min-width="600" align="center">
         <template #default="scope">
           <span v-if="!scope.row.operItems.length">-</span>

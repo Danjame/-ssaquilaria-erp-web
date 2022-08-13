@@ -51,6 +51,7 @@
           </el-descriptions>
         </template>
       </el-table-column>
+      <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="提交时间" align="center">
         <template #default="scope">
           <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>

@@ -14,10 +14,10 @@
           <el-button type="primary" size="small" :icon="'Plus'" circle @click="handleAdd" />
         </template>
       </el-table-column>
-      <el-table-column label="* 商品序列号" align="center">
+      <el-table-column label="* 商品编号" align="center">
         <template #default="scope">
           <el-form-item>
-            <el-input v-model="scope.row.serialNum" placeholder="请输入序列号" />
+            <el-input v-model="scope.row.serialNum" placeholder="请输入编号" />
           </el-form-item>
         </template>
       </el-table-column>
@@ -84,7 +84,7 @@ const handleSubmit = async () => {
   }
 
   if (sale.goods.some(item => item.serialNum === '')) {
-    ElMessage.error('商品序列号不能为空')
+    ElMessage.error('商品编号不能为空')
     return
   }
 
@@ -96,7 +96,7 @@ const handleSubmit = async () => {
     message: h(
       'div',
       null,
-      commodities.map(item => h('p', null, item.serialNum + ':' + item.transaction?.product?.name)).concat(
+      commodities.map(item => h('p', null, item.serialNum + ':' + item.product?.name)).concat(
         [
           h('p', null, '商品数量: ' + commodities.length + ' 件'),
           h('p', null, '金额: ' + sale.goods.reduce((sum, item) => (sum + item.price), 0) + ' 元')

@@ -25,56 +25,63 @@
         <template #default="props">
           <h3>商品</h3>
           <el-table :data="props.row.commodities" border>
-            <el-table-column label="序列号" prop="serialNum" align="center" />
+            <el-table-column label="序号" type="index" align="center" width="60" />
+            <el-table-column label="商品编号" prop="serialNum" align="center" />
             <el-table-column label="商品名称" align="center">
               <template #default="scope">
-                <span>{{ scope.row.transaction?.product ? scope.row.transaction.product.name : '-' }}</span>
+                <span>{{ scope.row.product ? scope.row.product.name : '-' }}</span>
               </template>
             </el-table-column>
             <el-table-column label="规格" align="center">
               <template #default="scope">
-                <span>{{ scope.row.transaction?.product ? scope.row.transaction.product.size : '-' }}</span>
+                <span>{{ scope.row.product ? scope.row.product.size : '-' }}</span>
               </template>
             </el-table-column>
             <el-table-column label="单位" align="center">
               <template #default="scope">
-                <span>{{ scope.row.transaction?.product?.unit ? scope.row.transaction.product.unit.name : '-' }}</span>
+                <span>{{ scope.row.product?.unit ? scope.row.product.unit.name : '-' }}</span>
               </template>
             </el-table-column>
             <el-table-column label="售价(元)" prop="price" align="center" />
           </el-table>
           <h3>退换历史</h3>
           <el-table :data="props.row.changes" border>
+            <el-table-column label="序号" type="index" align="center" width="60" />
             <el-table-column label="时间" align="center">
               <template #default="scope">
                 <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="退货" align="center">
+            <el-table-column label="退货" min-width="200" align="center">
               <template #default="scope">
-                <template v-for="(item, i) in scope.row.return" :key="i">
-                  <el-tag>
-                    {{ item }}
-                  </el-tag>
-                  (-{{ scope.row.refund[i] }} 元)
-                </template>
+                <el-row class="change-leave-label-row">
+                  <el-col :span="12">编号</el-col>
+                  <el-col :span="12">退款(元)</el-col>
+                </el-row>
+                <el-row class="change-leave-value-row" v-for="(item, i) in scope.row.return" :key="i">
+                  <el-col :span="12">{{ item }}</el-col>
+                  <el-col class="change-leave-value-row-right" :span="12">{{ scope.row.refund[i] ? '-' + scope.row.refund[i] : 0 }}</el-col>
+                </el-row>
               </template>
             </el-table-column>
-            <el-table-column label="补货" align="center">
+            <el-table-column label="补货" min-width="200" align="center">
               <template #default="scope">
-                <template v-for="(item, i) in scope.row.leave" :key="i">
-                  <el-tag>
-                    {{ item }}
-                  </el-tag>
-                  ({{ scope.row.charge[i] }} 元)
-                </template>
+                <el-row class="change-leave-label-row">
+                  <el-col :span="12">编号</el-col>
+                  <el-col :span="12">售价(元)</el-col>
+                </el-row>
+                <el-row class="change-leave-value-row" v-for="(item, i) in scope.row.leave" :key="i">
+                  <el-col :span="12">{{ item }}</el-col>
+                  <el-col class="change-leave-value-row-right" :span="12">{{ scope.row.charge[i] ?? 0 }}</el-col>
+                </el-row>
               </template>
             </el-table-column>
             <el-table-column label="退/补(元)" prop="amount" align="center" />
           </el-table>
         </template>
       </el-table-column>
-      <el-table-column label="销售单号" prop="orderNum" align="center" />
+      <el-table-column label="序号" type="index" align="center" width="60" />
+      <el-table-column label="单号" prop="orderNum" align="center" />
       <el-table-column label="时间" align="center">
         <template #default="scope">
           <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
@@ -186,4 +193,14 @@ watch(() => listParams.productId, id => {
 </script>
 
 <style lang="scss" scoped>
+.change-leave-label-row{
+  font-size: small;
+}
+.change-leave-value-row{
+  font-size: small;
+  border-top: 1px solid #E4E7ED;
+  &-right{
+    border-left: 1px solid #E4E7ED;
+  }
+}
 </style>
