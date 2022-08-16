@@ -193,14 +193,16 @@ watch(() => listParams.productId, id => {
 </script>
 
 <style lang="scss" scoped>
-.change-leave-label-row{
+.change-leave-label-row {
   font-size: small;
 }
-.change-leave-value-row{
+
+.change-leave-value-row {
   font-size: small;
-  border-top: 1px solid #E4E7ED;
-  &-right{
-    border-left: 1px solid #E4E7ED;
+  border-top: 1px solid var(--el-table-border-color);
+
+  &-right {
+    border-left: 1px solid var(--el-table-border-color);
   }
 }
 </style>
