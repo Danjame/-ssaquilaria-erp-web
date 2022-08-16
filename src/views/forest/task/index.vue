@@ -51,13 +51,13 @@
           </el-descriptions>
         </template>
       </el-table-column>
-      <el-table-column label="序号" type="index" align="center" width="60" />
-      <el-table-column label="提交时间" align="center">
+      <el-table-column class-name="task-table-column" label="序号" type="index" align="center" width="60" />
+      <el-table-column class-name="task-table-column" label="提交时间" align="center">
         <template #default="scope">
           <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="林区" align="center" min-width="120">
+      <el-table-column class-name="task-table-column" label="林区" align="center" min-width="120">
         <template #default="scope">
           <el-tag v-if="scope.row.farm && scope.row.area">{{ scope.row.farm.name + ': ' + scope.row.area.name }}</el-tag>
           <el-space v-else>
@@ -65,36 +65,57 @@
           </el-space>
         </template>
       </el-table-column>
-      <el-table-column label="棵数" prop="treeCount" align="center" />
-      <el-table-column label="记录类" align="center">
+      <el-table-column class-name="task-table-column" label="棵数" prop="treeCount" align="center" />
+      <el-table-column class-name="task-table-column" label="记录类" align="center">
         <template #default="scope">
           <span>{{ scope.row.operType?.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="记录项" align="center">
+      <el-table-column class-name="task-table-column" label="记录项" align="center">
         <template #default="scope">
           <span>{{ scope.row.operItem ? scope.row.operItem.name : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="数据" align="center">
+      <el-table-column class-name="task-table-column" label="数据" align="center">
         <template #default="scope">
           <span>{{ scope.row.operData ? scope.row.operData : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="用时(分)" prop="duration" align="center" />
-      <el-table-column label="申请人" align="center">
+      <el-table-column class-name="task-table-column" label="用时(分)" prop="duration" align="center" />
+      <el-table-column class-name="task-table-column" label="申请人" align="center">
         <template #default="scope">
           <span>{{ scope.row.operator?.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工单状态" align="center">
+      <el-table-column class-name="task-table-column task-picture-table-column" label="图片" align="center">
+        <template #default="scope">
+          <el-image
+            style="width: 50px; height: 50px;"
+            fit="cover"
+            :src="scope.row.srcList && scope.row.srcList.length ? scope.row.srcList[0] : null"
+            :preview-src-list="scope.row.srcList"
+          >
+            <template #placeholder>
+              <div class="image-slot">
+                <el-icon><component :is="'Picture'" /></el-icon>
+              </div>
+            </template>
+            <template #error>
+              <div class="image-slot">
+                <el-icon><component :is="'DocumentDelete'" /></el-icon>
+              </div>
+            </template>
+          </el-image>
+        </template>
+      </el-table-column>
+      <el-table-column class-name="task-table-column" label="工单状态" align="center">
         <template #default="scope">
           <el-tag v-if="scope.row.status === 1" type="success">通过</el-tag>
           <el-tag v-else-if="scope.row.status === 2" type="danger">驳回</el-tag>
           <el-tag v-else type="warning">待审核</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" fixed="right">
+      <el-table-column class-name="task-table-column" label="操作" align="center" fixed="right">
         <template #default="scope">
           <el-button type="primary" link @click="openForm(scope.row.id)">{{ scope.row.status === 0 ? '审核' : '查看' }}</el-button>
         </template>
@@ -121,6 +142,7 @@ import { getAllUsers } from '@/api/system/user'
 import { User } from '@/api/system/types/user'
 import { getTasksByConditions } from '@/api/forest/task'
 import { Task } from '@/api/forest/types/task'
+import { downloadImage } from '@/api/file/image'
 import moment from 'moment'
 
 onMounted(() => {
@@ -183,6 +205,10 @@ const loadTasks = async () => {
   const data = await getTasksByConditions(listParams)
   tasks.value = data.results
   count.value = data.count
+
+  tasks.value.forEach(async item => {
+    if (item.images && item.images.length) item.srcList = await downloadImage(item.images)
+  })
 }
 
 // 审查组件
@@ -226,5 +252,27 @@ watch(() => listParams.status, status => {
 <style lang="scss">
 .task-desc-label.el-descriptions__label {
   width: 20%;
+}
+
+.task-table-column {
+
+  &.el-table__cell {
+    position: static;
+  }
+}
+
+.el-table__body-wrapper .task-picture-table-column .cell {
+  line-height: 0px;
+
+  .image-slot {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: var(--el-fill-color-light);
+    color: var(--el-text-color-secondary);
+    font-size: 14px;
+  }
 }
 </style>

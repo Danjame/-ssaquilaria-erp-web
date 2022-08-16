@@ -20,6 +20,7 @@ export interface Task {
   endedAt: Date
   duration: number
   images: string[]
+  srcList: string[]
   remark: string
   operator: User
   review: string

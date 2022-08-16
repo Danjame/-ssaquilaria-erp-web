@@ -24,7 +24,14 @@
       <el-descriptions-item label="备注" align="center">{{ task.remark }}</el-descriptions-item>
       <el-descriptions-item label="图片" align="center">
         <el-space size="large">
-          <el-image v-for="(image, i) in srcList" :key="i" style="height: 100px" fit="cover" :src="image" :preview-src-list="srcList" />
+          <el-image
+            v-for="(image, i) in task.srcList" :key="i"
+            style="height: 100px"
+            fit="cover"
+            :src="image"
+            :preview-src-list="task.srcList"
+            :initial-index="i"
+          />
         </el-space>
       </el-descriptions-item>
       <el-descriptions-item label="审核人" align="center">{{ task.reviewer?.name }}</el-descriptions-item>
@@ -77,14 +84,13 @@ const status = [
 
 // 工单信息
 const task = reactive({} as Task)
-const srcList = ref<string[]>([])
 const loadTask = async () => {
   Object.assign(task, await getTaskById(props.id))
   taskParams.status = task.status ? task.status : undefined
   taskParams.review = task.review
 
   // 图片处理
-  srcList.value = await downloadImage(task.images)
+  if (task.images && task.images.length) task.srcList = await downloadImage(task.images)
 }
 
 // 表单提交

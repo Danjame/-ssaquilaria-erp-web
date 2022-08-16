@@ -100,16 +100,25 @@
           <span>{{ scope.row.reviewer?.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="图片" align="center">
+      <el-table-column class-name="record-picture-table-column" label="图片" align="center">
         <template #default="scope">
-          <el-popover width="auto" placement="bottom" trigger="click" @show="onImageShow(scope.row.images)">
-            <el-space>
-              <el-image v-for="(img, i) in srcList" :key="i" style="width: 80px" fit="cover" :src="img" :preview-src-list="srcList" />
-            </el-space>
-            <template #reference>
-              <el-button :icon="'Picture'" circle />
+          <el-image
+            style="width: 50px; height: 50px;"
+            fit="cover"
+            :src="scope.row.srcList && scope.row.srcList.length ? scope.row.srcList[0] : null"
+            :preview-src-list="scope.row.srcList"
+          >
+            <template #placeholder>
+              <div class="image-slot">
+                <el-icon><component :is="'Picture'" /></el-icon>
+              </div>
             </template>
-          </el-popover>
+            <template #error>
+              <div class="image-slot">
+                <el-icon><component :is="'DocumentDelete'" /></el-icon>
+              </div>
+            </template>
+          </el-image>
         </template>
       </el-table-column>
     </el-table>
@@ -207,12 +216,10 @@ const loadRecordsByTree = async () => {
   const data = await getRecordsByTree(listParams)
   records.value = data.results
   count.value = data.count
-}
 
-// 图片处理
-const srcList = ref([] as string[])
-const onImageShow = async (images: string[]) => {
-  srcList.value = await downloadImage(images)
+  records.value.forEach(async item => {
+    if (item.images && item.images.length) item.srcList = await downloadImage(item.images)
+  })
 }
 
 // 监听参数变化
@@ -240,8 +247,28 @@ watch(() => listParams.reviewerId, id => {
 <style lang="scss">
 .record-dialog-container {
   min-width: 1000px;
+
   .record-form-select {
     width: 150px;
+  }
+
+  .el-table .el-table__cell {
+    position: static;
+  }
+
+  .el-table__body-wrapper .record-picture-table-column .cell {
+    line-height: 0px;
+
+    .image-slot {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: var(--el-fill-color-light);
+      color: var(--el-text-color-secondary);
+      font-size: 14px;
+    }
   }
 }
 </style>

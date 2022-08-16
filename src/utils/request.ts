@@ -101,7 +101,9 @@ request.interceptors.response.use(function (response) {
         }
         break
       default:
-        ElMessage.error(error.response.data.message)
+        if (error.response.data.message) {
+          ElMessage.error(error.response.data.message)
+        }
     }
   }
 
