@@ -37,7 +37,7 @@ onMounted(() => {
   if (props.id) loadClient()
 })
 
-// 供应商信息
+// 客户信息
 const client = reactive({} as ClientAttrs)
 const loadClient = async () => {
   const { name, phone } = await getClientById(props.id)

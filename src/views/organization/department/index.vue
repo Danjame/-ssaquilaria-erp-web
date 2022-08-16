@@ -74,7 +74,7 @@ onMounted(() => {
   loadDepartments()
 })
 
-// 类别列表
+// 部门列表
 const listParams = reactive({
   page: 1,
   size: 10

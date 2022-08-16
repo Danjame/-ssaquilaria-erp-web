@@ -71,7 +71,7 @@ onMounted(() => {
   loadClients()
 })
 
-// 类别列表
+// 客户列表
 const listParams = reactive({
   name: undefined,
   phone: undefined,

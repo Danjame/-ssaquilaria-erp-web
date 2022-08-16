@@ -6,6 +6,7 @@ import invRoutes from './modules/inventory'
 import frstRoutes from './modules/forest'
 import commRoutes from './modules/commerce'
 import fileRoutes from './modules/file'
+import nursRoutes from './modules/nursery'
 import { Menu } from '@/api/system/types/menu'
 import store from '@/store'
 
@@ -34,7 +35,8 @@ const routes: RouteRecordRaw[] = [
       invRoutes,
       frstRoutes,
       fileRoutes,
-      commRoutes
+      commRoutes,
+      nursRoutes
     ]
   },
   {

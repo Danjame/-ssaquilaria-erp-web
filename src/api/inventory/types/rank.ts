@@ -15,5 +15,5 @@ export interface RankConditions {
 export interface RankAttrs {
   name: string
   specification?: string
-  remark?: string;
+  remark?: string
 }

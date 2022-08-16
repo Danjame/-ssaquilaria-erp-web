@@ -179,7 +179,7 @@ const loadAllSeedlings = async () => {
   seedlings.value = await getAllSeedlings()
 }
 
-// 销售列表
+// 交易变动列表
 const listParams = reactive({
   type: undefined,
   method: undefined,

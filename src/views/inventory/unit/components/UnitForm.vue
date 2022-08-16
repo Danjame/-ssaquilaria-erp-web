@@ -27,13 +27,7 @@ const rules = reactive({
   name: [
     { required: true, message: '单位名称不能为空', trigger: 'blur' }
   ],
-  value: [
-    { required: true, message: '单位编号不能为空', trigger: 'blur' }
-  ],
-  label: [
-    { required: true, message: '单位标签不能为空', trigger: 'blur' }
-  ],
-  description: [
+  remark: [
     { required: false, message: '描述不能为空', trigger: 'blur' }
   ]
 })
@@ -45,8 +39,8 @@ onMounted(() => {
 // 单位信息
 const unit = reactive({} as UnitAttrs)
 const loadUnit = async () => {
-  const { name, value, label, description } = await getUnitById(props.id)
-  Object.assign(unit, { name, value, label, description })
+  const { name, remark } = await getUnitById(props.id)
+  Object.assign(unit, { name, remark })
 }
 
 // 表单提交
