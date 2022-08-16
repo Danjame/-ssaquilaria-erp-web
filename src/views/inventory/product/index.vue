@@ -8,6 +8,9 @@
     :handler-a="openForm"
   >
     <template #form-item>
+      <el-form-item label="产品编号" prop="serialNum">
+        <el-input v-model="listParams.serialNum" placeholder="请输入产品编号" />
+      </el-form-item>
       <el-form-item label="产品名称" prop="name">
         <el-input v-model="listParams.name" placeholder="请输入产品名称" />
       </el-form-item>
@@ -19,6 +22,7 @@
     </template>
     <template #table-column>
       <el-table-column label="序号" type="index" align="center" width="60" />
+      <el-table-column label="产品编号" prop="serialNum" align="center" />
       <el-table-column label="产品名称" prop="name" align="center" />
       <el-table-column label="产品类别" align="center">
         <template #default="scope">
@@ -89,6 +93,7 @@ const loadAllCategories = async () => {
 
 // 产品列表
 const listParams = reactive({
+  serialNum: undefined,
   name: undefined,
   categoryId: undefined,
   page: 1,
@@ -126,6 +131,9 @@ const handleDelete = async (id: number) => {
 }
 
 // 监听参数变化
+watch(() => listParams.serialNum, serialNum => {
+  listParams.serialNum = !serialNum ? undefined : serialNum
+})
 watch(() => listParams.name, name => {
   if (name === '') listParams.name = undefined
 })

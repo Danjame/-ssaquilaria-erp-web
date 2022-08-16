@@ -8,10 +8,8 @@
     :handler-a="openForm"
   >
     <template #form-item>
-      <el-form-item label="产品" prop="productId">
-        <el-select v-model="listParams.productId" placeholder="请选择产品名称" clearable>
-          <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
-        </el-select>
+      <el-form-item label="供应商名称" prop="name">
+        <el-input v-model="listParams.name" placeholder="请输入供应商名称" />
       </el-form-item>
     </template>
     <template #table-column>
@@ -48,25 +46,16 @@
 
 <script lang="ts" setup>
 import SupplierForm from './components/SupplierForm.vue'
-import { getAllProducts } from '@/api/inventory/product'
-import { Product } from '@/api/inventory/types/product'
 import { getSuppliersByConditions, deleteSupplier } from '@/api/commerce/supplier'
 import { Supplier } from '@/api/commerce/types/supplier'
 
 onMounted(() => {
-  loadAllProducts()
   loadSuppliers()
 })
 
-// 产品
-const products = ref<Product[]>([])
-const loadAllProducts = async () => {
-  products.value = await getAllProducts()
-}
-
 // 供应商列表
 const listParams = reactive({
-  productId: undefined,
+  name: undefined,
   page: 1,
   size: 10
 })
@@ -102,8 +91,8 @@ const handleDelete = async (id: number) => {
 }
 
 // 监听参数变化
-watch(() => listParams.productId, id => {
-  listParams.productId = !id ? undefined : id
+watch(() => listParams.name, name => {
+  listParams.name = !name ? undefined : name
 })
 </script>
 

@@ -1,7 +1,6 @@
 import { User } from '@/api/system/types/user'
 import { Product } from '../../inventory/types/product'
 import { Supplier } from './supplier'
-import { Transaction } from '../../inventory/types/transaction'
 
 export interface Purchase {
   id: number
@@ -12,8 +11,8 @@ export interface Purchase {
   quantity: number
   price: number
   amount: number
-  comment: string
-  transaction: Transaction
+  remark: string
+  returned: boolean
   createdAt: Date
   updatedAt: Date
 }
@@ -27,11 +26,10 @@ export interface PurchaseConditions {
 }
 
 export interface PurchaseAttrs {
-  orderNum: string
   productId: number | undefined
   supplierId: number | undefined
   price: number
   quantity: number
   amount: number
-  comment?: string
+  remark?: string
 }

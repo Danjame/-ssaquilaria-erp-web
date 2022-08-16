@@ -7,6 +7,7 @@ import { Material } from './material'
 
 export interface Product {
   id: number
+  serialNum: string
   name: string
   category: Category
   size: string
@@ -26,6 +27,7 @@ export interface Product {
 }
 
 export interface ProductConditions {
+  serialNum?: string
   name?: string
   categoryId?: number
   page?: number
@@ -33,6 +35,7 @@ export interface ProductConditions {
 }
 
 export interface ProductAttrs {
+  serialNum: string
   name: string
   categoryId: number | undefined
   unitId: number | undefined

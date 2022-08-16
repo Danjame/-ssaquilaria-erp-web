@@ -23,7 +23,7 @@
     <template #table-column>
       <el-table-column type="expand">
         <template #default="props">
-          <h3>商品</h3>
+          <h3 style="margin-left: 12px;">商品</h3>
           <el-table :data="props.row.commodities" border>
             <el-table-column label="序号" type="index" align="center" width="60" />
             <el-table-column label="商品编号" prop="serialNum" align="center" />
@@ -44,7 +44,7 @@
             </el-table-column>
             <el-table-column label="售价(元)" prop="price" align="center" />
           </el-table>
-          <h3>退换历史</h3>
+          <h3 style="margin-left: 12px;">退换历史</h3>
           <el-table :data="props.row.changes" border>
             <el-table-column label="序号" type="index" align="center" width="60" />
             <el-table-column label="时间" align="center">

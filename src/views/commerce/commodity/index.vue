@@ -23,11 +23,32 @@
       </el-form-item>
     </template>
     <template #table-column>
+      <el-table-column type="expand">
+        <template #default="props">
+          <h3 style="margin-left: 11px;">客户信息</h3>
+          <el-descriptions :column="1" border>
+            <el-descriptions-item width="50%" label="下单客户">
+              {{ props.row.customer ? props.row.customer : '-' }}
+            </el-descriptions-item>
+            <el-descriptions-item width="50%" label="客户微信名">
+              {{ props.row.client ? props.row.client.nickname : '-' }}
+            </el-descriptions-item>
+            <el-descriptions-item width="50%" label="查询次数">
+              {{ props.row.queryCount }}
+            </el-descriptions-item>
+          </el-descriptions>
+        </template>
+      </el-table-column>
       <el-table-column label="序号" type="index" align="center" width="60" />
-      <el-table-column label="商品编号" prop="serialNum" align="center" />
-      <el-table-column label="产品" align="center">
+      <el-table-column label="商品编码" prop="serialNum" align="center" />
+      <el-table-column label="产品名称" align="center">
         <template #default="scope">
           <span>{{ scope.row.product?.name }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="产品编码" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.product?.serialNum }}</span>
         </template>
       </el-table-column>
       <el-table-column label="产区" align="center">
@@ -58,17 +79,6 @@
           <span>{{ scope.row.price ? scope.row.price : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="下单客户" align="center">
-        <template #default="scope">
-          <span>{{ scope.row.customer ? scope.row.customer : '-' }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="客户微信" align="center">
-        <template #default="scope">
-          <span>{{ scope.row.client ? scope.row.client.nickname : '-' }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="查询次数" prop="queryCount" align="center" />
       <el-table-column label="操作" min-width="150" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
@@ -148,7 +158,7 @@ const downloadQRCode = async (commodity: Commodity) => {
 
   const a = document.createElement('a')
   a.href = canvas.toDataURL()
-  a.download = `${commodity.transaction.product.name}_${commodity.serialNum}`
+  a.download = `${commodity.product.name}_${commodity.serialNum}`
   a.click()
   a.remove()
 }

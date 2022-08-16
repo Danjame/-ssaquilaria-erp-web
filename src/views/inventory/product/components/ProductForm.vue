@@ -1,6 +1,9 @@
 <template>
   <Dialog :title="id ? '编辑产品' : '新增产品'" :submit="handleSubmit">
     <el-form ref="form" :rules="rules" :model="product" label-width="100px">
+      <el-form-item label="产品编号" prop="serialNum">
+        <el-input v-model="product.serialNum" placeholder="请输入产品编号" />
+      </el-form-item>
       <el-form-item label="产品名称" prop="name">
         <el-input v-model="product.name" placeholder="请输入产品名称" />
       </el-form-item>
@@ -55,6 +58,9 @@ const props = defineProps({
 })
 
 const rules = reactive({
+  serialNum: [
+    { required: true, message: '产品编号不能为空', trigger: 'blur' }
+  ],
   name: [
     { required: true, message: '产品名称不能为空', trigger: 'blur' }
   ],
@@ -102,20 +108,22 @@ const loadAllMaterials = async () => {
 const product = reactive({} as ProductAttrs)
 const loadProduct = async () => {
   const {
+    serialNum,
     name,
-    category: { id: categoryId },
-    unit: { id: unitId },
-    material: { id: materialId },
+    category,
+    unit,
+    material,
     size,
     description,
     warnQty
   } = await getProductById(props.id)
 
   Object.assign(product, {
+    serialNum,
     name,
-    categoryId,
-    unitId,
-    materialId,
+    categoryId: category?.id,
+    unitId: unit?.id,
+    materialId: material?.id,
     size,
     description,
     warnQty

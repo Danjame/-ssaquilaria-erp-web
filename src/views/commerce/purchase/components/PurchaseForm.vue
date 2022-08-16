@@ -1,9 +1,6 @@
 <template>
   <Dialog title="新增采购" :submit="handleSubmit">
     <el-form ref="form" :model="purchase" :rules="rules" label-width="100px">
-      <el-form-item label="采购单号" prop="orderNum" placeholder="请输入采购单号">
-        <el-input v-model="purchase.orderNum" placeholder="请输入采购单号" />
-      </el-form-item>
       <el-form-item label="产品" prop="productId">
         <el-select v-model="purchase.productId" placeholder="请选择产品" clearable>
           <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
@@ -23,8 +20,8 @@
       <el-form-item label="金额" prop="amount">
         <el-input-number v-model="purchase.amount" disabled :controls="false" :precision="2" placeholder="请输入产品金额" />
       </el-form-item>
-      <el-form-item label="备注" prop="comment">
-        <el-input type="textarea" v-model="purchase.comment" autosize placeholder="请输入备注" />
+      <el-form-item label="备注" prop="remark">
+        <el-input type="textarea" v-model="purchase.remark" autosize placeholder="请输入备注" />
       </el-form-item>
     </el-form>
   </Dialog>
@@ -51,9 +48,6 @@ defineProps({
 
 // 表单验证
 const rules = reactive({
-  orderNum: [
-    { required: true, message: '采购单号不能为空', trigger: 'blur' }
-  ],
   productId: [
     { required: true, message: '产品不能为空', trigger: 'blur' }
   ],
@@ -69,7 +63,7 @@ const rules = reactive({
   amount: [
     { required: true, message: '产品金额不能为空', trigger: 'blur' }
   ],
-  comment: [
+  remark: [
     { required: false, message: '备注不能为空', trigger: 'blur' }
   ]
 })

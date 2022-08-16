@@ -39,8 +39,8 @@ onMounted(() => {
 // 供应商信息
 const supplier = reactive({} as SupplierAttrs)
 const loadSupplier = async () => {
-  const { name, remark, description } = await getSupplierById(props.id)
-  Object.assign(supplier, { name, remark, description })
+  const { name, remark } = await getSupplierById(props.id)
+  Object.assign(supplier, { name, remark })
 }
 
 // 表单提交
