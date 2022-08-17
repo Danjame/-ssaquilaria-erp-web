@@ -31,22 +31,32 @@ const props = defineProps({
   }
 })
 
+// 监听参数变化
 interface EmitsType {
   (e: 'update:page', page: number): void
   (e: 'update:size', size: number): void
 }
 const emit = defineEmits<EmitsType>()
 
-// 监听参数变化
-watch(() => props.page, page => {
-  emit('update:page', page)
-  props.loadList && props.loadList()
+const page = computed({
+  get () {
+    return props.page
+  },
+  set (page) {
+    emit('update:page', page)
+    props.loadList && props.loadList()
+  }
 })
 
-watch(() => props.size, size => {
-  emit('update:size', size)
-  emit('update:page', 1)
-  props.loadList && props.loadList()
+const size = computed({
+  get () {
+    return props.size
+  },
+  set (size) {
+    emit('update:size', size)
+    emit('update:page', 1)
+    props.loadList && props.loadList()
+  }
 })
 
 </script>
