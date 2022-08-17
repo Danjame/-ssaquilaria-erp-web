@@ -6,6 +6,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     Dialog: typeof import('./components/Dialog/index.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
+    ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElBreadcrumb: typeof import('element-plus/es')['ElBreadcrumb']
     ElBreadcrumbItem: typeof import('element-plus/es')['ElBreadcrumbItem']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -42,6 +43,7 @@ declare module 'vue' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElTree: typeof import('element-plus/es')['ElTree']
     Icon: typeof import('./components/Icon/index.vue')['default']
     Index: typeof import('./components/Index/index.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']

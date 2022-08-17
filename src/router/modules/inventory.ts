@@ -3,7 +3,7 @@ import { RouteRecordRaw, RouterView } from 'vue-router'
 const routes: RouteRecordRaw = {
   path: 'inventory',
   component: RouterView,
-  meta: { title: '进销存' },
+  meta: { title: '库存管理' },
   children: [
     {
       path: 'product',
