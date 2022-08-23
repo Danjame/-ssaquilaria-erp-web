@@ -13,7 +13,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="数量" prop="quantity">
-        <el-input-number v-model="movement.quantity" :min="1" :controls="false" placeholder="请输入产品数量" />
+        <el-input-number v-model="movement.quantity" :min="1" placeholder="请输入产品数量" />
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" v-model="movement.remark" autosize placeholder="请输入备注" />

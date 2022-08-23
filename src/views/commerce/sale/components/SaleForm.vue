@@ -1,44 +1,47 @@
 <template>
-  <Dialog title="新增销售" :submit="handleSubmit">
-    <el-form ref="form" :model="sale" :rules="rules" label-width="90px">
-      <el-form-item label="下单客户" prop="customer">
+  <Dialog title="销售出库" :submit="handleSubmit">
+    <el-form ref="form" :model="sale" :rules="rules" label-width="60px">
+      <el-form-item label="客户" prop="customer">
         <el-input v-model="sale.customer" placeholder="请输入客户名称" />
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" v-model="sale.remark" autosize placeholder="请输入备注" />
       </el-form-item>
+      <el-form-item label="项目">
+        <el-table :data="sale.goods" style="width: 100%" border>
+          <el-table-column type="index" align="center" width="60">
+            <template #header>
+              <el-button type="primary" size="small" :icon="'Plus'" circle @click="handleAdd" />
+            </template>
+          </el-table-column>
+          <el-table-column label="* 商品编号" align="center">
+            <template #default="scope">
+              <el-form-item>
+                <el-input v-model="scope.row.serialNum" placeholder="请输入编号" />
+              </el-form-item>
+            </template>
+          </el-table-column>
+          <el-table-column label="售价(元)" align="center">
+            <template #default="scope">
+              <el-form-item>
+                <el-input-number v-model="scope.row.salePrice" :min="0" />
+              </el-form-item>
+            </template>
+          </el-table-column>
+          <el-table-column label="操作" width="60" align="center">
+            <template #default="scope">
+              <el-button type="primary" link @click="handleDelete(scope.$index)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-form-item>
+      <el-form-item label="数量" prop="quantity">
+        <el-input-number :model-value="qty" :controls="false" disabled />
+      </el-form-item>
+      <el-form-item label="金额" prop="amount">
+        <el-input-number :model-value="total" :controls="false" disabled />
+      </el-form-item>
     </el-form>
-    <el-table :data="sale.goods" style="width: 100%" border>
-      <el-table-column type="index" align="center" width="60">
-        <template #header>
-          <el-button type="primary" size="small" :icon="'Plus'" circle @click="handleAdd" />
-        </template>
-      </el-table-column>
-      <el-table-column label="* 商品编号" align="center">
-        <template #default="scope">
-          <el-form-item>
-            <el-input v-model="scope.row.serialNum" placeholder="请输入编号" />
-          </el-form-item>
-        </template>
-      </el-table-column>
-      <el-table-column label="售价(元)" align="center">
-        <template #default="scope">
-          <el-form-item>
-            <el-input-number v-model="scope.row.price" :min="0" />
-          </el-form-item>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="100" align="center" fixed="right">
-        <template #default="scope">
-          <el-button type="primary" link @click="handleDelete(scope.$index)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-row>
-      <el-col :span="12" :offset="12" style="height: 40px; line-height: 40px">
-        总计(元): {{ sale.goods.reduce((sum, item) => (sum + item.price), 0) }}
-      </el-col>
-    </el-row>
   </Dialog>
 </template>
 
@@ -52,6 +55,12 @@ const rules = reactive({
   customer: [
     { required: true, message: '下单客户不能为空', trigger: 'blur' }
   ],
+  quantity: [
+    { required: true, message: '数量不能为空', trigger: 'blur' }
+  ],
+  amount: [
+    { required: true, message: '金额不能为空', trigger: 'blur' }
+  ],
   remark: [
     { required: false, message: '备注不能为空', trigger: 'blur' }
   ]
@@ -62,10 +71,15 @@ const sale = reactive({
   customer: '',
   goods: [{
     serialNum: '',
-    price: 0
+    salePrice: 0
   }],
+  quantity: 0,
+  amount: 0,
   remark: ''
 } as SaleAttrs)
+
+const qty = computed(() => sale.goods.length)
+const total = computed(() => sale.goods.reduce((sum, item) => (sum + item.salePrice), 0))
 
 // 表单提交
 const form = ref<typeof ElForm>()
@@ -98,8 +112,8 @@ const handleSubmit = async () => {
       null,
       commodities.map(item => h('p', null, item.serialNum + ':' + item.product?.name)).concat(
         [
-          h('p', null, '商品数量: ' + commodities.length + ' 件'),
-          h('p', null, '金额: ' + sale.goods.reduce((sum, item) => (sum + item.price), 0) + ' 元')
+          h('p', null, '商品数量: ' + qty.value + ' 件'),
+          h('p', null, '金额: ' + total.value + ' 元')
         ]
       )
     ),
@@ -108,6 +122,8 @@ const handleSubmit = async () => {
     cancelButtonText: '取消'
   }).then(async () => {
     // 提交
+    sale.quantity = qty.value
+    sale.amount = total.value
     await createSale(sale)
     ElMessage.success('新增成功')
     emit('submit')
@@ -117,7 +133,7 @@ const handleSubmit = async () => {
 const handleAdd = () => {
   sale.goods.push({
     serialNum: '',
-    price: 0
+    salePrice: 0
   })
 }
 

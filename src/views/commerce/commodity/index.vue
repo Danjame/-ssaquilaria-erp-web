@@ -12,9 +12,12 @@
         <el-input v-model="listParams.serialNum" placeholder="请输入商品编号" />
       </el-form-item>
       <el-form-item label="产品" prop="productId">
-        <el-select v-model="listParams.productId" placeholder="请选择产品" clearable>
+        <el-select v-model="listParams.productId" placeholder="请选择产品" clearable :disabled="listParams.productSerialNum">
           <el-option v-for="(product, i) in products" :key="i" :label="product.name" :value="product.id" />
         </el-select>
+      </el-form-item>
+      <el-form-item label="产品编码" prop="productSerialNum">
+        <el-input v-model="listParams.productSerialNum" placeholder="请输入产品编码" :disabled="listParams.productId" />
       </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-select v-model="listParams.status" placeholder="请选择状态" clearable>
@@ -40,7 +43,7 @@
         </template>
       </el-table-column>
       <el-table-column label="序号" type="index" align="center" width="60" />
-      <el-table-column label="商品编码" prop="serialNum" align="center" />
+      <el-table-column label="商品编号" prop="serialNum" align="center" />
       <el-table-column label="产品名称" align="center">
         <template #default="scope">
           <span>{{ scope.row.product?.name }}</span>
@@ -130,6 +133,7 @@ const loadAllProducts = async () => {
 const listParams = reactive({
   serialNum: undefined,
   productId: undefined,
+  productSerialNum: undefined,
   status: undefined,
   page: 1,
   size: 10
@@ -174,7 +178,20 @@ watch(() => listParams.serialNum, num => {
   listParams.serialNum = !num ? undefined : num
 })
 watch(() => listParams.productId, id => {
-  listParams.productId = !id ? undefined : id
+  if (!id) {
+    listParams.productId = undefined
+  } else {
+    listParams.productId = id
+    listParams.productSerialNum = undefined
+  }
+})
+watch(() => listParams.productSerialNum, num => {
+  if (!num) {
+    listParams.productSerialNum = undefined
+  } else {
+    listParams.productSerialNum = num
+    listParams.productId = undefined
+  }
 })
 watch(() => listParams.status, status => {
   listParams.status = !status ? undefined : status

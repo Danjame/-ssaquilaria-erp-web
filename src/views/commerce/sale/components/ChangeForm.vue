@@ -68,7 +68,7 @@
             <el-form-item :label="c.productName">
               <el-input v-model="change.leave[i]" placeholder="请输入编号" @blur="onLeaveInputBlur(i)">
                 <template #append>
-                  <el-button :icon="'Minus'" @click="handleDelete(i)" />
+                  <el-button :icon="'Close'" @click="handleDelete(i)" />
                 </template>
               </el-input>
             </el-form-item>
@@ -136,8 +136,10 @@ const handleDelete = (index: number) => {
 }
 
 const onLeaveInputBlur = async (index: number) => {
-  const commodity = await getCommodityBySerialNum(change.leave[index])
-  leave.value[index].productName = commodity?.product?.name
+  if (change.leave[index]) {
+    const commodity = await getCommodityBySerialNum(change.leave[index])
+    leave.value[index].productName = commodity?.product?.name
+  }
 }
 
 // 表单提交

@@ -34,16 +34,6 @@ export interface MovementConditions {
   size?: number
 }
 
-export interface MovementAttrs {
-  type: number | undefined
-  quantity: number | undefined
-  goods?: Article[]
-  serialNums?: string[]
-  materialId?: number | undefined
-  saplingId?: number | undefined
-  remark?: string
-}
-
 export interface ProductMovementAttrs {
   type: number | undefined
   quantity: number | undefined

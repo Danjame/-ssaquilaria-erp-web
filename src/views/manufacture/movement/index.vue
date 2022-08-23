@@ -40,6 +40,48 @@
       <el-button type="primary" @click="openSmf">苗木出入库</el-button>
     </template>
     <template #table-column>
+      <el-table-column type="expand">
+        <template #default="props">
+          <h3 style="margin-left: 11px;">{{ targets.find(i => i['value'] === props.row.target)?.label }}</h3>
+          <el-table v-if="props.row.commodities.length" :data="props.row.commodities" border>
+            <el-table-column label="序号" type="index" align="center" width="60" />
+            <el-table-column label="产品名称" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.product ? scope.row.product.name : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="商品编号" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.serialNum ? scope.row.serialNum : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="规格" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.size ? scope.row.size : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="消耗原料" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.material ? scope.row.material.name : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="消耗数量" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.materialQty ? scope.row.materialQty + scope.row.material?.unit?.name : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="定价(元)" prop="fixedPrice" align="center" />
+          </el-table>
+          <el-descriptions v-else :column="1" border>
+            <el-descriptions-item label="名称" align="center" label-class-name="movement-desc-label">
+              {{ props.row.material ? props.row.material.name : (props.row.sapling ? props.row.sapling.name : '-') }}
+            </el-descriptions-item>
+            <el-descriptions-item label="单位" align="center" label-class-name="movement-desc-label">
+              {{ props.row.material ? props.row.material.unit.name : (props.row.sapling ? props.row.sapling.unit.name : '-') }}
+            </el-descriptions-item>
+          </el-descriptions>
+        </template>
+      </el-table-column>
       <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="时间" width="90" align="center">
         <template #default="scope">
@@ -54,21 +96,6 @@
       <el-table-column label="物料类型" align="center">
         <template #default="scope">
           <span>{{ targets.find(i => i['value'] === scope.row.target)?.label }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="物料名(编号)" align="center">
-        <template #default="scope">
-          <span v-if="scope.row.target !== 1">{{ scope.row.material ? scope.row.material.name : scope.row.sapling.name }}</span>
-          <el-space v-else>
-            <el-tag v-for="(c, i) in scope.row.commodities" :key="i">
-              {{ c.product.name }} : {{ c.serialNum }}
-            </el-tag>
-          </el-space>
-        </template>
-      </el-table-column>
-      <el-table-column label="定价" align="center">
-        <template #default="scope">
-          <span>{{ scope.row.fixedPrice ? scope.row.fixedPrice : '-' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="数量" prop="quantity" align="center" />
@@ -256,6 +283,8 @@ watch(() => listParams.saplingId, id => {
 })
 </script>
 
-<style lang="scss" scoped>
-
+<style lang="scss">
+.movement-desc-label.el-descriptions__label {
+  width: 20%;
+}
 </style>

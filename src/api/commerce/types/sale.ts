@@ -1,8 +1,8 @@
 import { Commodity } from './commodity'
 
-interface Goods {
+interface Article {
   serialNum: string
-  price: number
+  salePrice: number
 }
 
 export interface Sale {
@@ -26,6 +26,8 @@ export interface SaleConditions {
 
 export interface SaleAttrs {
   customer: string
-  goods: Goods[]
+  goods: Article[]
+  quantity: number
+  amount: number
   remark: string
 }

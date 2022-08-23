@@ -24,10 +24,3 @@ export const createPurchase = (data: PurchaseAttrs) => {
     data
   })
 }
-
-export const returnCommodities = (id: number) => {
-  return request<Purchase>({
-    method: 'PATCH',
-    url: `/commerce/purchases/${id}`
-  })
-}

@@ -9,14 +9,14 @@
     :close-on-press-escape="false"
     center
   >
-    <el-form ref="form" :model="movement" :rules="rules" label-width="100px">
+    <el-form ref="form" :model="movement" :rules="rules" label-width="70px">
       <el-form-item prop="type">
         <el-radio-group v-model="movement.type">
           <el-radio-button :label="DECR">出库</el-radio-button>
           <el-radio-button :label="INCR">入库</el-radio-button>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="产品">
+      <el-form-item label="项目">
         <el-table v-if="movement.type === INCR" :data="movement.goods" style="width: 100%" border>
           <el-table-column type="index" align="center" width="60">
             <template #header>
@@ -88,7 +88,7 @@
               </el-form-item>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center">
+          <el-table-column label="操作" width="100" align="center">
             <template #default="scope">
               <el-button type="primary" link @click="deleteSerialNum(scope.$index)">删除</el-button>
             </template>
@@ -96,7 +96,7 @@
         </el-table>
       </el-form-item>
       <el-form-item label="数量" prop="quantity">
-        {{ movement.type === INCR ? movement.goods!.reduce((sum, item) => (sum + item.quantity), 0) : movement.serialNums?.length }}
+        <el-input-number :model-value="qty" :controls="false" disabled />
       </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input type="textarea" v-model="movement.remark" autosize placeholder="请输入备注" />
@@ -161,6 +161,8 @@ const movement = reactive({
   remark: ''
 } as ProductMovementAttrs)
 
+const qty = computed(() => movement.type === INCR ? movement.goods!.reduce((sum, item) => (sum + item.quantity), 0) : movement.serialNums?.length)
+
 // 入库
 const addGoods = () => {
   movement.goods?.push({
@@ -191,7 +193,7 @@ const isLoading = ref(false)
 const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
-  movement.quantity = INCR ? movement.goods!.reduce((sum, item) => (sum + item.quantity), 0) : movement.serialNums?.length
+  movement.quantity = qty.value
   const { type, quantity, goods, serialNums, remark } = movement
 
   const valid = await form.value?.validate()
@@ -225,8 +227,7 @@ const handleCancel = () => {
 
 <style lang="scss">
 .product-movement-dialog-container {
-  width: 80%;
-  min-width: 1380px;
+  min-width: 1350px;
 
   .product-form-item {
     display: inline-flex;

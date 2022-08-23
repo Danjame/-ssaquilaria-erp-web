@@ -2,6 +2,13 @@ import { User } from '@/api/system/types/user'
 import { Commodity } from './commodity'
 import { Supplier } from './supplier'
 
+interface Article {
+  productId: number | undefined
+  size: string
+  purchasePrice: number
+  quantity: number
+}
+
 export interface Purchase {
   id: number
   orderNum: string
@@ -24,9 +31,8 @@ export interface PurchaseConditions {
 }
 
 export interface PurchaseAttrs {
-  productId: number | undefined
+  goods: Article[]
   supplierId: number | undefined
-  price: number
   quantity: number
   amount: number
   remark?: string

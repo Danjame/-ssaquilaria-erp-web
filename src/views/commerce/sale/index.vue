@@ -34,7 +34,7 @@
             </el-table-column>
             <el-table-column label="规格" align="center">
               <template #default="scope">
-                <span>{{ scope.row.product ? scope.row.product.size : '-' }}</span>
+                <span>{{ scope.row.size ? scope.row.size : '-' }}</span>
               </template>
             </el-table-column>
             <el-table-column label="单位" align="center">
@@ -42,7 +42,7 @@
                 <span>{{ scope.row.product?.unit ? scope.row.product.unit.name : '-' }}</span>
               </template>
             </el-table-column>
-            <el-table-column label="售价(元)" prop="price" align="center" />
+            <el-table-column label="售价(元)" prop="salePrice" align="center" />
           </el-table>
           <h3 style="margin-left: 12px;">退换历史</h3>
           <el-table :data="props.row.changes" border>
