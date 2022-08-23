@@ -102,6 +102,10 @@ request.interceptors.response.use(function (response) {
         break
       default:
         if (error.response.data.message) {
+          if (typeof error.response.data.message === 'object') {
+            error.response.data.message = error.response.data.message.toString()
+          }
+
           ElMessage.error(error.response.data.message)
         }
     }

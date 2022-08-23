@@ -1,5 +1,5 @@
 import { User } from '@/api/system/types/user'
-import { Product } from '../../inventory/types/product'
+import { Commodity } from './commodity'
 import { Supplier } from './supplier'
 
 export interface Purchase {
@@ -7,12 +7,10 @@ export interface Purchase {
   orderNum: string
   applicant: User
   supplier: Supplier
-  product: Product
+  commodities: Commodity[]
   quantity: number
-  price: number
   amount: number
   remark: string
-  returned: boolean
   createdAt: Date
   updatedAt: Date
 }

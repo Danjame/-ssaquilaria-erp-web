@@ -91,8 +91,8 @@
 
 <script lang="ts" setup>
 import PurchaseForm from './components/PurchaseForm.vue'
-import { getAllProducts } from '@/api/inventory/product'
-import { Product } from '@/api/inventory/types/product'
+import { getAllProducts } from '@/api/manufacture/product'
+import { Product } from '@/api/manufacture/types/product'
 import { getAllSuppliers } from '@/api/commerce/supplier'
 import { Supplier } from '@/api/commerce/types/supplier'
 import { getPurchasesByConditions, deletePurchase, returnCommodities } from '@/api/commerce/purchase'

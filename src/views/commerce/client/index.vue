@@ -5,8 +5,7 @@
     :count="count"
     :data="clients"
     :load="loadClients"
-    :handler-a="openForm"
-    :handler-btns="false"
+    :default-handler="false"
   >
     <template #form-item>
       <el-form-item label="名字" prop="name">

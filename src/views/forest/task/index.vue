@@ -5,8 +5,7 @@
     :count="count"
     :data="tasks"
     :load="loadTasks"
-    :handler-a="openForm"
-    :handler-btns="false"
+    :default-handler="false"
   >
     <template #form-item>
       <el-form-item label="记录类" prop="operTypeId">

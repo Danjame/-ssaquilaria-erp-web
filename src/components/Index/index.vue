@@ -11,8 +11,8 @@
         </el-form-item>
       </el-form>
       <slot name="form" />
-      <el-button-group v-if="handlerBtns">
-        <el-button type="primary" :icon="'Plus'" @click="handlerA">新增{{ title }}</el-button>
+      <el-button-group>
+        <el-button v-if="defaultHandler" type="primary" :icon="'Plus'" @click="handlerA">新增{{ title }}</el-button>
         <slot name="form-item-button" />
       </el-button-group>
     </template>
@@ -66,7 +66,7 @@ const props = defineProps({
     type: Boolean,
     default: true
   },
-  handlerBtns: {
+  defaultHandler: {
     type: Boolean,
     default: true
   }

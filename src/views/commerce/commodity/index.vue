@@ -5,7 +5,7 @@
     :count="count"
     :data="commodities"
     :load="loadCommodities"
-    :handler-btns="false"
+    :default-handler="false"
   >
     <template #form-item>
       <el-form-item label="商品编号" prop="serialNum">
@@ -54,12 +54,12 @@
       <el-table-column label="产区" align="center">
         <el-table-column label="林场" align="center">
           <template #default="scope">
-            <span>{{ scope.row.product?.material?.farm ? scope.row.product.material.farm.name : '-' }}</span>
+            <span>{{ scope.row.material?.farm ? scope.row.material.farm.name : '-' }}</span>
           </template>
         </el-table-column>
         <el-table-column label="林区" align="center">
           <template #default="scope">
-            <span>{{ scope.row.product?.material?.area ? scope.row.product.material.area.name : '-' }}</span>
+            <span>{{ scope.row.material?.area ? scope.row.material.area.name : '-' }}</span>
           </template>
         </el-table-column>
       </el-table-column>
@@ -96,8 +96,8 @@
 </template>
 
 <script lang="ts" setup>
-import { getAllProducts } from '@/api/inventory/product'
-import { Product } from '@/api/inventory/types/product'
+import { getAllProducts } from '@/api/manufacture/product'
+import { Product } from '@/api/manufacture/types/product'
 import { getCommoditiesByConditions, deleteCommodity } from '@/api/commerce/commodity'
 import { Commodity } from '@/api/commerce/types/commodity'
 import { AVAILABLE, SOLD } from '@/utils/constants'

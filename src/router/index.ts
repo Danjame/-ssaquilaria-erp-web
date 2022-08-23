@@ -2,7 +2,7 @@ import { createRouter, RouteRecordRaw, createWebHashHistory } from 'vue-router'
 import AppLayout from '@/layout/index.vue'
 import sysRoutes from './modules/system'
 import orgRoutes from './modules/organization'
-import invRoutes from './modules/inventory'
+import mfrRoutes from './modules/manufacture'
 import frstRoutes from './modules/forest'
 import commRoutes from './modules/commerce'
 import fileRoutes from './modules/file'
@@ -32,7 +32,7 @@ const routes: RouteRecordRaw[] = [
       },
       sysRoutes,
       orgRoutes,
-      invRoutes,
+      mfrRoutes,
       frstRoutes,
       fileRoutes,
       commRoutes,

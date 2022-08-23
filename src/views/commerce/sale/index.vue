@@ -120,8 +120,8 @@
 <script lang="ts" setup>
 import SaleForm from './components/SaleForm.vue'
 import ChangeForm from './components/ChangeForm.vue'
-import { getAllProducts } from '@/api/inventory/product'
-import { Product } from '@/api/inventory/types/product'
+import { getAllProducts } from '@/api/manufacture/product'
+import { Product } from '@/api/manufacture/types/product'
 import { getSalesByConditions, deleteSale } from '@/api/commerce/sale'
 import { Sale } from '@/api/commerce/types/sale'
 import moment from 'moment'

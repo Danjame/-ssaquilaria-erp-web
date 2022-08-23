@@ -5,7 +5,7 @@
     :count="count"
     :data="cultivations"
     :load="loadCultivations"
-    :handler-btns="false"
+    :default-handler="false"
   >
     <template #form-item>
       <el-form-item label="幼苗" prop="plantId">

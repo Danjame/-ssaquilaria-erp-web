@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { PropType } from 'vue'
-import { Product } from '@/api/inventory/types/product'
+import { Product } from '@/api/manufacture/types/product'
 import { Supplier } from '@/api/commerce/types/supplier'
 import { createPurchase } from '@/api/commerce/purchase'
 import { PurchaseAttrs } from '@/api/commerce/types/purchase'
