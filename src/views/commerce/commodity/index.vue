@@ -30,13 +30,10 @@
         <template #default="props">
           <h3 style="margin-left: 11px;">客户信息</h3>
           <el-descriptions :column="1" border>
-            <el-descriptions-item width="50%" label="下单客户">
-              {{ props.row.customer ? props.row.customer : '-' }}
-            </el-descriptions-item>
-            <el-descriptions-item width="50%" label="客户微信名">
+            <el-descriptions-item label="客户微信名" align="center" label-class-name="commodity-desc-label">
               {{ props.row.client ? props.row.client.nickname : '-' }}
             </el-descriptions-item>
-            <el-descriptions-item width="50%" label="查询次数">
+            <el-descriptions-item label="查询次数" align="center" label-class-name="commodity-desc-label">
               {{ props.row.queryCount }}
             </el-descriptions-item>
           </el-descriptions>
@@ -198,6 +195,9 @@ watch(() => listParams.status, status => {
 })
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+.commodity-desc-label.el-descriptions__label {
+  width: 20%;
+}
 
 </style>

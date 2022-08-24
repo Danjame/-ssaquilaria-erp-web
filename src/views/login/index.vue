@@ -6,7 +6,7 @@
         <p>中科沉香ERP系统</p>
       </div>
       <el-form-item label="手机号" prop="phone">
-        <el-input v-model="user.phone" placeholder="请输入手机号">
+        <el-input v-model="user.phone" placeholder="请输入手机号" size="large">
           <template #prefix>
             <el-icon style="width: 100%; height: 100%;">
               <component :is="'User'" />
@@ -15,14 +15,16 @@
         </el-input>
       </el-form-item>
       <el-form-item label="验证码" prop="code">
-        <el-input v-model="user.code" type="password" placeholder="请输入短信验证码">
+        <el-input v-model="user.code" type="password" placeholder="请输入短信验证码" size="large">
           <template #prefix>
             <el-icon style="width: 100%; height: 100%;">
               <component :is="'Lock'" />
             </el-icon>
           </template>
           <template #append>
-            <el-button @click="loadSmsCode()" :disabled="Boolean(count)">{{ count ? `${count}秒后重新发送` : '获取验证码' }}</el-button>
+            <el-button @click="loadSmsCode()" :disabled="Boolean(count)" style="width: 130px">
+              {{ count ? `${count}秒后重新发送` : '获取验证码' }}
+            </el-button>
           </template>
         </el-input>
       </el-form-item>
