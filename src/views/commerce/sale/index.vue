@@ -11,7 +11,7 @@
       <el-form-item label="单号" prop="orderNum">
         <el-input v-model="listParams.orderNum" placeholder="请输入单号" />
       </el-form-item>
-      <el-form-item label="下单客户" prop="customer">
+      <el-form-item label="客户" prop="customer">
         <el-input v-model="listParams.customer" placeholder="请输入客户名" />
       </el-form-item>
       <el-form-item label="产品" prop="productId">
@@ -99,7 +99,7 @@
       </el-table-column>
       <el-table-column label="商品数量" prop="quantity" align="center" />
       <el-table-column label="金额(元)" prop="amount" align="center" />
-      <el-table-column label="下单客户" prop="customer" align="center" />
+      <el-table-column label="客户" prop="customer" align="center" />
       <el-table-column label="备注" align="center">
         <template #default="scope">
           <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
