@@ -39,6 +39,13 @@
               </el-form-item>
             </template>
           </el-table-column>
+          <el-table-column label="重量" align="center">
+            <template #default="scope">
+              <el-form-item class="product-form-item">
+                <el-input v-model="scope.row.weight" placeholder="请输入重量" />
+              </el-form-item>
+            </template>
+          </el-table-column>
           <el-table-column label="消耗原料" align="center" inline>
             <template #default="scope">
               <el-form-item class="product-form-item">
@@ -151,6 +158,7 @@ const movement = reactive({
   goods: [{
     productId: undefined,
     size: '',
+    weight: '',
     fixedPrice: 0,
     quantity: 1,
     materialId: undefined,
@@ -168,6 +176,7 @@ const addGoods = () => {
   movement.goods?.push({
     productId: undefined,
     size: '',
+    weight: '',
     fixedPrice: 0,
     quantity: 1,
     materialId: undefined,
@@ -227,11 +236,10 @@ const handleCancel = () => {
 
 <style lang="scss">
 .product-movement-dialog-container {
-  min-width: 1350px;
+  min-width: 1520px;
 
   .product-form-item {
     display: inline-flex;
-
   }
 }
 </style>

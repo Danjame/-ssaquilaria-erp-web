@@ -38,6 +38,13 @@
               </el-form-item>
             </template>
           </el-table-column>
+          <el-table-column label="重量" align="center">
+            <template #default="scope">
+              <el-form-item class="purchase-form-item">
+                <el-input v-model="scope.row.weight" placeholder="请输入重量" />
+              </el-form-item>
+            </template>
+          </el-table-column>
           <el-table-column label="进价(元)" align="center">
             <template #default="scope">
               <el-form-item class="purchase-form-item">
@@ -106,7 +113,7 @@ const rules = reactive({
     { required: true, validator: validateQty, trigger: 'blur' }
   ],
   amount: [
-    { required: true, validator: validateQty, trigger: 'blur' }
+    { required: true, message: '金额不能为空', trigger: 'blur' }
   ],
   remark: [
     { required: false, message: '备注不能为空', trigger: 'blur' }
@@ -118,6 +125,7 @@ const purchase = reactive({
   goods: [{
     productId: undefined,
     size: '',
+    weight: '',
     purchasePrice: 0,
     quantity: 1
   }],
@@ -128,12 +136,13 @@ const purchase = reactive({
 } as PurchaseAttrs)
 
 const qty = computed(() => purchase.goods!.reduce((sum, item) => (sum + item.quantity), 0))
-const total = computed(() => purchase.goods!.reduce((sum, item) => (sum + item.quantity * item.purchasePrice), 0))
+const total = computed(() => purchase.goods!.reduce((sum, item) => Math.round((sum + item.quantity * item.purchasePrice + Number.EPSILON) * 100) / 100, 0))
 
 const addGoods = () => {
   purchase.goods?.push({
     productId: undefined,
     size: '',
+    weight: '',
     purchasePrice: 0,
     quantity: 1
   })
@@ -178,7 +187,7 @@ const handleCancel = () => {
 
 <style lang="scss">
 .purchase-dialog-container {
-  min-width: 1050px;
+  min-width: 1200px;
 
   .purchase-form-item {
     display: inline-flex;

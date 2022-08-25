@@ -40,6 +40,11 @@
         </template>
       </el-table-column>
       <el-table-column label="序号" type="index" align="center" width="60" />
+      <el-table-column label="ID" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="商品编号" prop="serialNum" align="center" />
       <el-table-column label="产品名称" align="center">
         <template #default="scope">
@@ -49,6 +54,16 @@
       <el-table-column label="产品编码" align="center">
         <template #default="scope">
           <span>{{ scope.row.product?.serialNum }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="规格" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.size }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="重量" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.weight }}</span>
         </template>
       </el-table-column>
       <el-table-column label="产区" align="center">
@@ -74,9 +89,19 @@
           <el-tag v-else type="danger">已售</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="定价（元）" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.fixedPrice ? scope.row.fixedPrice : '-' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="进价（元）" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.purchasePrice ? scope.row.purchasePrice : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="售价（元）" align="center">
         <template #default="scope">
-          <span>{{ scope.row.price ? scope.row.price : '-' }}</span>
+          <span>{{ scope.row.salePrice ? scope.row.salePrice : '-' }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="150" align="center" fixed="right">

@@ -11,6 +11,7 @@ export interface Commodity {
   serialNum: string
   product: Product;
   size: string;
+  weight: string;
   movements: Movement[]
   fixedPrice: number
   material: Material

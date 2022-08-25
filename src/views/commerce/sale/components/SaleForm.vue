@@ -49,6 +49,7 @@
 import { getCommoditiesBySerialNums } from '@/api/commerce/commodity'
 import { createSale } from '@/api/commerce/sale'
 import { SaleAttrs } from '@/api/commerce/types/sale'
+import { validateQty } from '@/utils/validator'
 
 // 表单验证
 const rules = reactive({
@@ -56,7 +57,7 @@ const rules = reactive({
     { required: true, message: '下单客户不能为空', trigger: 'blur' }
   ],
   quantity: [
-    { required: true, message: '数量不能为空', trigger: 'blur' }
+    { required: true, validator: validateQty, trigger: 'blur' }
   ],
   amount: [
     { required: true, message: '金额不能为空', trigger: 'blur' }
@@ -79,7 +80,7 @@ const sale = reactive({
 } as SaleAttrs)
 
 const qty = computed(() => sale.goods.length)
-const total = computed(() => sale.goods.reduce((sum, item) => (sum + item.salePrice), 0))
+const total = computed(() => sale.goods.reduce((sum, item) => Math.round((sum + item.salePrice + Number.EPSILON) * 100) / 100, 0))
 
 // 表单提交
 const form = ref<typeof ElForm>()

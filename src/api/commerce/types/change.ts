@@ -17,4 +17,5 @@ export interface ChangeAttrs {
   leave: string[]
   refund: number[]
   charge: number[]
+  amount: number
 }

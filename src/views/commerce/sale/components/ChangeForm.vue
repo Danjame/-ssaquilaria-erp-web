@@ -78,9 +78,7 @@
           </template>
         </el-form>
       </el-descriptions-item>
-      <el-descriptions-item label-class-name="change-description-label" align="center" label="退/补(元)">
-        {{ change.charge.reduce((sum, item) => (sum + item), 0) - change.refund.reduce((sum, item) => (sum + item), 0) }}
-      </el-descriptions-item>
+      <el-descriptions-item label-class-name="change-description-label" align="center" label="退/补(元)">{{ amount }}</el-descriptions-item>
     </el-descriptions>
     <template #footer>
       <span>
@@ -122,8 +120,11 @@ const change = reactive({
   return: [],
   leave: [],
   refund: [],
-  charge: []
+  charge: [],
+  amount: 0
 } as ChangeAttrs)
+
+const amount = computed(() => Math.round((change.charge.reduce((sum, item) => (sum + item), 0) - change.refund.reduce((sum, item) => (sum + item), 0) + Number.EPSILON) * 100) / 100)
 
 const leave = ref<{ serialNum: string, productName: string }[]>([])
 const handleAdd = () => {
@@ -152,6 +153,7 @@ const handleSubmit = () => {
     '退换处理'
   ).then(() => {
     // 确认
+    change.amount = amount.value
     isLoading.value = true
     addChangeToSale(props.id, change).then(() => {
       ElMessage.success('操作成功')

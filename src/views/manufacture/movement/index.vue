@@ -60,6 +60,11 @@
                 <span>{{ scope.row.size ? scope.row.size : '-' }}</span>
               </template>
             </el-table-column>
+            <el-table-column label="重量" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.weight ? scope.row.weight : '-' }}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="消耗原料" align="center">
               <template #default="scope">
                 <span>{{ scope.row.material ? scope.row.material.name : '-' }}</span>

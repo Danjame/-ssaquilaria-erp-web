@@ -26,6 +26,11 @@
           <h3 style="margin-left: 12px;">商品</h3>
           <el-table :data="props.row.commodities" border>
             <el-table-column label="序号" type="index" align="center" width="60" />
+            <el-table-column label="ID" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.id }}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="商品编号" prop="serialNum" align="center" />
             <el-table-column label="商品名称" align="center">
               <template #default="scope">
@@ -35,6 +40,11 @@
             <el-table-column label="规格" align="center">
               <template #default="scope">
                 <span>{{ scope.row.size ? scope.row.size : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="重量" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.weight ? scope.row.weight : '-' }}</span>
               </template>
             </el-table-column>
             <el-table-column label="单位" align="center">

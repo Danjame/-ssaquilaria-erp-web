@@ -28,6 +28,11 @@
           <h3 style="margin-left: 11px;">商品</h3>
           <el-table v-if="props.row.commodities.length" :data="props.row.commodities" border>
             <el-table-column label="序号" type="index" align="center" width="60" />
+            <el-table-column label="ID" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.id }}</span>
+              </template>
+            </el-table-column>
             <el-table-column label="产品" align="center">
               <template #default="scope">
                 <span>{{ scope.row.product ? scope.row.product.name + ' (' + scope.row.product.serialNum + ')' : '-' }}</span>
@@ -36,6 +41,16 @@
             <el-table-column label="编号" align="center">
               <template #default="scope">
                 <span>{{ scope.row.serialNum ? scope.row.serialNum : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="规格" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.size ? scope.row.size : '-' }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column label="重量" align="center">
+              <template #default="scope">
+                <span>{{ scope.row.weight ? scope.row.weight : '-' }}</span>
               </template>
             </el-table-column>
             <el-table-column label="进价(元)" prop="purchasePrice" align="center" />

@@ -32,9 +32,9 @@ export default defineConfig({
         additionalData: '@import "@/styles/variables.scss";'
       }
     }
-  },
-  server: {
-    // host: '0.0.0.0',
-    port: 5000
   }
+  // server: {
+  //   host: '0.0.0.0',
+  //   port: 5000
+  // }
 })

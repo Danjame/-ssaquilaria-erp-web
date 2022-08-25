@@ -5,6 +5,7 @@ import { Supplier } from './supplier'
 interface Article {
   productId: number | undefined
   size: string
+  weight: string
   purchasePrice: number
   quantity: number
 }

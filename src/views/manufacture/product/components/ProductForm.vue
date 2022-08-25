@@ -17,14 +17,6 @@
           <el-option v-for="(unit, i) in units" :key="i" :label="unit.name" :value="unit.id" />
         </el-select>
       </el-form-item>
-      <el-form-item label="原料" prop="materialId">
-        <el-select v-model="product.materialId" placeholder="请选择原料">
-          <el-option v-for="(material, i) in materials" :key="i" :label="material.name" :value="material.id" />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="规格" prop="size">
-        <el-input v-model="product.size" placeholder="请输入产品规格" />
-      </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input type="textarea" v-model="product.description" autosize placeholder="请输入产品描述" />
       </el-form-item>
@@ -70,12 +62,6 @@ const rules = reactive({
   unitId: [
     { required: true, message: '产品单位不能为空', trigger: 'blur' }
   ],
-  materialId: [
-    { required: false, message: '产品原料不能为空', trigger: 'blur' }
-  ],
-  size: [
-    { required: true, message: '产品规格不能为空', trigger: 'blur' }
-  ],
   description: [
     { required: false, message: '产品描述不能为空', trigger: 'blur' }
   ],
@@ -112,8 +98,6 @@ const loadProduct = async () => {
     name,
     category,
     unit,
-    material,
-    size,
     description,
     warnQty
   } = await getProductById(props.id)
@@ -123,8 +107,6 @@ const loadProduct = async () => {
     name,
     categoryId: category?.id,
     unitId: unit?.id,
-    materialId: material?.id,
-    size,
     description,
     warnQty
   })

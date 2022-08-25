@@ -5,6 +5,7 @@ import { Commodity } from '@/api/commerce/types/commodity'
 interface Article {
   productId: number | undefined
   size: string
+  weight: string
   fixedPrice: number
   quantity: number
   materialId: number | undefined
