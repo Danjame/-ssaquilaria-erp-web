@@ -16,7 +16,8 @@
         <slot name="form-item-button" />
       </el-button-group>
     </template>
-    <el-table :data="data" v-loading="store.state.isLoading">
+    <slot name="table-header" />
+    <el-table :data="data" v-loading="store.state.isLoading" @selection-change="onDataSelect">
       <slot name="table-column" />
     </el-table>
     <Pagination
@@ -53,6 +54,10 @@ const props = defineProps({
   data: {
     type: Array,
     required: true
+  },
+  onDataSelect: {
+    type: Function as PropType<(data: any) => void>,
+    default: () => {}
   },
   load: {
     type: Function as PropType<() => Promise<void>>,

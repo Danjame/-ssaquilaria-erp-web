@@ -40,17 +40,15 @@
           <span>{{ scope.row.unit.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产区" align="center">
-        <el-table-column label="林场" align="center">
-          <template #default="scope">
-            <span>{{ scope.row.farm ? scope.row.farm.name : '-' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="林区" align="center">
-          <template #default="scope">
-            <span>{{ scope.row.area ? scope.row.area.name : '-' }}</span>
-          </template>
-        </el-table-column>
+      <el-table-column label="林场" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.farm ? scope.row.farm.name : '-' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="林区" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.area ? scope.row.area.name : '-' }}</span>
+        </template>
       </el-table-column>
       <el-table-column label="描述" align="center">
         <template #default="scope">

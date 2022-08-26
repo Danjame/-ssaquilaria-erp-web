@@ -4,6 +4,7 @@
     :params="listParams"
     :count="count"
     :data="commodities"
+    :on-data-select="handleSelection"
     :load="loadCommodities"
     :default-handler="false"
   >
@@ -25,6 +26,17 @@
         </el-select>
       </el-form-item>
     </template>
+    <template #table-header>
+      <el-button
+        class="download-qrcode"
+        type="primary"
+        :icon="'Download'"
+        :disabled="!selection || selection.length === 0"
+        @click="downloadAllQRCodes"
+      >
+        下载二维码
+      </el-button>
+    </template>
     <template #table-column>
       <el-table-column type="expand">
         <template #default="props">
@@ -39,6 +51,7 @@
           </el-descriptions>
         </template>
       </el-table-column>
+      <el-table-column type="selection" width="55" />
       <el-table-column label="序号" type="index" align="center" width="60" />
       <el-table-column label="ID" align="center">
         <template #default="scope">
@@ -66,17 +79,15 @@
           <span>{{ scope.row.weight }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="产区" align="center">
-        <el-table-column label="林场" align="center">
-          <template #default="scope">
-            <span>{{ scope.row.material?.farm ? scope.row.material.farm.name : '-' }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="林区" align="center">
-          <template #default="scope">
-            <span>{{ scope.row.material?.area ? scope.row.material.area.name : '-' }}</span>
-          </template>
-        </el-table-column>
+      <el-table-column label="林场" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.material?.farm ? scope.row.material.farm.name : '-' }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="林区" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.material?.area ? scope.row.material.area.name : '-' }}</span>
+        </template>
       </el-table-column>
       <el-table-column label="批次" align="center">
         <template #default="scope">
@@ -169,11 +180,11 @@ const loadCommodities = async () => {
 }
 
 // 下载二维码
-const downloadQRCode = async (commodity: Commodity) => {
+const downloadQRCode = (commodity: Commodity) => {
   const canvas = document.createElement('canvas')
 
   QRCode.toCanvas(canvas, commodity.traceNum, { margin: 6 }, error => {
-    ElMessage.error('下载失败：' + error.message)
+    if (error) ElMessage.error('下载失败：' + error.message)
   })
   const ctx = canvas.getContext('2d')
 
@@ -189,10 +200,21 @@ const downloadQRCode = async (commodity: Commodity) => {
   a.remove()
 }
 
+const downloadAllQRCodes = () => {
+  selection.value.forEach(item => {
+    downloadQRCode(item)
+  })
+}
+
 const handleDelete = async (id: number) => {
   await deleteCommodity(id)
   ElMessage.success('删除成功')
   loadCommodities()
+}
+
+const selection = ref<Commodity[]>([])
+const handleSelection = (commodities: Commodity[]) => {
+  selection.value = commodities
 }
 
 // 监听参数变化
@@ -221,8 +243,11 @@ watch(() => listParams.status, status => {
 </script>
 
 <style lang="scss">
+.el-button.is-disabled.download-qrcode {
+  background-color: var(--el-color-info-light-7);
+  border-color: var(--el-border-color);
+}
 .commodity-desc-label.el-descriptions__label {
   width: 20%;
 }
-
 </style>
