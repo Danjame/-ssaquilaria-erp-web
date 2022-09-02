@@ -12,8 +12,8 @@
 </template>
 
 <script lang="ts" setup>
-import { getClientById, updateClient } from '@/api/commerce/client.js'
-import { ClientAttrs } from '@/api/commerce/types/client.js'
+import { getClientById, updateClient } from '@/api/commerce/client'
+import { ClientAttrs } from '@/api/commerce/types/client'
 
 const props = defineProps({
   id: {

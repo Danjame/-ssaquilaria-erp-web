@@ -32,9 +32,9 @@
         type="primary"
         :icon="'Download'"
         :disabled="!selection || selection.length === 0"
-        @click="downloadAllQRCodes"
+        @click="downloadLabels"
       >
-        下载二维码
+        下载标签
       </el-button>
     </template>
     <template #table-column>
@@ -115,10 +115,10 @@
           <span>{{ scope.row.salePrice ? scope.row.salePrice : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="150" align="center" fixed="right">
+      <el-table-column label="操作" min-width="130" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
-            <el-button type="primary" link @click="downloadQRCode(scope.row)">下载二维码</el-button>
+            <el-button type="primary" link @click="downloadLabel(scope.row)">下载标签</el-button>
             <el-popconfirm title="确定要删除该商品项吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="primary" link>删除</el-button>
@@ -139,6 +139,8 @@ import { Commodity } from '@/api/commerce/types/commodity'
 import { AVAILABLE, SOLD } from '@/utils/constants'
 import moment from 'moment'
 import QRCode from 'qrcode'
+import JsBarcode from 'jsbarcode'
+import mpCodeSrc from '@/assets/mp_code.jpg'
 
 const statuses = [
   {
@@ -179,30 +181,60 @@ const loadCommodities = async () => {
   count.value = data.count
 }
 
-// 下载二维码
-const downloadQRCode = (commodity: Commodity) => {
-  const canvas = document.createElement('canvas')
+// 下载标签
+const downloadLabel = (commodity: Commodity) => {
+  const width = 150
 
-  QRCode.toCanvas(canvas, commodity.traceNum, { margin: 6 }, error => {
+  // 二维码
+  const qrCanvas = document.createElement('canvas')
+  QRCode.toCanvas(qrCanvas, commodity.traceNum, { width }, error => {
     if (error) ElMessage.error('下载失败：' + error.message)
   })
+
+  // 条形码
+  const barCanvas = document.createElement('canvas')
+  JsBarcode(barCanvas, commodity.serialNum, { height: 50 })
+
+  // 标签
+  const canvas = document.createElement('canvas')
+  canvas.width = barCanvas.width
+  canvas.height = 410
   const ctx = canvas.getContext('2d')
 
-  if (ctx) {
-    ctx.font = '14px Arial'
-    ctx.fillText(commodity.serialNum, 23, 158)
-  }
+  // 小程序码
+  const mpCode = new Image()
+  mpCode.src = mpCodeSrc
 
-  const a = document.createElement('a')
-  a.href = canvas.toDataURL()
-  a.download = `${commodity.product.name}_${commodity.serialNum}`
-  a.click()
-  a.remove()
+  mpCode.onload = () => {
+    if (ctx) {
+      ctx.font = '16px Arial'
+      ctx.textAlign = 'center'
+
+      ctx.fillText('1、微信扫一扫', (barCanvas.width - width) / 2, width / 2 - 5)
+      ctx.fillText('进入官方小程序', (barCanvas.width - width) / 2, width / 2 + 15)
+      ctx.drawImage(mpCode, barCanvas.width - width, 0, width, width)
+
+      ctx.fillText('2、点击“扫码查询”', (barCanvas.width - width) / 2 + width, width / 2 + width - 5)
+      ctx.fillText('验证防伪码', (barCanvas.width - width) / 2 + width, width / 2 + width + 15)
+      ctx.drawImage(qrCanvas, 0, width)
+
+      ctx.font = '15px Arial'
+      ctx.textAlign = 'center'
+      ctx.fillText(`${commodity.product.name} | ${commodity.size} | ${commodity.weight}`, barCanvas.width / 2, width * 2 + 15)
+      ctx.drawImage(barCanvas, 0, width * 2 + 20)
+
+      const a = document.createElement('a')
+      a.href = canvas.toDataURL()
+      a.download = `${commodity.product.name}_${commodity.serialNum}`
+      a.click()
+      a.remove()
+    }
+  }
 }
 
-const downloadAllQRCodes = () => {
+const downloadLabels = () => {
   selection.value.forEach(item => {
-    downloadQRCode(item)
+    downloadLabel(item)
   })
 }
 
