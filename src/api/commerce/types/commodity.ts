@@ -33,3 +33,11 @@ export interface CommodityConditions {
   page?: number
   size?: number
 }
+
+export interface CommodityAttrs {
+  size?: string
+  weight?: string
+  fixedPrice?: number
+  purchasePrice?: number
+  salePrice?: number
+}

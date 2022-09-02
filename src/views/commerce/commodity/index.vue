@@ -115,9 +115,10 @@
           <span>{{ scope.row.salePrice ? scope.row.salePrice : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="130" align="center" fixed="right">
+      <el-table-column label="操作" min-width="180" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
+            <el-button type="primary" link @click="openForm(scope.row.id)">编辑</el-button>
             <el-button type="primary" link @click="downloadLabel(scope.row)">下载标签</el-button>
             <el-popconfirm title="确定要删除该商品项吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
@@ -128,10 +129,19 @@
         </template>
       </el-table-column>
     </template>
+    <template #a>
+      <CommodityForm
+        v-if="formVisible"
+        v-model="formVisible"
+        :id="commodityId"
+        @submit="onFormSubmitted"
+      />
+    </template>
   </Index>
 </template>
 
 <script lang="ts" setup>
+import CommodityForm from './components/CommodityForm.vue'
 import { getAllProducts } from '@/api/manufacture/product'
 import { Product } from '@/api/manufacture/types/product'
 import { getCommoditiesByConditions, deleteCommodity } from '@/api/commerce/commodity'
@@ -247,6 +257,21 @@ const handleDelete = async (id: number) => {
 const selection = ref<Commodity[]>([])
 const handleSelection = (commodities: Commodity[]) => {
   selection.value = commodities
+}
+
+// 编辑组件
+const formVisible = ref(false)
+const commodityId = ref<number | undefined>(undefined)
+const openForm = (payload: number | MouseEvent) => {
+  if (typeof payload === 'number') {
+    commodityId.value = payload
+    formVisible.value = true
+  }
+}
+
+const onFormSubmitted = () => {
+  formVisible.value = false
+  loadCommodities()
 }
 
 // 监听参数变化
