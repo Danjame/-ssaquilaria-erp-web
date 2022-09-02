@@ -40,13 +40,13 @@ const rules = reactive({
     { required: true, message: '商品重量不能为空', trigger: 'blur' }
   ],
   fixedPrice: [
-    { required: true, message: '商品定价不能为空', trigger: 'blur' }
+    { required: false, message: '商品定价不能为空', trigger: 'blur' }
   ],
   purchasePrice: [
-    { required: true, message: '采购价格不能为空', trigger: 'blur' }
+    { required: false, message: '采购价格不能为空', trigger: 'blur' }
   ],
   salePrice: [
-    { required: true, message: '销售价格不能为空', trigger: 'blur' }
+    { required: false, message: '销售价格不能为空', trigger: 'blur' }
   ]
 })
 
