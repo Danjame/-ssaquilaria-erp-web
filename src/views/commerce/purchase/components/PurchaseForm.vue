@@ -162,7 +162,7 @@ const handleSubmit = async () => {
 
   const valid = await form.value?.validate()
   if (!valid) return
-  // // 验证通过
+  // 验证通过
 
   ElMessageBox.confirm(
     '确定提交采购入库?',
@@ -170,6 +170,7 @@ const handleSubmit = async () => {
   ).then(async () => {
     isLoading.value = true
 
+    // 提交
     await createPurchase(purchase)
     ElMessage.success('新增成功')
     emit('submit')
@@ -191,7 +192,6 @@ const handleCancel = () => {
 
   .purchase-form-item {
     display: inline-flex;
-
   }
 }
 </style>

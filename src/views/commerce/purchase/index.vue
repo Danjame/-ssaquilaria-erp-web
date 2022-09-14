@@ -25,7 +25,7 @@
     <template #table-column>
       <el-table-column type="expand">
         <template #default="props">
-          <h3 style="margin-left: 11px;">商品</h3>
+          <h3 style="margin-left: 11px;">明细</h3>
           <el-table v-if="props.row.commodities.length" :data="props.row.commodities" border>
             <el-table-column label="序号" type="index" align="center" width="60" />
             <el-table-column label="ID" align="center">
@@ -69,7 +69,14 @@
           <span>{{ scope.row.supplier.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="数量" prop="quantity" align="center" />
+      <el-table-column label="商品数量" align="center">
+        <template #default="scope">
+          <template v-for="(item, i) in Object.keys(scope.row.resume)" :key="i">
+            <el-tag type="info">{{ item + ': ' + scope.row.resume[item] }}</el-tag>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column label="总数" prop="quantity" align="center" />
       <el-table-column label="金额" prop="amount" align="center" />
       <el-table-column label="申请人" align="center">
         <template #default="scope">
@@ -150,6 +157,16 @@ const purchases = ref<Purchase[]>([])
 const count = ref(0)
 const loadPurchases = async () => {
   const data = await getPurchasesByConditions(listParams)
+  data.results.forEach(p => {
+    p.resume = {}
+    p.commodities.forEach(c => {
+      if (!p.resume[c.product.name]) {
+        p.resume[c.product.name] = 1
+      } else {
+        p.resume[c.product.name] += 1
+      }
+    })
+  })
   purchases.value = data.results
   count.value = data.count
 }
@@ -180,5 +197,8 @@ watch(() => listParams.supplierId, id => {
 </script>
 
 <style lang="scss" scoped>
-
+.el-tag + .el-tag {
+  margin-left: 5px;
+  margin-top: 5px;
+}
 </style>

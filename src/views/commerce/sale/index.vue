@@ -97,7 +97,14 @@
           <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="商品数量" prop="quantity" align="center" />
+      <el-table-column label="商品数量" align="center">
+        <template #default="scope">
+          <template v-for="(item, i) in Object.keys(scope.row.resume)" :key="i">
+            <el-tag type="info">{{ item + ': ' + scope.row.resume[item] }}</el-tag>
+          </template>
+        </template>
+      </el-table-column>
+      <el-table-column label="总数" prop="quantity" align="center" />
       <el-table-column label="金额(元)" prop="amount" align="center" />
       <el-table-column label="客户" prop="customer" align="center" />
       <el-table-column label="备注" align="center">
@@ -159,6 +166,16 @@ const sales = ref<Sale[]>([])
 const count = ref(0)
 const loadSales = async () => {
   const data = await getSalesByConditions(listParams)
+  data.results.forEach(s => {
+    s.resume = {}
+    s.commodities.forEach(c => {
+      if (!s.resume[c.product.name]) {
+        s.resume[c.product.name] = 1
+      } else {
+        s.resume[c.product.name] += 1
+      }
+    })
+  })
   sales.value = data.results
   count.value = data.count
 }

@@ -21,6 +21,7 @@ export interface Purchase {
   remark: string
   createdAt: Date
   updatedAt: Date
+  resume: any
 }
 
 export interface PurchaseConditions {

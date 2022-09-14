@@ -82,22 +82,25 @@
             </template>
           </el-table-column>
         </el-table>
-        <el-table v-else :data="movement.serialNums" style="width: 100%" border>
+        <el-table v-else :data="movement.commodities" style="width: 100%" border>
           <el-table-column type="index" align="center" width="60">
             <template #header>
-              <el-button type="primary" size="small" :icon="'Plus'" circle @click="addSerialNum" />
+              <el-button type="primary" size="small" :icon="'Plus'" circle @click="addCommodity" />
             </template>
           </el-table-column>
-          <el-table-column label="商品序列号" align="center">
+          <el-table-column label="* 商品编号" align="center">
             <template #default="scope">
               <el-form-item>
-                <el-input v-model="movement!.serialNums![scope.$index]" placeholder="请输入序列号" />
+                <el-input v-model="scope.row.serialNum" placeholder="请输入编号" @blur="onBlur(scope.row)" />
               </el-form-item>
             </template>
           </el-table-column>
+          <el-table-column label="名称" prop="name" align="center" />
+          <el-table-column label="规格" prop="size" align="center" />
+          <el-table-column label="重量" prop="weight" align="center" />
           <el-table-column label="操作" width="100" align="center">
             <template #default="scope">
-              <el-button type="primary" link @click="deleteSerialNum(scope.$index)">删除</el-button>
+              <el-button type="primary" link @click="deleteCommodity(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -126,6 +129,7 @@ import { createProductMovement } from '@/api/manufacture/movement'
 import { ProductMovementAttrs } from '@/api/manufacture/types/movement'
 import { validateQty } from '@/utils/validator'
 import { DECR, INCR, PRODUCT } from '@/utils/constants'
+import { getCommodityBySerialNum } from '@/api/commerce/commodity'
 
 defineProps({
   products: {
@@ -164,12 +168,17 @@ const movement = reactive({
     materialId: undefined,
     materialQty: 0
   }],
-  serialNums: [''],
+  commodities: [{
+    serialNum: '',
+    name: '',
+    size: '',
+    weight: ''
+  }],
   quantity: undefined,
   remark: ''
 } as ProductMovementAttrs)
 
-const qty = computed(() => movement.type === INCR ? movement.goods!.reduce((sum, item) => (sum + item.quantity), 0) : movement.serialNums?.length)
+const qty = computed(() => movement.type === INCR ? movement.goods?.reduce((sum, item) => (sum + item.quantity), 0) : movement.commodities?.length)
 
 // 入库
 const addGoods = () => {
@@ -189,12 +198,41 @@ const deleteGoods = async (index: number) => {
 }
 
 // 出库
-const addSerialNum = () => {
-  movement.serialNums?.push('')
+const addCommodity = () => {
+  movement.commodities?.push({
+    serialNum: '',
+    name: '',
+    size: '',
+    weight: ''
+  })
 }
 
-const deleteSerialNum = async (index: number) => {
-  movement.serialNums?.splice(index, 1)
+const deleteCommodity = async (index: number) => {
+  movement.commodities?.splice(index, 1)
+}
+
+const onBlur = async (article: {
+  serialNum: string;
+  name: string;
+  size: string;
+  weight: string;
+  }) => {
+  if (!article.serialNum) return ElMessage.warning('商品编号不能为空')
+
+  const list = movement.commodities?.map(item => item.serialNum)
+  const set = new Set(list)
+
+  if (list?.length !== set.size) {
+    ElMessage.warning(`编号 ${article.serialNum}已存在, 请勿重复输入`)
+  } else {
+    const commodity = await getCommodityBySerialNum(article.serialNum)
+    if (commodity) {
+      const { product: { name: productName }, size, weight } = commodity
+      article.name = productName
+      article.size = size
+      article.weight = weight
+    }
+  }
 }
 
 // 表单提交
@@ -203,7 +241,7 @@ const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
   movement.quantity = qty.value
-  const { type, quantity, goods, serialNums, remark } = movement
+  const { type, quantity, goods, commodities, remark } = movement
 
   const valid = await form.value?.validate()
   if (!valid) return
@@ -215,14 +253,17 @@ const handleSubmit = async () => {
   ).then(async () => {
     isLoading.value = true
 
+    let ret = null
     if (type === INCR) {
-      await createProductMovement({ type, quantity, goods, remark })
+      ret = await createProductMovement({ type, quantity, goods, remark })
     } else {
-      await createProductMovement({ type, quantity, serialNums, remark })
+      ret = await createProductMovement({ type, quantity, serialNums: commodities?.map(item => item.serialNum), remark })
     }
-    ElMessage.success('新增成功')
-    emit('submit')
-  }).finally(() => {
+
+    if (ret) {
+      ElMessage.success('新增成功')
+      emit('submit')
+    }
     isLoading.value = false
   })
 }

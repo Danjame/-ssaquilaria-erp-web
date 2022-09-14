@@ -40,6 +40,12 @@ export interface ProductMovementAttrs {
   quantity: number | undefined
   goods?: Article[]
   serialNums?: string[]
+  commodities?: {
+    serialNum: string
+    name: string
+    size: string
+    weight: string
+  }[]
   remark?: string
 }
 

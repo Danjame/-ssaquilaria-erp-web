@@ -1,5 +1,14 @@
 <template>
-  <Dialog title="销售出库" :submit="handleSubmit">
+  <el-dialog
+    title="销售出库"
+    ref="dialog"
+    v-model="visible"
+    custom-class="sale-dialog-container"
+    destroy-on-close
+    :close-on-click-modal="false"
+    :close-on-press-escape="false"
+    center
+  >
     <el-form ref="form" :model="sale" :rules="rules" label-width="60px">
       <el-form-item label="客户" prop="customer">
         <el-input v-model="sale.customer" placeholder="请输入客户名称" />
@@ -16,14 +25,17 @@
           </el-table-column>
           <el-table-column label="* 商品编号" align="center">
             <template #default="scope">
-              <el-form-item>
-                <el-input v-model="scope.row.serialNum" placeholder="请输入编号" />
+              <el-form-item class="sale-form-item">
+                <el-input v-model="scope.row.serialNum" placeholder="请输入编号" @blur="onBlur(scope.row)" />
               </el-form-item>
             </template>
           </el-table-column>
+          <el-table-column label="名称" prop="name" align="center" />
+          <el-table-column label="规格" prop="size" align="center" />
+          <el-table-column label="重量" prop="weight" align="center" />
           <el-table-column label="售价(元)" align="center">
             <template #default="scope">
-              <el-form-item>
+              <el-form-item class="sale-form-item">
                 <el-input-number v-model="scope.row.salePrice" :min="0" />
               </el-form-item>
             </template>
@@ -42,11 +54,17 @@
         <el-input-number :model-value="total" :controls="false" disabled />
       </el-form-item>
     </el-form>
-  </Dialog>
+    <template #footer>
+      <span>
+        <el-button @click="handleCancel">取 消</el-button>
+        <el-button type="primary" @click="handleSubmit" :loading="isLoading">提 交</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script lang="ts" setup>
-import { getCommoditiesBySerialNums } from '@/api/commerce/commodity'
+import { getCommoditiesBySerialNums, getCommodityBySerialNum } from '@/api/commerce/commodity'
 import { createSale } from '@/api/commerce/sale'
 import { SaleAttrs } from '@/api/commerce/types/sale'
 import { validateQty } from '@/utils/validator'
@@ -72,7 +90,10 @@ const sale = reactive({
   customer: '',
   goods: [{
     serialNum: '',
-    salePrice: 0
+    salePrice: 0,
+    name: '',
+    size: '',
+    weight: ''
   }],
   quantity: 0,
   amount: 0,
@@ -82,7 +103,47 @@ const sale = reactive({
 const qty = computed(() => sale.goods.length)
 const total = computed(() => sale.goods.reduce((sum, item) => Math.round((sum + item.salePrice + Number.EPSILON) * 100) / 100, 0))
 
+const handleAdd = () => {
+  sale.goods.push({
+    serialNum: '',
+    salePrice: 0,
+    name: '',
+    size: '',
+    weight: ''
+  })
+}
+
+const handleDelete = async (index: number) => {
+  sale.goods.splice(index, 1)
+}
+
+const onBlur = async (article: {
+  serialNum: string;
+  salePrice: number;
+  name: string;
+  size: string;
+  weight: string;
+  }) => {
+  if (!article.serialNum) return ElMessage.warning('商品编号不能为空')
+
+  const list = sale.goods.map(item => item.serialNum)
+  const set = new Set(list)
+
+  if (list.length !== set.size) {
+    ElMessage.warning(`编号 ${article.serialNum}已存在, 请勿重复输入`)
+  } else {
+    const commodity = await getCommodityBySerialNum(article.serialNum)
+    if (commodity) {
+      const { product: { name: productName }, size, weight } = commodity
+      article.name = productName
+      article.size = size
+      article.weight = weight
+    }
+  }
+}
+
 // 表单提交
+const isLoading = ref(false)
 const form = ref<typeof ElForm>()
 const emit = defineEmits(['submit'])
 const handleSubmit = async () => {
@@ -93,17 +154,12 @@ const handleSubmit = async () => {
     item.serialNum = item.serialNum.trim()
   })
 
-  if (!sale.goods.length) {
-    ElMessage.error('商品为必填项')
-    return
-  }
+  if (!sale.goods.length) return ElMessage.error('商品为必填项')
 
-  if (sale.goods.some(item => item.serialNum === '')) {
-    ElMessage.error('商品编号不能为空')
-    return
-  }
+  if (sale.goods.some(item => item.serialNum === '')) return ElMessage.error('商品编号不能为空')
 
   const commodities = await getCommoditiesBySerialNums(sale.goods.map(item => item.serialNum))
+  if (!commodities) return ElMessage.error('请输入正确的商品编号')
 
   // 验证通过
   ElMessageBox({
@@ -111,7 +167,7 @@ const handleSubmit = async () => {
     message: h(
       'div',
       null,
-      commodities.map(item => h('p', null, item.serialNum + ':' + item.product?.name)).concat(
+      commodities?.map(item => h('p', null, item.serialNum + ':' + item.product?.name)).concat(
         [
           h('p', null, '商品数量: ' + qty.value + ' 件'),
           h('p', null, '金额: ' + total.value + ' 元')
@@ -122,30 +178,33 @@ const handleSubmit = async () => {
     confirmButtonText: '确认并提交',
     cancelButtonText: '取消'
   }).then(async () => {
+    isLoading.value = true
+
     // 提交
     sale.quantity = qty.value
     sale.amount = total.value
-    await createSale(sale)
-    ElMessage.success('新增成功')
-    emit('submit')
+    const ret = await createSale(sale)
+    if (ret) {
+      ElMessage.success('操作成功')
+      emit('submit')
+    }
+    isLoading.value = false
   })
 }
 
-const handleAdd = () => {
-  sale.goods.push({
-    serialNum: '',
-    salePrice: 0
-  })
+const visible = false
+const dialog = ref<typeof ElDialog>()
+const handleCancel = () => {
+  dialog.value!.visible = false
 }
-
-const handleDelete = async (index: number) => {
-  sale.goods.splice(index, 1)
-}
-
 </script>
 
-<style lang="scss" scoped>
-.el-table .el-form-item {
-  margin-bottom: 0;
+<style lang="scss">
+.sale-dialog-container {
+  min-width: 1110px;
+
+  .sale-form-item {
+    display: inline-flex;
+  }
 }
 </style>

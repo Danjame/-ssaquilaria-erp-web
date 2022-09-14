@@ -1,4 +1,18 @@
 <template>
+  <div style="padding: 10px;">商品库存</div>
+  <el-card style="margin-bottom: 20px">
+    <el-table :data="products" border>
+      <el-table-column label="序号" type="index" align="center" width="60" />
+      <el-table-column label="产品编号" prop="serialNum" align="center" />
+      <el-table-column label="产品名称" prop="name" align="center" />
+      <el-table-column label="库存" prop="stockQty" align="center" />
+      <el-table-column label="生产入库" prop="incomingQty" align="center" />
+      <el-table-column label="生产出库" prop="outgoingQty" align="center" />
+      <el-table-column label="采购量" prop="purchaseQty" align="center" />
+      <el-table-column label="销售量" prop="saleQty" align="center" />
+    </el-table>
+  </el-card>
+  <div style="padding: 10px;">商品明细</div>
   <Index
     title="商品"
     :params="listParams"
@@ -251,6 +265,7 @@ const downloadLabels = () => {
 const handleDelete = async (id: number) => {
   await deleteCommodity(id)
   ElMessage.success('删除成功')
+  loadAllProducts()
   loadCommodities()
 }
 
@@ -271,6 +286,7 @@ const openForm = (payload: number | MouseEvent) => {
 
 const onFormSubmitted = () => {
   formVisible.value = false
+  loadAllProducts()
   loadCommodities()
 }
 

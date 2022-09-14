@@ -3,6 +3,9 @@ import { Commodity } from './commodity'
 interface Article {
   serialNum: string
   salePrice: number
+  name: string
+  size: string
+  weight: string
 }
 
 export interface Sale {
@@ -15,6 +18,7 @@ export interface Sale {
   remark: string
   createdAt: Date
   updatedAt: Date
+  resume: any
 }
 
 export interface SaleConditions {

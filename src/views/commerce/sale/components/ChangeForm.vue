@@ -46,15 +46,17 @@
               <el-option
                 v-for="(commodity, i) in sale.commodities"
                 :key="i"
-                :label="commodity.product?.name + ': ' + commodity.serialNum" :value="commodity.serialNum"
+                :label="commodity.serialNum + ': ' + commodity.product?.name + ' | ' + commodity.size + ' | ' + commodity.weight" :value="commodity.serialNum"
               />
             </el-select>
           </el-form-item>
         </el-form>
         <el-form inline>
           <template v-for="(p, i) in change.return" :key="i">
-            <el-form-item :label="sale.commodities.find(item => item.serialNum === change.return[i])?.product?.name">
-              <el-input v-model="change.return[i]" disabled />
+            <el-form-item :label="change.return[i]">
+              {{ sale.commodities.find(item => item.serialNum === change.return[i])?.product?.name }} |
+              {{ sale.commodities.find(item => item.serialNum === change.return[i])?.size }} |
+              {{ sale.commodities.find(item => item.serialNum === change.return[i])?.weight }}
             </el-form-item>
             <el-form-item label="退款(元)">
               <el-input-number v-model="change.refund[i]" :min="0" placeholder="请输入" />
@@ -62,15 +64,18 @@
           </template>
         </el-form>
       </el-descriptions-item>
-      <el-descriptions-item label-class-name="change-description-label" align="center" label="补货">
+      <el-descriptions-item label-class-name="change-description-label change-description-label-leave" label="补货">
         <el-form inline>
           <template v-for="(c, i) in leave" :key="i">
-            <el-form-item :label="c.productName">
+            <el-form-item>
               <el-input v-model="change.leave[i]" placeholder="请输入编号" @blur="onLeaveInputBlur(i)">
                 <template #append>
                   <el-button :icon="'Close'" @click="handleDelete(i)" />
                 </template>
               </el-input>
+            </el-form-item>
+            <el-form-item v-if="c.productName">
+              {{ c.productName + ' | ' + c.size + ' | ' + c.weight }}
             </el-form-item>
             <el-form-item label="售价(元)">
               <el-input-number v-model="change.charge[i]" :min="0" placeholder="请输入" />
@@ -126,9 +131,9 @@ const change = reactive({
 
 const amount = computed(() => Math.round((change.charge.reduce((sum, item) => (sum + item), 0) - change.refund.reduce((sum, item) => (sum + item), 0) + Number.EPSILON) * 100) / 100)
 
-const leave = ref<{ serialNum: string, productName: string }[]>([])
+const leave = ref<{ serialNum: string, productName: string, size: string, weight: string }[]>([])
 const handleAdd = () => {
-  leave.value.push({ serialNum: '', productName: '' })
+  leave.value.push({ serialNum: '', productName: '', size: '', weight: '' })
   change.leave.push('')
 }
 const handleDelete = (index: number) => {
@@ -137,9 +142,18 @@ const handleDelete = (index: number) => {
 }
 
 const onLeaveInputBlur = async (index: number) => {
-  if (change.leave[index]) {
+  const set = new Set(change.leave)
+  if (!change.leave[index]) return ElMessage.warning('商品编号不能为空')
+
+  if (change.leave.length !== set.size) {
+    ElMessage.warning(`编号 ${change.leave[index]}已存在, 请勿重复输入`)
+  } else {
     const commodity = await getCommodityBySerialNum(change.leave[index])
-    leave.value[index].productName = commodity?.product?.name
+    if (commodity) {
+      leave.value[index].productName = commodity.product?.name
+      leave.value[index].size = commodity.size
+      leave.value[index].weight = commodity.weight
+    }
   }
 }
 
@@ -148,19 +162,24 @@ const isLoading = ref(false)
 const emit = defineEmits(['submit'])
 
 const handleSubmit = () => {
+  if (change.leave.length && change.leave.some(item => item === '')) {
+    return ElMessage.error('请输入补货商品编号')
+  }
+
   ElMessageBox.confirm(
     '确定提交订单退换处理？',
     '退换处理'
-  ).then(() => {
+  ).then(async () => {
     // 确认
     change.amount = amount.value
     isLoading.value = true
-    addChangeToSale(props.id, change).then(() => {
+
+    const ret = await addChangeToSale(props.id, change)
+    if (ret) {
       ElMessage.success('操作成功')
       emit('submit')
-    }).finally(() => {
-      isLoading.value = false
-    })
+    }
+    isLoading.value = false
   })
 }
 
@@ -171,10 +190,14 @@ const handleCancel = () => {
 
 <style lang="scss">
 .change-dialog-container {
-  min-width: 800px;
+  min-width: 850px;
 
   .change-description-label {
     width: 100px;
+  }
+
+  .change-description-label-leave {
+    text-align: center !important;
   }
 }
 </style>

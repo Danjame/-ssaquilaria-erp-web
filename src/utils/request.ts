@@ -97,7 +97,7 @@ request.interceptors.response.use(function (response) {
             toLogin()
           })
         } else {
-          ElMessage.error(error.response.data.message)
+          return ElMessage.error(error.response.data.message)
         }
         break
       default:
@@ -106,7 +106,7 @@ request.interceptors.response.use(function (response) {
             error.response.data.message = error.response.data.message.toString()
           }
 
-          ElMessage.error(error.response.data.message)
+          return ElMessage.error(error.response.data.message)
         }
     }
   }
