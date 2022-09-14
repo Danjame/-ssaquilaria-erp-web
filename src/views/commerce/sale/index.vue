@@ -220,6 +220,10 @@ watch(() => listParams.productId, id => {
 </script>
 
 <style lang="scss" scoped>
+.el-tag + .el-tag {
+  margin-left: 5px;
+  margin-top: 5px;
+}
 .change-leave-label-row {
   font-size: small;
 }
