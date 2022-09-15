@@ -124,20 +124,21 @@ const handleLogin = async () => {
   if (!valid) return
   // 验证通过
   isLoading.value = true
-  const data = await login(user).finally(() => {
-    isLoading.value = false
-  })
 
-  if (!data) return
+  login(user)
+    .then(data => {
+      store.commit('setUser', data)
+      ElMessage.success('登录成功')
 
-  store.commit('setUser', data)
-  ElMessage.success('登录成功')
-
-  let redirect = route.query.redirect
-  if (typeof redirect !== 'string') {
-    redirect = '/'
-  }
-  router.replace(redirect)
+      let redirect = route.query.redirect
+      if (typeof redirect !== 'string') {
+        redirect = '/'
+      }
+      router.replace(redirect)
+    })
+    .finally(() => {
+      isLoading.value = false
+    })
 }
 </script>
 

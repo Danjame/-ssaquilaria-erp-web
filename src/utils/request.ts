@@ -56,8 +56,9 @@ request.interceptors.response.use(function (response) {
     // token 过期/无效
     switch (error.response.status) {
       case 401:
-        if (error.response.data.message === 'Invalid User') {
-          return ElMessage.error('账号/密码不正确')
+        // 登录失败
+        if (error.response.data.message === 'Invalid User' || error.response.config.url === '/auth/login/sms') {
+          return ElMessage.error('手机号/验证码不正确')
         }
 
         if (isRefreshing) return
