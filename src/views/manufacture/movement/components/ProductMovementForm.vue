@@ -18,11 +18,7 @@
       </el-form-item>
       <el-form-item label="项目">
         <el-table v-if="movement.type === INCR" :data="movement.goods" style="width: 100%" border>
-          <el-table-column type="index" align="center" width="60">
-            <template #header>
-              <el-button type="primary" size="small" :icon="'Plus'" circle @click="addGoods" />
-            </template>
-          </el-table-column>
+          <el-table-column type="index" align="center" width="60" />
           <el-table-column label="产品" align="center">
             <template #default="scope">
               <el-form-item class="product-form-item">
@@ -83,11 +79,7 @@
           </el-table-column>
         </el-table>
         <el-table v-else :data="movement.commodities" style="width: 100%" border>
-          <el-table-column type="index" align="center" width="60">
-            <template #header>
-              <el-button type="primary" size="small" :icon="'Plus'" circle @click="addCommodity" />
-            </template>
-          </el-table-column>
+          <el-table-column type="index" align="center" width="60" />
           <el-table-column label="* 商品编号" align="center">
             <template #default="scope">
               <el-form-item>
@@ -104,6 +96,9 @@
             </template>
           </el-table-column>
         </el-table>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="handleAdd">添加项目</el-button>
       </el-form-item>
       <el-form-item label="数量" prop="quantity">
         <el-input-number :model-value="qty" :controls="false" disabled />
@@ -181,32 +176,11 @@ const movement = reactive({
 const qty = computed(() => movement.type === INCR ? movement.goods?.reduce((sum, item) => (sum + item.quantity), 0) : movement.commodities?.length)
 
 // 入库
-const addGoods = () => {
-  movement.goods?.push({
-    productId: undefined,
-    size: '',
-    weight: '',
-    fixedPrice: 0,
-    quantity: 1,
-    materialId: undefined,
-    materialQty: 0
-  })
-}
-
 const deleteGoods = async (index: number) => {
   movement.goods?.splice(index, 1)
 }
 
 // 出库
-const addCommodity = () => {
-  movement.commodities?.push({
-    serialNum: '',
-    name: '',
-    size: '',
-    weight: ''
-  })
-}
-
 const deleteCommodity = async (index: number) => {
   movement.commodities?.splice(index, 1)
 }
@@ -217,21 +191,36 @@ const onBlur = async (article: {
   size: string;
   weight: string;
   }) => {
-  if (!article.serialNum) return ElMessage.warning('商品编号不能为空')
-
-  const list = movement.commodities?.map(item => item.serialNum)
-  const set = new Set(list)
-
-  if (list?.length !== set.size) {
-    ElMessage.warning(`编号 ${article.serialNum}已存在, 请勿重复输入`)
-  } else {
-    const commodity = await getCommodityBySerialNum(article.serialNum)
-    if (commodity) {
+  getCommodityBySerialNum(article.serialNum)
+    .then(commodity => {
       const { product: { name: productName }, size, weight } = commodity
       article.name = productName
       article.size = size
       article.weight = weight
-    }
+    })
+    .catch(error => {
+      console.log(error)
+    })
+}
+
+const handleAdd = () => {
+  if (movement.type === INCR) {
+    movement.goods?.push({
+      productId: undefined,
+      size: '',
+      weight: '',
+      fixedPrice: 0,
+      quantity: 1,
+      materialId: undefined,
+      materialQty: 0
+    })
+  } else {
+    movement.commodities?.push({
+      serialNum: '',
+      name: '',
+      size: '',
+      weight: ''
+    })
   }
 }
 
@@ -245,8 +234,33 @@ const handleSubmit = async () => {
 
   const valid = await form.value?.validate()
   if (!valid) return
-  // 验证通过
 
+  if (type === DECR) {
+    movement.commodities?.forEach(item => {
+      item.serialNum = item.serialNum.trim()
+    })
+
+    if (!movement.commodities?.length) return ElMessage.error('项目为必填项')
+    if (movement.commodities?.some(item => item.serialNum === '')) return ElMessage.error('编号不能为空')
+
+    const unique: string[] = []
+    const duplicate: string[] = []
+
+    movement.commodities?.forEach(item => {
+      if (unique.indexOf(item.serialNum) === -1) {
+        unique.push(item.serialNum)
+      } else {
+        duplicate.push(item.serialNum)
+      }
+    })
+
+    const list = [...new Set(duplicate)]
+    if (list.length > 0) {
+      return ElMessage.error(`编号${list}重复，请检查编号`)
+    }
+  }
+
+  // 验证通过
   ElMessageBox.confirm(
     type === INCR ? '确定提交产品入库?' : '确定提交产品出库?',
     type === INCR ? '产品入库' : '产品出库'

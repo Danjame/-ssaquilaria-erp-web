@@ -17,12 +17,8 @@
         <el-input type="textarea" v-model="sale.remark" autosize placeholder="请输入备注" />
       </el-form-item>
       <el-form-item label="项目">
-        <el-table :data="sale.goods" style="width: 100%" border>
-          <el-table-column type="index" align="center" width="60">
-            <template #header>
-              <el-button type="primary" size="small" :icon="'Plus'" circle @click="handleAdd" />
-            </template>
-          </el-table-column>
+        <el-table :data="sale.commodities" style="width: 100%" border>
+          <el-table-column type="index" align="center" width="60" />
           <el-table-column label="* 商品编号" align="center">
             <template #default="scope">
               <el-form-item class="sale-form-item">
@@ -42,10 +38,13 @@
           </el-table-column>
           <el-table-column label="操作" width="60" align="center">
             <template #default="scope">
-              <el-button type="primary" link @click="handleDelete(scope.$index)">删除</el-button>
+              <el-button type="primary" link @click="deleteCommodity(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="addCommodity">添加项目</el-button>
       </el-form-item>
       <el-form-item label="数量" prop="quantity">
         <el-input-number :model-value="qty" :controls="false" disabled />
@@ -88,7 +87,7 @@ const rules = reactive({
 // 销售信息
 const sale = reactive({
   customer: '',
-  goods: [{
+  commodities: [{
     serialNum: '',
     salePrice: 0,
     name: '',
@@ -100,11 +99,11 @@ const sale = reactive({
   remark: ''
 } as SaleAttrs)
 
-const qty = computed(() => sale.goods.length)
-const total = computed(() => sale.goods.reduce((sum, item) => Math.round((sum + item.salePrice + Number.EPSILON) * 100) / 100, 0))
+const qty = computed(() => sale.commodities.length)
+const total = computed(() => sale.commodities.reduce((sum, item) => Math.round((sum + item.salePrice + Number.EPSILON) * 100) / 100, 0))
 
-const handleAdd = () => {
-  sale.goods.push({
+const addCommodity = () => {
+  sale.commodities.push({
     serialNum: '',
     salePrice: 0,
     name: '',
@@ -113,8 +112,8 @@ const handleAdd = () => {
   })
 }
 
-const handleDelete = async (index: number) => {
-  sale.goods.splice(index, 1)
+const deleteCommodity = async (index: number) => {
+  sale.commodities.splice(index, 1)
 }
 
 const onBlur = async (article: {
@@ -124,22 +123,16 @@ const onBlur = async (article: {
   size: string;
   weight: string;
   }) => {
-  if (!article.serialNum) return ElMessage.warning('商品编号不能为空')
-
-  const list = sale.goods.map(item => item.serialNum)
-  const set = new Set(list)
-
-  if (list.length !== set.size) {
-    ElMessage.warning(`编号 ${article.serialNum}已存在, 请勿重复输入`)
-  } else {
-    const commodity = await getCommodityBySerialNum(article.serialNum)
-    if (commodity) {
+  getCommodityBySerialNum(article.serialNum)
+    .then(commodity => {
       const { product: { name: productName }, size, weight } = commodity
       article.name = productName
       article.size = size
       article.weight = weight
-    }
-  }
+    })
+    .catch(error => {
+      console.log(error)
+    })
 }
 
 // 表单提交
@@ -150,15 +143,30 @@ const handleSubmit = async () => {
   const valid = await form.value?.validate()
   if (!valid) return
 
-  sale.goods.forEach(item => {
+  sale.commodities.forEach(item => {
     item.serialNum = item.serialNum.trim()
   })
 
-  if (!sale.goods.length) return ElMessage.error('商品为必填项')
+  if (!sale.commodities.length) return ElMessage.error('商品为必填项')
+  if (sale.commodities.some(item => item.serialNum === '')) return ElMessage.error('商品编号不能为空')
 
-  if (sale.goods.some(item => item.serialNum === '')) return ElMessage.error('商品编号不能为空')
+  const unique: string[] = []
+  const duplicate: string[] = []
 
-  const commodities = await getCommoditiesBySerialNums(sale.goods.map(item => item.serialNum))
+  sale.commodities.forEach(item => {
+    if (unique.indexOf(item.serialNum) === -1) {
+      unique.push(item.serialNum)
+    } else {
+      duplicate.push(item.serialNum)
+    }
+  })
+
+  const list = [...new Set(duplicate)]
+  if (list.length > 0) {
+    return ElMessage.error(`商品编号${list}重复，请检查编号`)
+  }
+
+  const commodities = await getCommoditiesBySerialNums(sale.commodities.map(item => item.serialNum))
   if (!commodities) return ElMessage.error('请输入正确的商品编号')
 
   // 验证通过

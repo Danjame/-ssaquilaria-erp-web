@@ -17,11 +17,7 @@
       </el-form-item>
       <el-form-item label="入库商品">
         <el-table :data="purchase.goods" style="width: 100%" border>
-          <el-table-column type="index" align="center" width="60">
-            <template #header>
-              <el-button type="primary" size="small" :icon="'Plus'" circle @click="addGoods" />
-            </template>
-          </el-table-column>
+          <el-table-column type="index" align="center" width="60" />
           <el-table-column label="产品" align="center">
             <template #default="scope">
               <el-form-item class="purchase-form-item">
@@ -65,6 +61,9 @@
             </template>
           </el-table-column>
         </el-table>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="addGoods">添加商品</el-button>
       </el-form-item>
       <el-form-item label="数量" prop="quantity">
         <el-input-number :model-value="qty" :controls="false" disabled />

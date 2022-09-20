@@ -30,7 +30,7 @@ export interface SaleConditions {
 
 export interface SaleAttrs {
   customer: string
-  goods: Article[]
+  commodities: Article[]
   quantity: number
   amount: number
   remark: string

@@ -101,6 +101,11 @@ request.interceptors.response.use(function (response) {
           return ElMessage.error(error.response.data.message)
         }
         break
+      case 400:
+        if (error.response.config.url !== '/commerce/commodities/by-serial-number/') {
+          return ElMessage.error(error.response.data.message)
+        }
+        break
       default:
         if (error.response.data.message) {
           if (typeof error.response.data.message === 'object') {
