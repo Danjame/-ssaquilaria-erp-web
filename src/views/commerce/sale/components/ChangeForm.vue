@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    title="退换处理"
+    title="变更"
     ref="dialog"
     v-model="visible"
     custom-class="change-dialog-container"
@@ -10,30 +10,25 @@
     center
   >
     <el-descriptions title="订单信息" :column="1" border>
-      <template #extra>
-        <el-button @click="handleAdd">
-          <el-space>
-            <span>补货</span>
-            <el-icon><component :is="'Plus'" /></el-icon>
-          </el-space>
-        </el-button>
-      </template>
-      <el-descriptions-item label-class-name="change-description-label" align="center" label="单号">
+      <el-descriptions-item label-class-name="change-description-label" label="单号">
         {{ sale.orderNum }}
       </el-descriptions-item>
-      <el-descriptions-item label-class-name="change-description-label" align="center" label="时间">
+      <el-descriptions-item label-class-name="change-description-label" label="时间">
         {{ moment(sale.createdAt).format('YYYY/MM/DD HH:mm') }}
       </el-descriptions-item>
-      <el-descriptions-item label-class-name="change-description-label" align="center" label="商品数量">
+      <el-descriptions-item label-class-name="change-description-label" label="商品数量">
         {{ sale.quantity }}
       </el-descriptions-item>
-      <el-descriptions-item label-class-name="change-description-label" align="center" label="金额(元)">
+      <el-descriptions-item label-class-name="change-description-label" label="金额(元)">
         {{ sale.amount }}
       </el-descriptions-item>
-      <el-descriptions-item label-class-name="change-description-label" align="center" label="备注">
-        {{ sale.remark }}
+      <el-descriptions-item label-class-name="change-description-label" label="客户">
+        <el-input style="width: 50%" v-model="sale.customer" placeholder="请输入客户名称" />
       </el-descriptions-item>
-      <el-descriptions-item label-class-name="change-description-label" align="center" label="退货">
+      <el-descriptions-item label-class-name="change-description-label" label="备注">
+        <el-input type="textarea" autosize v-model="sale.remark" placeholder="请输入备注" />
+      </el-descriptions-item>
+      <el-descriptions-item label-class-name="change-description-label" label="退货">
         <el-form inline>
           <el-form-item label="退货商品">
             <el-select
@@ -64,7 +59,7 @@
           </template>
         </el-form>
       </el-descriptions-item>
-      <el-descriptions-item label-class-name="change-description-label change-description-label-leave" label="补货">
+      <el-descriptions-item label-class-name="change-description-label" label="补货">
         <el-form inline>
           <template v-for="(c, i) in leave" :key="i">
             <el-form-item>
@@ -82,8 +77,9 @@
             </el-form-item>
           </template>
         </el-form>
+        <el-button @click="handleAdd">添加</el-button>
       </el-descriptions-item>
-      <el-descriptions-item label-class-name="change-description-label" align="center" label="退/补(元)">{{ amount }}</el-descriptions-item>
+      <el-descriptions-item label-class-name="change-description-label" label="退/补(元)">{{ amount }}</el-descriptions-item>
     </el-descriptions>
     <template #footer>
       <span>
@@ -141,40 +137,51 @@ const handleDelete = (index: number) => {
   change.leave.splice(index, 1)
 }
 
-const onLeaveInputBlur = async (index: number) => {
-  const set = new Set(change.leave)
-  if (!change.leave[index]) return ElMessage.warning('商品编号不能为空')
-
-  if (change.leave.length !== set.size) {
-    ElMessage.warning(`编号 ${change.leave[index]}已存在, 请勿重复输入`)
-  } else {
-    const commodity = await getCommodityBySerialNum(change.leave[index])
-    if (commodity) {
-      leave.value[index].productName = commodity.product?.name
-      leave.value[index].size = commodity.size
-      leave.value[index].weight = commodity.weight
-    }
-  }
+const onLeaveInputBlur = (index: number) => {
+  getCommodityBySerialNum(change.leave[index])
+    .then(commodity => {
+      const { product: { name: productName }, size, weight } = commodity
+      leave.value[index].productName = productName
+      leave.value[index].size = size
+      leave.value[index].weight = weight
+    })
+    .catch(error => {
+      console.log(error)
+    })
 }
 
 // 表单提交
 const isLoading = ref(false)
 const emit = defineEmits(['submit'])
 
-const handleSubmit = () => {
-  if (change.leave.length && change.leave.some(item => item === '')) {
-    return ElMessage.error('请输入补货商品编号')
+const handleSubmit = async () => {
+  if (change.leave.length && change.leave.some(item => item === '')) return ElMessage.error('请输入补货商品编号')
+
+  const unique: string[] = []
+  const duplicate: string[] = []
+
+  change.leave.forEach(item => {
+    if (unique.indexOf(item) === -1) {
+      unique.push(item)
+    } else {
+      duplicate.push(item)
+    }
+  })
+
+  const list = [...new Set(duplicate)]
+  if (list.length > 0) {
+    return ElMessage.error(`商品编号${list}重复，请检查编号`)
   }
 
   ElMessageBox.confirm(
-    '确定提交订单退换处理？',
-    '退换处理'
+    '确定提交订单变更？',
+    '订单变更'
   ).then(async () => {
     // 确认
     change.amount = amount.value
     isLoading.value = true
 
-    const ret = await addChangeToSale(props.id, change)
+    const ret = await addChangeToSale(props.id, { change, customer: sale.customer, remark: sale.remark })
     if (ret) {
       ElMessage.success('操作成功')
       emit('submit')
@@ -194,10 +201,6 @@ const handleCancel = () => {
 
   .change-description-label {
     width: 100px;
-  }
-
-  .change-description-label-leave {
-    text-align: center !important;
   }
 }
 </style>

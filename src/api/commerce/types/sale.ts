@@ -1,3 +1,4 @@
+import { ChangeAttrs } from './change'
 import { Commodity } from './commodity'
 
 interface Article {
@@ -34,4 +35,10 @@ export interface SaleAttrs {
   quantity: number
   amount: number
   remark: string
+}
+
+export interface SaleChange {
+  customer: string
+  remark: string
+  change: ChangeAttrs
 }

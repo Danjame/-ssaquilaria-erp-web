@@ -112,10 +112,10 @@
           <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" min-width="130" align="center" fixed="right">
+      <el-table-column label="操作" min-width="100" align="center" fixed="right">
         <template #default="scope">
           <el-space spacer="|">
-            <el-button type="primary" link @click="openChangeForm(scope.row.id)">退换处理</el-button>
+            <el-button type="primary" link @click="openChangeForm(scope.row.id)">变更</el-button>
             <el-popconfirm title="确定要删除该订单吗?" @confirm="handleDelete(scope.row.id)">
               <template #reference>
                 <el-button type="primary" link>删除</el-button>

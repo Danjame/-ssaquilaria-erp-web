@@ -1,7 +1,6 @@
 import request from '@/utils/request'
-import { Sale, SaleAttrs, SaleConditions } from './types/sale'
+import { Sale, SaleAttrs, SaleChange, SaleConditions } from './types/sale'
 import { PageResult } from '../types'
-import { ChangeAttrs } from './types/change'
 
 export const getSalesByConditions = (params?: SaleConditions) => {
   return request<PageResult<Sale>>({
@@ -33,7 +32,7 @@ export const createSale = (data: SaleAttrs) => {
   })
 }
 
-export const addChangeToSale = (id: number, data: ChangeAttrs) => {
+export const addChangeToSale = (id: number, data: SaleChange) => {
   return request<Sale>({
     method: 'PATCH',
     url: `/commerce/sales/${id}`,
