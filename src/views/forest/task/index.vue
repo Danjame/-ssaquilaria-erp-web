@@ -86,7 +86,7 @@
           <span>{{ scope.row.operator?.name }}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="task-table-column task-picture-table-column" label="图片" align="center">
+      <!-- <el-table-column class-name="task-table-column task-picture-table-column" label="图片" align="center">
         <template #default="scope">
           <el-image
             style="width: 50px; height: 50px;"
@@ -106,7 +106,7 @@
             </template>
           </el-image>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column class-name="task-table-column" label="工单状态" align="center">
         <template #default="scope">
           <el-tag v-if="scope.row.status === 1" type="success">通过</el-tag>
@@ -205,9 +205,9 @@ const loadTasks = async () => {
   tasks.value = data.results
   count.value = data.count
 
-  tasks.value.forEach(async item => {
-    if (item.images && item.images.length) item.srcList = await downloadImage(item.images)
-  })
+  // tasks.value.forEach(async item => {
+  //   if (item.images && item.images.length) item.srcList = await downloadImage(item.images)
+  // })
 }
 
 // 审查组件

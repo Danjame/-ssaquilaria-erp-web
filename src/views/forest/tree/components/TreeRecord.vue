@@ -15,11 +15,27 @@
       <el-descriptions-item label="所属林场" align="center">{{ tree.farm?.name }}</el-descriptions-item>
       <el-descriptions-item label="林场区域" align="center">{{ tree.area?.name }}</el-descriptions-item>
       <el-descriptions-item label="种植时间" align="center">{{ moment(tree.plantedAt).format('YYYY/MM') }}</el-descriptions-item>
-      <el-descriptions-item align="center">
+      <el-descriptions-item align="center" class-name="tree-description-picture">
         <template #label>
           <div class="cell-item">状态图{{ imgRecord.createdAt ? ' (' + moment(imgRecord.createdAt).format('YYYY/MM/DD') + ')' : '' }}</div>
         </template>
-        <el-image style="width: 60px; height: 60px" fit="cover" :src="imgRecord.srcList[0]" :preview-src-list="imgRecord.srcList" />
+        <el-image
+          style="width: 60px; height: 60px"
+          fit="cover"
+          :src="imgRecord.srcList && imgRecord.srcList.length ? imgRecord.srcList[0] : null"
+          :preview-src-list="imgRecord.srcList"
+        >
+          <template #placeholder>
+            <div class="image-slot">
+              <el-icon><component :is="'Picture'" /></el-icon>
+            </div>
+          </template>
+          <template #error>
+            <div class="image-slot">
+              <el-icon><component :is="'DocumentDelete'" /></el-icon>
+            </div>
+          </template>
+        </el-image>
       </el-descriptions-item>
     </el-descriptions>
     <el-divider />
@@ -247,6 +263,21 @@ watch(() => listParams.reviewerId, id => {
 <style lang="scss">
 .record-dialog-container {
   min-width: 1000px;
+
+  .el-descriptions__body .el-descriptions__table .el-descriptions__cell.tree-description-picture {
+    line-height: 0px;
+
+    .image-slot {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: var(--el-fill-color-light);
+      color: var(--el-text-color-secondary);
+      font-size: 14px;
+    }
+  }
 
   .record-form-select {
     width: 150px;
