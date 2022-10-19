@@ -103,6 +103,10 @@ request.interceptors.response.use(function (response) {
         break
       case 400:
         if (error.response.config.url !== '/commerce/commodities/by-serial-number/') {
+          if (typeof error.response.data.message === 'object') {
+            error.response.data.message = error.response.data.message.toString()
+          }
+
           return ElMessage.error(error.response.data.message)
         }
         break

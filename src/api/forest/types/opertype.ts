@@ -3,6 +3,7 @@ import { OperItem } from './operitem'
 export interface OperType {
   id: number
   name: string
+  value: string
   operItems: OperItem[]
   remark: string
   createdAt: Date
@@ -16,5 +17,6 @@ export interface OperTypeConditions{
 
 export interface OperTypeAttrs {
   name: string
+  value: string
   remark: string
 }

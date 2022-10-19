@@ -4,6 +4,9 @@
       <el-form-item label="记录类名称" prop="name">
         <el-input v-model="operType.name" placeholder="请输入记录类名称" />
       </el-form-item>
+      <el-form-item label="记录类编号" prop="value">
+        <el-input v-model="operType.value" placeholder="请输入记录类编号" />
+      </el-form-item>
       <el-form-item label="备注" prop="remark">
         <el-input v-model="operType.remark" placeholder="请输入备注" type="textarea" autosize />
       </el-form-item>
@@ -26,6 +29,9 @@ const rules = reactive({
   name: [
     { required: true, message: '记录类名称不能为空', trigger: 'blur' }
   ],
+  value: [
+    { required: true, message: '记录类编号不能为空', trigger: 'blur' }
+  ],
   remark: [
     { required: false, message: '备注不能为空', trigger: 'blur' }
   ]
@@ -38,8 +44,8 @@ onMounted(() => {
 // 记录类信息
 const operType = reactive({} as OperType)
 const loadOperType = async () => {
-  const { name, remark } = await getOperTypeById(props.id)
-  Object.assign(operType, { name, remark })
+  const { name, value, remark } = await getOperTypeById(props.id)
+  Object.assign(operType, { name, value, remark })
 }
 
 // 表单提交
