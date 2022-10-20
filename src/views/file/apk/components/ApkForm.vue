@@ -32,7 +32,7 @@
         </el-upload>
         <el-form ref="form" :rules="rules" :model="apk">
           <el-form-item label="版本" prop="version">
-            <el-input v-model="apk.version" placeholder="请输入版本号" />
+            <el-input-number v-model="apk.version" :controls="false" placeholder="请输入版本号" />
           </el-form-item>
           <el-form-item label="更新" prop="needUpdate">
             <el-select v-model="apk.needUpdate" placeholder="是否强制更新">
