@@ -32,6 +32,11 @@
           <el-tag v-else type="warning">否</el-tag>
         </template>
       </el-table-column>
+      <el-table-column label="更新内容" prop="remark" align="center">
+        <template #default="scope">
+          <span>{{ scope.row.remark ? scope.row.remark : '-' }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" fixed="right">
         <template #default="scope">
           <el-button v-if="!scope.row.isDownLoading" type="primary" link @click="handleDownload(scope.row)">下载</el-button>

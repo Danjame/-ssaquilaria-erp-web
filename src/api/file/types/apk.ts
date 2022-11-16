@@ -8,6 +8,7 @@ export interface Apk {
   mimeType: string
   size: number
   version: string
+  remark: string
   needUpdate: boolean
   createdAt: Date
   updatedAt: Date
@@ -27,4 +28,5 @@ export interface ApkConditions {
 export interface ApkAttrs {
   version: string
   needUpdate: boolean
+  remark: string
 }

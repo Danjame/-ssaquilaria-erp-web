@@ -39,6 +39,9 @@
               <el-option v-for="(item, i) in status" :key="i" :label="item.name" :value="item.value" />
             </el-select>
           </el-form-item>
+          <el-form-item label="备注" prop="remark">
+            <el-input v-model="apk.remark" placeholder="请输入更新内容" type="textarea" autosize />
+          </el-form-item>
         </el-form>
       </el-space>
     </div>
@@ -54,6 +57,9 @@ const rules = reactive({
   ],
   needUpdate: [
     { required: true, message: '请选择是否强制更新', trigger: 'blur' }
+  ],
+  remark: [
+    { required: true, message: '更新内容不能为空', trigger: 'blur' }
   ]
 })
 
@@ -72,7 +78,8 @@ const status = [
 const url = `${import.meta.env.VITE_BASE_URL}/file/apks/upload`
 const apk = reactive({
   version: undefined,
-  needUpdate: undefined
+  needUpdate: undefined,
+  remark: undefined
 })
 const limit = 1
 const headers = {
