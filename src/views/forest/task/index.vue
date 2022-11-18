@@ -141,7 +141,7 @@ import { getAllUsers } from '@/api/system/user'
 import { User } from '@/api/system/types/user'
 import { getTasksByConditions } from '@/api/forest/task'
 import { Task } from '@/api/forest/types/task'
-import { downloadImage } from '@/api/file/image'
+// import { downloadImage } from '@/api/file/image'
 import moment from 'moment'
 
 onMounted(() => {

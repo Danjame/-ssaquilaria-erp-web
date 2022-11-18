@@ -13,3 +13,10 @@ export const downloadImage = async (files: string[]): Promise<string[]> => {
     return URL.createObjectURL(blob)
   })
 }
+
+export const clearImages = () => {
+  return request({
+    method: 'POST',
+    url: '/file/images/clear'
+  })
+}

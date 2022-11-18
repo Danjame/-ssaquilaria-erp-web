@@ -1,7 +1,7 @@
 <template>
   <Dialog :title="!task.status ? '审核工单' : '工单详情'" :submit="handleSubmit">
     <el-descriptions :column="1" border>
-      <el-descriptions-item label="操作时间" align="center">{{ moment(task.startedAt).format('YYYY/MM/DD HH:mm') }}</el-descriptions-item>
+      <el-descriptions-item :min-width="100" label="操作时间" align="center">{{ moment(task.startedAt).format('YYYY/MM/DD HH:mm') }}</el-descriptions-item>
       <el-descriptions-item label="林区" align="center">
         <el-tag v-if="task.farm && task.area">{{ task.farm.name + ': ' + task.area.name }}</el-tag>
         <el-space wrap>
@@ -10,7 +10,7 @@
       </el-descriptions-item>
       <el-descriptions-item align="center">
         <template #label>
-          <span>树木（{{ task.treeCount }} 棵）</span>
+          <span>树木({{ task.treeCount }})</span>
         </template>
         <el-space wrap>
           <el-tag v-for="(tree, i) in task.trees" :key="i">{{ tree.serialNum }}</el-tag>
@@ -23,7 +23,7 @@
       <el-descriptions-item label="申请人" align="center">{{ task.operator?.name }}</el-descriptions-item>
       <el-descriptions-item label="备注" align="center">{{ task.remark }}</el-descriptions-item>
       <el-descriptions-item label="图片" align="center">
-        <el-space size="large">
+        <el-space size="large" wrap>
           <el-image
             v-for="(image, i) in task.srcList" :key="i"
             style="height: 100px"

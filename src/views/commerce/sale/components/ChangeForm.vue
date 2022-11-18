@@ -201,6 +201,7 @@ const handleCancel = () => {
 
   .change-description-label {
     width: 100px;
+    text-align: center !important;
   }
 }
 </style>

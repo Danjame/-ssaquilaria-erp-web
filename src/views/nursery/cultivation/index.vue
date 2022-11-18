@@ -16,6 +16,11 @@
     </template>
     <template #table-column>
       <el-table-column class-name="cultivation-table-column" label="序号" type="index" align="center" width="60" />
+      <el-table-column class-name="task-table-column" label="时间" align="center">
+        <template #default="scope">
+          <span>{{ moment(scope.row.createdAt).format('YYYY/MM/DD HH:mm') }}</span>
+        </template>
+      </el-table-column>
       <el-table-column class-name="cultivation-table-column" label="事件" prop="event" align="center" />
       <el-table-column class-name="cultivation-table-column" label="幼苗" align="center">
         <template #default="scope">
@@ -72,6 +77,7 @@ import { Cultivation } from '@/api/nursery/types/cultivation'
 import { getAllPlants } from '@/api/nursery/plant'
 import { Plant } from '@/api/nursery/types/Plant'
 import { downloadImage } from '@/api/file/image'
+import moment from 'moment'
 
 onMounted(() => {
   loadAllPlants()
