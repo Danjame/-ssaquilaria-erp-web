@@ -40,7 +40,7 @@
           <el-descriptions :column="1" border>
             <el-descriptions-item label="树木编号" align="center" label-class-name="task-desc-label">
               <span v-if="!scope.row.trees.length">-</span>
-              <el-space v-else>
+              <el-space v-else wrap>
                 <el-tag v-for="(tree, i) in scope.row.trees" :key="i">{{ tree.serialNum }}</el-tag>
               </el-space>
             </el-descriptions-item>

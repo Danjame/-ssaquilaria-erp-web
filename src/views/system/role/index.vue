@@ -17,7 +17,7 @@
         <template #default="props">
           <el-descriptions :column="2" border>
             <el-descriptions-item label="角色权限" align="center" label-class-name="role-desc-label" class-name="role-desc-content">
-              <el-space>
+              <el-space wrap>
                 <el-tag v-for="(permission, i) in props.row.permissions" :key="i" size="large">{{ permission.name }}</el-tag>
               </el-space>
             </el-descriptions-item>
@@ -142,8 +142,5 @@ watch(() => listParams.name, name => {
 }
 .role-desc-content.el-descriptions__content {
   width: 40%;
-  .el-space--horizontal {
-    flex-wrap: wrap;
-  }
 }
 </style>

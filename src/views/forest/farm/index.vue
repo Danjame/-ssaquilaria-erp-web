@@ -30,7 +30,7 @@
           <el-descriptions :column="1" border>
             <el-descriptions-item label="林区" align="center" label-class-name="farm-desc-label">
               <span v-if="!scope.row.areas.length">-</span>
-              <el-space v-else>
+              <el-space v-else wrap>
                 <el-tag v-for="(area, i) in scope.row.areas" :key="i">{{ area.name }}</el-tag>
               </el-space>
             </el-descriptions-item>
