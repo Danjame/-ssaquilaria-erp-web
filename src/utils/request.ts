@@ -35,13 +35,11 @@ request.interceptors.response.use(function (response) {
   if (response.config.url?.includes('/conditions')) {
     store.commit('setLoading', false)
   }
-
   return response
 }, function (error) {
   // Any status codes that falls outside the range of 2xx cause this function to trigger
   // Do something with response error
   const { user } = store.state
-
   if (!error.response) {
     // 服务离线
     if (!axios.isCancel(error)) {
@@ -98,7 +96,7 @@ request.interceptors.response.use(function (response) {
             toLogin()
           })
         } else {
-          return ElMessage.error(error.response.data.message)
+          ElMessage.error(error.response.data.message)
         }
         break
       case 400:
@@ -107,7 +105,7 @@ request.interceptors.response.use(function (response) {
             error.response.data.message = error.response.data.message.toString()
           }
 
-          return ElMessage.error(error.response.data.message)
+          ElMessage.error(error.response.data.message)
         }
         break
       default:
@@ -116,7 +114,7 @@ request.interceptors.response.use(function (response) {
             error.response.data.message = error.response.data.message.toString()
           }
 
-          return ElMessage.error(error.response.data.message)
+          ElMessage.error(error.response.data.message)
         }
     }
   }
