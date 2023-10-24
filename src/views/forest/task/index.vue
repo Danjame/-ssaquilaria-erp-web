@@ -58,8 +58,7 @@
       </el-table-column>
       <el-table-column class-name="task-table-column" label="林区" align="center" min-width="120">
         <template #default="scope">
-          <el-tag v-if="scope.row.farm && scope.row.area">{{ scope.row.farm.name + ': ' + scope.row.area.name }}</el-tag>
-          <el-space v-else>
+          <el-space>
             <el-tag v-for="(area, i) in scope.row.areas" :key="i">{{ area.farm.name + ': ' + area.name }}</el-tag>
           </el-space>
         </template>

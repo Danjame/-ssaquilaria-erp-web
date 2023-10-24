@@ -3,7 +3,6 @@
     <el-descriptions :column="1" border>
       <el-descriptions-item :min-width="100" label="操作时间" align="center">{{ moment(task.startedAt).format('YYYY/MM/DD HH:mm') }}</el-descriptions-item>
       <el-descriptions-item label="林区" align="center">
-        <el-tag v-if="task.farm && task.area">{{ task.farm.name + ': ' + task.area.name }}</el-tag>
         <el-space wrap>
           <el-tag v-for="(area, i) in task.areas" :key="i">{{ area.farm.name + ': ' + area.name }}</el-tag>
         </el-space>

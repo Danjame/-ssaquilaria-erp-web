@@ -8,9 +8,6 @@
     :handler-a="() => {formVisible = true }"
   >
     <template #form-item>
-      <el-form-item>
-        <el-button :icon="'Delete'" @click="clearUp">清理冗余文件</el-button>
-      </el-form-item>
       <el-form-item label="版本" prop="version">
         <el-input v-model="listParams.version" placeholder="请输入版本号" />
       </el-form-item>
@@ -69,7 +66,6 @@
 <script lang="ts" setup>
 import ApkForm from './components/ApkForm.vue'
 import { downloadApk, getApksByConditions } from '@/api/file/apk'
-import { clearImages } from '@/api/file/image'
 import { Apk } from '@/api/file/types/apk'
 import moment from 'moment'
 import axios from 'axios'
@@ -89,11 +85,6 @@ const status = [
     value: 0
   }
 ]
-
-const clearUp = async () => {
-  const { data } = await clearImages()
-  ElMessage.success(`成功清理: ${data} 个文件`)
-}
 
 // 软件列表
 const listParams = reactive({

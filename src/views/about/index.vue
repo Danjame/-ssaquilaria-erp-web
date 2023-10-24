@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <p>中科沉香ERP管理系统 v1.0</p>
+    <p>中科沉香ERP系统V1.0</p>
     <p>北京中科沉香科技股份有限公司 版权所有</p>
     <p>京ICP备2021002184号-1</p>
   </div>
