@@ -7,6 +7,8 @@ import frstRoutes from './modules/forest'
 import commRoutes from './modules/commerce'
 import fileRoutes from './modules/file'
 import nursRoutes from './modules/nursery'
+import subscriptionRoutes from './modules/subscription'
+import museumRoutes from './modules/museum'
 import { Menu } from '@/api/system/types/menu'
 import store from '@/store'
 
@@ -36,7 +38,9 @@ const routes: RouteRecordRaw[] = [
       frstRoutes,
       fileRoutes,
       commRoutes,
-      nursRoutes
+      nursRoutes,
+      subscriptionRoutes,
+      museumRoutes
     ]
   },
   {
